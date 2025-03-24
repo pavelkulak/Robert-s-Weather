@@ -1,0 +1,207 @@
+
+
+
+* {
+    /* font-family: "Segoe UI"; */
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple Color Emoji",Helvetica,Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol"
+}
+
+hr {
+    border-bottom: 1px solid rgb(200, 194, 194);
+}
+
+
+
+.hide1 {        /* Неполное скрытие объекта (место под него остаётся) */
+    visibility: hidden;
+    
+}
+.hide2 {        /* Полное скрытие объекта (скрывается и объект и место под него) */
+    display: none !important;
+}   
+
+.hide3 {
+    max-height: 0;
+  }
+    
+
+
+.hiddenFiltered {
+    display: none !important;
+}
+
+.transition-hide {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+.transition-show {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s linear;
+  }
+ 
+
+
+
+.conteiner_for_flex {      /* Контейнеры для "display:flex" */
+    display: flex;
+    align-items: center;
+}
+
+
+
+fieldset {          /* (поле у form) */
+    margin: 10px 5px 10px 5px;
+}
+
+.hovered1:hover {
+    cursor: pointer;
+}
+.hovered1_2:hover {
+    cursor: pointer;
+    background-color: #F5F5F5;
+    /* background-color: #4f4c4c2a; */
+}
+.hovered1_3:hover {
+    cursor: pointer;
+    background-color: #F3F3F3;
+}
+.hovered2:hover {
+    cursor: text;
+}
+.hovered3:hover {
+    cursor: pointer;
+    background-color: #FEE6E3;
+}
+
+.hover-hint {   /* Объекты, требующие добававления стилей при наведении на них (c подсказкой и замедленной анимацией) */
+    display: inline-block;  
+    position: relative;
+} 
+
+    .hover-hint:hover {     /* Анимация при наведении */
+        cursor: pointer;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+        background-color: #4f4c4c2a;
+    }
+    .hover-hint:hover::after {   /* Всплывающая подсказка при наведении:  */  
+        content: attr(data-title); /* Выводим текст */
+        position: absolute; /* Абсолютное позиционирование */
+        left: 30%; top: 100%; /* Положение подсказки */
+        z-index: 1; /* Отображаем подсказку поверх других элементов */
+        color: #EEEEEE;
+        background: rgba(2, 2, 1, 0.9); /* Полупрозрачный цвет фона */
+        font-family: Arial, sans-serif; /* Гарнитура шрифта */
+        font-size: 11px; /* Размер текста подсказки */
+        padding: 5px 10px; /* Поля */
+        border: 1px solid #333; /* Параметры рамки */
+    }
+
+
+.active {
+    background-color: #4f4c4c2a;
+}
+.active2 {
+    background-color: #F5F5F5;
+}
+
+
+.hover-hint_black {   /* Объекты, требующие добававления стилей при наведении на них (c подсказкой и замедленной анимацией) */
+    display: inline-block;  
+    position: relative;
+} 
+    .hover-hint_black:hover {     /* Анимация при наведении */
+        cursor: pointer;
+        -webkit-transition: all 1s ease;
+        transition: all 1s ease;
+        background-color: #4f4c4c2a;
+    }
+    .hover-hint_black:hover::after {   /* Всплывающая подсказка при наведении:  */  
+        content: attr(data-title); /* Выводим текст */
+        position: absolute; /* Абсолютное позиционирование */
+        left: -260%; top: 120%; /* Положение подсказки */
+        z-index: 1; /* Отображаем подсказку поверх других элементов */
+        color: #ffffff;
+        /*background: rgba(2, 2, 1, 0.9); */ /* Полупрозрачный цвет фона */
+        background-color: black;
+        font-family: Arial, sans-serif; /* Гарнитура шрифта */
+        font-size: 11px; /* Размер текста подсказки */
+        padding: 5px 10px; /* Поля */
+        border: 1px solid #333; /* Параметры рамки */
+    }
+
+
+
+.hovered_select_menu {
+    color: #c3392c !important;
+    background-color: #FEE6E3 !important;
+}
+.hovered_aside-items:hover {
+    background-color: #F6EFEE;
+    cursor: pointer;
+}
+
+.darkned {
+    filter: brightness(40%)
+}
+
+
+
+
+.disabled img {
+    filter: invert(80%) !important;
+    color: #b2b2b2;
+}
+.disabled:hover {
+    cursor: not-allowed;
+}
+
+
+
+
+input {
+    border: 1px solid gray;
+}
+
+.ramka {
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+
+
+[contenteditable]:empty:before {       /* Подсказка placeholder для div(вов) с contenteditable="true". Без этого стиля не будет работать подсказка */
+    content: attr(data-placeholder);
+    color: grey;
+    display: inline-block;
+}
+
+
+
+.bold {
+    font-weight: bold;
+}
+
+
+/* Цвета: */
+
+.green {
+    color: green;
+}
+.red {
+    color: red;
+}
+
+.ser {
+    color: gray
+}
+
+
+
+
+.air-datepicker--pointer {
+    display: none !important;
+}
