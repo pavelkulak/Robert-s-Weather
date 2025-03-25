@@ -1,38 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="src/css/main.css" />
-    <!-- Шрифт -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <!--  -->
-    <!-- favicon -->
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <!--  -->
-    <title>Robert's Weather</title>
-  </head>
-  <body>
-    <div class="content">
-      <section class="control">
-        <div class="container control__container">
-          
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="src/css/main.css" />
+        <!-- Шрифт -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&display=swap" rel="stylesheet"
+        />
+        <!--  -->
+        <!-- favicon -->
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <!--  -->
+        <title>Robert's Weather</title>
+    </head>
+    <body>
+        <div class="content">
+            <section class="control">
+                <div class="container control__container">
+                    <div class="control__control-bar">
+                        <img src="./src/icon/refresh_BG.svg" alt="refresh-BG" class="control__refresh-BG">
+                        <div class="control__change-language">
+                            <span class="control__name-language">EN</span>
+                            <img src="./src/icon/arrow_down.svg" alt="" class="control__icon-arrow-down-language">
+                        </div>
+                        <div class="control__change-temperature">
+                            <div class="control__type-temperature control__faringate">°F</div>
+                            <div class="control__type-temperature control__celsius control__type-temperature_selected-type">°С</div>
+                        </div>
+                    </div>
+                    <form action="" class="control__serch-bar" method="POST" name="search-city-form" id="search-city-form">
+                        <div class="control__search-city-input-container">
+                            <input type="text" id="search-city-input" placeholder="Search city or ZIP" class="control__search-city-input">
+                            <img src="./src/icon/micro.svg" alt="" class="control__search-city-icon">
+                        </div>
+                        <button type="submit" class="control__search-city-button">Search</button>
+                    </form>
+                    <!-- <div class="control__serch-bar">55</div> -->
+                </div>
+            </section>
+            <section class="today-weather">
+                <div class="container today-weather__container">Minsk, Belarus</div>
+            </section>
+            <section class="weather-three-days">
+                <div class="container weather-three-days__container"></div>
+            </section>
+            <section class="map">
+                <div class="container map__container"></div>
+            </section>
         </div>
-      </section>
-      <section class="today-weather">
-        <div class="container today-weather__container">Minsk, Belarus</div>
-      </section>
-      <section class="weather-three-days">
-        <div class="container weather-three-days__container"></div>
-      </section>
-      <section class="map">
-        <div class="container map__container"></div>
-      </section>
-    </div>
 
-
-    <script type="module" src="/src/js/script.js"></script>
-  </body> 
+        <script type="module" src="/src/js/script.js"></script>
+    </body>
 </html>
