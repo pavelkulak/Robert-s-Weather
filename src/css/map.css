@@ -1,0 +1,5 @@
+.map {
+    color:  #fff;
+    grid-column: 2;
+    grid-row: 2 / 4;
+}

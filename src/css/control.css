@@ -1,5 +1,7 @@
 .control {
-    padding: 40px 0 57px 0;
+    grid-column: 1 / 3;
+    padding-top: 40px;
+    margin-bottom: 57px;
 }
 .control__container {
     display: flex;
