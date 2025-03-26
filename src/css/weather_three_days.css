@@ -2,3 +2,39 @@
     color: #fff;
     grid-column: 1;
 }
+
+.weather-three-days__container {
+    display: flex;
+    gap: 51px;
+}
+
+.day {
+    display: grid;
+    grid-template-columns: min-content min-content;
+    grid-template-rows: 27px 1fr;
+    row-gap: 13px;
+}
+
+.day__day-week {
+    grid-column: 1 / 3;
+}
+.day__day-week {
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+
+.day__temperature {
+    display: flex;
+    font-size: 80px;
+}
+.day__num-temperature {
+    font-size: 80px;
+}
+
+
+.day__weather-icon {
+    max-width: unset;
+   margin-left: 5px;
+}
