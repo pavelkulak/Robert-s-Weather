@@ -2,3 +2,50 @@
     color: #fff;
     grid-column: 1;
 }
+
+.today-weather__city-country {
+    font-size: 44px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.today-weather__today-date-time {
+    font-size: 24px;
+    font-weight: 600;
+}
+.today-weather__temperature-today {
+    display: flex;
+    font-weight: 700;
+    z-index: 1;
+    height: fit-content;
+}
+.today-weather__num-temperature-today {
+    font-size: 306px;
+}
+.today-weather__degree-temperature-today {
+    font-size: 100px;
+    margin-top: 60px;
+    margin-left: 18px;
+}
+
+.today-weather__data-weather {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
+    align-items: end;
+}
+.today-weather__weather-icon {
+    position: absolute;
+    top: 0;
+    left: 380px;
+}
+
+.today-weather__weather-details {
+    margin-bottom: 70px;
+    font-size: 22px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 37px;
+    white-space: nowrap;
+    
+}
