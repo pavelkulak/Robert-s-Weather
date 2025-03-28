@@ -175,21 +175,20 @@ function initMap(lat, lon) {
     console.log(lon);
     // Создаём карту и устанавливаем координаты
     const map = L.map("map").setView([lat, lon], 10);
-  
-    // Добавляем слой карты OpenStreetMap
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '© OpenStreetMap contributors'
+
+    // Добавляем слой карты CartoDB с локализацией
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CartoDB</a>',
     }).addTo(map);
-  
+
     // Добавляем метку города
     L.marker([lat, lon]).addTo(map)
-      .bindPopup("Выбранный город")
-      .openPopup();
+        .bindPopup("Выбранный город")
+        .openPopup();
 
 
-
+        
     // Преобразуем координаты в формат градусов, минут, секунд. Затем вписываем их в HTML
-
     map__latitude.innerText = convertToDMS(lat)
     map__longitude.innerText = convertToDMS(lon)
 }
