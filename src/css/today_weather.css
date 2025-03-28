@@ -36,8 +36,11 @@
 }
 .today-weather__weather-icon {
     position: absolute;
-    top: 0;
-    left: 380px;
+    max-width: unset;
+    width: 200px; /* Можно уменьшить размер (например, 50px) */
+    height: 200px;
+    top: -30px;
+    left: 320px;
 }
 
 .today-weather__weather-details {
