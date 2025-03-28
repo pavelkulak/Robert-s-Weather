@@ -13,5 +13,10 @@ const today_weather__perceived_temperature_num = document.querySelector(".today-
 const today_weather__wind_speed_num = document.querySelector(".today-weather__wind-speed-num")
 const today_weather__humidity_num = document.querySelector(".today-weather__humidity-num")
 
+const threeDaysArr = [...document.querySelectorAll(".day")]
+const tomorrowDayEl = threeDaysArr[0]
+const afterTomorrowDayEl = threeDaysArr[1]
+const thirdDayEl = threeDaysArr[2]
 
-export {today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num}
+
+export {today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl}
