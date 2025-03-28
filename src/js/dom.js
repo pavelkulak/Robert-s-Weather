@@ -18,5 +18,8 @@ const tomorrowDayEl = threeDaysArr[0]
 const afterTomorrowDayEl = threeDaysArr[1]
 const thirdDayEl = threeDaysArr[2]
 
+const map__latitude = document.querySelector(".map__latitude-num")
+const map__longitude = document.querySelector(".map__longitude-num")
 
-export {today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl}
+
+export {today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude, map__longitude}

@@ -1,5 +1,5 @@
 'use strict';
-import { today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl } from "./dom.js"
+import { today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude, map__longitude } from "./dom.js"
 
 const API_KEY = "4e88cbe360a5181d59fb73d2bee0c230";
 let city = "Minsk";
@@ -9,6 +9,10 @@ window.localStorage.setItem("city", "Minsk")
 } else {
 city = window.localStorage.getItem("city");
 }
+
+
+
+
 
 
 function getTodayWeather(newCity, curLangue) {
@@ -70,6 +74,12 @@ fetch(url)
     today_weather__weather_icon.src = iconUrl;
     today_weather__weather_icon.alt = data.weather[0].description;
 
+
+    window.localStorage.setItem("latitude", data.coord.lat)
+    window.localStorage.setItem("longitude", data.coord.lon)
+
+
+
     console.log(data);
     // console.log(`Температура в ${data.sys.country} ${data.name}: ${data.main.temp}°C`);
 
@@ -83,74 +93,117 @@ getTodayWeather(city, "en")
 // getTodayWeather("mekka", "ru")
 
 
-
 function getThreeDaysWeather(newCity, curLangue) {
 city = newCity
 window.localStorage.setItem("city", newCity)
 
 const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=${curLangue}`;
 
-fetch(url)
-.then(response => response.json())
-.then(data => {
-    console.log(data);
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
 
-    // Текущая дата
-    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+        // Текущая дата
+        const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-    // Фильтруем прогноз на 12:00 по местному времени
-    const dailyForecasts = data.list.filter(entry => entry.dt_txt.includes("12:00:00"));
+        // Фильтруем прогноз на 12:00 по местному времени
+        const dailyForecasts = data.list.filter(entry => entry.dt_txt.includes("12:00:00"));
 
-    // Функция для форматирования даты
-    function formatDay(dt_txt, lang) {
-        const date = new Date(dt_txt);
-        return date.toLocaleDateString(lang, { weekday: "short" }); // Выводит "Tue", "Wed" и т. д.
-    }
-
-
-    // Извлекаем прогноз на 3 дня вперёд
-    const tomorrowData = dailyForecasts[0];     // Завтра (первый после сегодняшнего)
-    const afterTomorrowData = dailyForecasts[1];    // Послезавтра
-    const thirdDayData = dailyForecasts[2];
-
-    // Данные на завтра
-    const tomorrowDay = formatDay(tomorrowData.dt_txt, curLangue);
-    const tomorrowTemp = Math.round(tomorrowData.main.temp);
-    const tomorrowIcon = `https://openweathermap.org/img/wn/${tomorrowData.weather[0].icon}@2x.png`;
-
-    // Данные на послезавтра
-    const afterTomorrowDay = formatDay(afterTomorrowData.dt_txt, curLangue);
-    const afterTomorrowTemp = Math.round(afterTomorrowData.main.temp);
-    const afterTomorrowIcon = `https://openweathermap.org/img/wn/${afterTomorrowData.weather[0].icon}@2x.png`;
-
-    // Данные на после-послезавтра
-    const thirdDay = formatDay(thirdDayData.dt_txt, curLangue);
-    const thirdDayTemp = Math.round(thirdDayData.main.temp);
-    const thirdDayIcon = `https://openweathermap.org/img/wn/${thirdDayData.weather[0].icon}@2x.png`;
+        // Функция для форматирования даты
+        function formatDay(dt_txt, lang) {
+            const date = new Date(dt_txt);
+            return date.toLocaleDateString(lang, { weekday: "short" }); // Выводит "Tue", "Wed" и т. д.
+        }
 
 
-    // Выводим данные в HTML
+        // Извлекаем прогноз на 3 дня вперёд
+        const tomorrowData = dailyForecasts[0];     // Завтра (первый после сегодняшнего)
+        const afterTomorrowData = dailyForecasts[1];    // Послезавтра
+        const thirdDayData = dailyForecasts[2];
 
-    // На завтра
-    tomorrowDayEl.querySelector(".day__day-week").innerText = tomorrowDay
-    tomorrowDayEl.querySelector(".day__num-temperature").innerText = tomorrowTemp
-    tomorrowDayEl.querySelector(".day__weather-icon").src = tomorrowIcon
+        // Данные на завтра
+        const tomorrowDay = formatDay(tomorrowData.dt_txt, curLangue);
+        const tomorrowTemp = Math.round(tomorrowData.main.temp);
+        const tomorrowIcon = `https://openweathermap.org/img/wn/${tomorrowData.weather[0].icon}@2x.png`;
 
-    // На послезавтра
-    afterTomorrowDayEl.querySelector(".day__day-week").innerText = afterTomorrowDay
-    afterTomorrowDayEl.querySelector(".day__num-temperature").innerText = afterTomorrowTemp
-    afterTomorrowDayEl.querySelector(".day__weather-icon").src = afterTomorrowIcon
+        // Данные на послезавтра
+        const afterTomorrowDay = formatDay(afterTomorrowData.dt_txt, curLangue);
+        const afterTomorrowTemp = Math.round(afterTomorrowData.main.temp);
+        const afterTomorrowIcon = `https://openweathermap.org/img/wn/${afterTomorrowData.weather[0].icon}@2x.png`;
 
-    // На после-послезавтра
-    thirdDayEl.querySelector(".day__day-week").innerText = thirdDay
-    thirdDayEl.querySelector(".day__num-temperature").innerText = thirdDayTemp
-    thirdDayEl.querySelector(".day__weather-icon").src = thirdDayIcon
+        // Данные на после-послезавтра
+        const thirdDay = formatDay(thirdDayData.dt_txt, curLangue);
+        const thirdDayTemp = Math.round(thirdDayData.main.temp);
+        const thirdDayIcon = `https://openweathermap.org/img/wn/${thirdDayData.weather[0].icon}@2x.png`;
 
 
-})
+        // Выводим данные в HTML
 
-.catch(error => console.error("Ошибка:", error));
+        // На завтра
+        tomorrowDayEl.querySelector(".day__day-week").innerText = tomorrowDay
+        tomorrowDayEl.querySelector(".day__num-temperature").innerText = tomorrowTemp
+        tomorrowDayEl.querySelector(".day__weather-icon").src = tomorrowIcon
+
+        // На послезавтра
+        afterTomorrowDayEl.querySelector(".day__day-week").innerText = afterTomorrowDay
+        afterTomorrowDayEl.querySelector(".day__num-temperature").innerText = afterTomorrowTemp
+        afterTomorrowDayEl.querySelector(".day__weather-icon").src = afterTomorrowIcon
+
+        // На после-послезавтра
+        thirdDayEl.querySelector(".day__day-week").innerText = thirdDay
+        thirdDayEl.querySelector(".day__num-temperature").innerText = thirdDayTemp
+        thirdDayEl.querySelector(".day__weather-icon").src = thirdDayIcon
+
+
+    })
+
+    .catch(error => console.error("Ошибка:", error));
 }   
 
 
+
 getThreeDaysWeather(city, "en")
+
+
+
+
+
+
+function initMap(lat, lon) {
+    console.log(lat)
+    console.log(lon);
+    // Создаём карту и устанавливаем координаты
+    const map = L.map("map").setView([lat, lon], 10);
+  
+    // Добавляем слой карты OpenStreetMap
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+  
+    // Добавляем метку города
+    L.marker([lat, lon]).addTo(map)
+      .bindPopup("Выбранный город")
+      .openPopup();
+
+
+
+    // Преобразуем координаты в формат градусов, минут, секунд. Затем вписываем их в HTML
+
+    map__latitude.innerText = convertToDMS(lat)
+    map__longitude.innerText = convertToDMS(lon)
+}
+
+
+// Функция для преобразования координат в формат градусов, минут, секунд
+function convertToDMS(coord) {
+    const degrees = Math.floor(coord);  // Целые градусы
+    const minutesFloat = (coord - degrees) * 60;  // Остаток, умноженный на 60
+    const minutes = Math.floor(minutesFloat);  // Целые минуты
+    const seconds = Math.round((minutesFloat - minutes) * 60);  // Оставшиеся секунды
+  
+    return `${degrees}°${minutes}'${seconds}"`;  // Форматируем строку
+}
+
+
+initMap(window.localStorage.getItem("latitude"), window.localStorage.getItem("longitude"));

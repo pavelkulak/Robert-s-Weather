@@ -10,6 +10,12 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&display=swap" rel="stylesheet"
         />
         <!--  -->
+
+        <!-- Подключение CSS и JS для Leaflet -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <!--  -->
+
         <!-- favicon -->
         <link rel="icon" type="image/svg+xml" href="/vite.svg" />
         <!--  -->
@@ -99,10 +105,10 @@
             </section>
             <section class="map">
                 <div class="container map__container">
-                    <img src="./src/img/map.jpg" alt="" class="map__map-img">
+                    <div id="map" class="map__mapEl"></div>
                     <div class="map__geolocation">
-                        <p class="map__latitude">Latitude: 53°54'</p>
-                        <p class="map__longitude">Longitude: 27°34'</p>
+                        <p class="map__latitude">Latitude: <span class="map__latitude-num">53°54'</span></p>
+                        <p class="map__longitude">Longitude: <span class="map__longitude-num">27°34'</span></p>
                     </div>
                 </div>
             </section>
