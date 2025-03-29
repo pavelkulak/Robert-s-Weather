@@ -13,10 +13,11 @@ window.localStorage.setItem("city", "Minsk")
 
 
 
-function getTodayWeather(curLangue, newCity = city) {
+function getTodayWeather(curLangue, typeTemp = "metric", newCity = city) {
 city = newCity
 window.localStorage.setItem("city", newCity)
-const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=${curLangue}`;
+const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
+
 
 fetch(url)
 .then(response => response.json())
@@ -95,19 +96,19 @@ fetch(url)
 .catch(error => console.error("Ошибка:", error));
 }
 
-getTodayWeather("en")
+// getTodayWeather("en")
 
 
-// getTodayWeather("en", "minsk")
-getTodayWeather("ru", "moscow")
-// getTodayWeather("ru", "mekka")
+// getTodayWeather("en", "metric", "minsk")
+getTodayWeather("ru", "metric", "moscow")
+// getTodayWeather("ru", "metric", "mekka")
 
 
-function getThreeDaysWeather(curLangue, newCity = city) {
+function getThreeDaysWeather(curLangue, typeTemp = "metric", newCity = city) {
 city = newCity
 window.localStorage.setItem("city", newCity)
 
-const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric&lang=${curLangue}`;
+const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
 
     fetch(url)
     .then(response => response.json())

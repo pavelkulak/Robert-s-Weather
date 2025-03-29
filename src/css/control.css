@@ -91,8 +91,14 @@
     background-color: #4C525566;
     cursor: pointer;
 }
+.control__type-temperature:not(.control__type-temperature_selected-type):hover {
+    background-color: #86929866;
+}
 .control__type-temperature_selected-type {
     background-color: #AEB5B980;
+}
+.control__type-temperature_selected-type:hover {
+    cursor: not-allowed;
 }
 .control__faringate {
     border-radius: 5px 0 0 5px;
