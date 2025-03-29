@@ -1,5 +1,5 @@
 'use strict';
-import { control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__change_temperature, control__type_temperature, control__faringate, control__celsius, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
+import { content, control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__change_temperature, control__type_temperature, control__faringate, control__celsius, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
 import {getTodayWeather, getThreeDaysWeather, initMap} from "./script.js"
 
 
@@ -72,6 +72,41 @@ control__change_temperature.addEventListener("click", function(e) {
     // Обновляю данные на странице, но прописав температуру в выбранной шкале
     getTodayWeather(control__name_language.innerText, curTypeTemp )
     getThreeDaysWeather(control__name_language.innerText, curTypeTemp )
+})
+
+
+
+
+
+
+const UNSPLASH_API_KEY = "Ie-v99zRFc6xkpCVhSXQKKRdwzheohCdmwvcxcDScYw";
+let numBgImg = 0
+// При клике на кнопку изменения фонового изображения
+control__refresh_BG.addEventListener("click", function(e) {
+    const url = `https://api.unsplash.com/search/photos?query=${window.localStorage.getItem("city")}&client_id=${UNSPLASH_API_KEY}&per_page=6`;
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if (numBgImg === 4) {
+            numBgImg = 5
+        } else if (numBgImg > 5) {
+            numBgImg = 0
+        }
+        // Получаем ссылку на первое изображение из результата поиска
+        const imageUrl = data.results[numBgImg]?.urls?.regular;
+    
+        if (imageUrl) {
+            // Устанавливаем изображение в качестве фона
+            content.style.backgroundImage = `url(${imageUrl})`;
+            content.style.backgroundSize = "cover"; // Фоновое изображение будет растянуто на весь экран
+            content.style.backgroundPosition = "center"; // Центрируем изображение
+
+            numBgImg += 1
+        } else {
+            console.log("Изображение не найдено");
+        }
+        })
+        .catch(error => console.error("Ошибка:", error));
 })
 
 
