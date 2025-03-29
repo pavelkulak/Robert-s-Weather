@@ -13,18 +13,16 @@ hr {
 
 
 
-.hide1 {        /* Неполное скрытие объекта (место под него остаётся) */
+.hidden-by-visibility {        /* Неполное скрытие объекта (место под него остаётся) */
     visibility: hidden;
-    
+    transition: all 0.2s;
 }
-.hide2 {        /* Полное скрытие объекта (скрывается и объект и место под него) */
+.hidden-by-display {        /* Полное скрытие объекта (скрывается и объект и место под него) */
     display: none !important;
+    transition: all 0.2s;
 }   
 
-.hide3 {
-    max-height: 0;
-  }
-    
+
 
 
 .hiddenFiltered {

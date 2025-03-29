@@ -28,8 +28,24 @@
                     <div class="control__control-bar">
                         <img src="./src/icon/refresh_BG.svg" alt="refresh-BG" class="control__refresh-BG">
                         <div class="control__change-language">
-                            <span class="control__name-language">EN</span>
-                            <img src="./src/icon/arrow_down.svg" alt="" class="control__icon-arrow-down-language">
+                            <div class="control__current-language">
+                                <span class="control__name-language">EN</span>
+                                <img src="./src/icon/arrow_down.svg" alt="" class="control__icon-arrow-down-language">   
+                            </div>
+                            <ul class="control__hidden-list-languages hidden-by-display">
+                                <li class="control__hidden-element-language control__hidden-element-language_selected">
+                                    <span class="control__hidden-element-language-name">EN</span> 
+                                    <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6">
+                                </li>
+                                <li class="control__hidden-element-language">
+                                    <span class="control__hidden-element-language-name">RU</span> 
+                                    <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6">
+                                </li>
+                                <li class="control__hidden-element-language">
+                                    <span class="control__hidden-element-language-name">ES</span> 
+                                    <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6">
+                                </li>
+                            </ul>
                         </div>
                         <div class="control__change-temperature">
                             <div class="control__type-temperature control__faringate">°F</div>
@@ -48,15 +64,15 @@
             <section class="today-weather">
                 <div class="container today-weather__container">
                     <div class="today-weather__header">
-                        <h1 class="today-weather__city-country"><span class="today-weather__city">Minsk</span>, <span class="today-weather__country">Belarus</span></h1>
+                        <h1 class="today-weather__city-country"><span class="today-weather__city"></span>, <span class="today-weather__country"></span></h1>
                         <h2 class="today-weather__today-date-time">
-                            <span class="today-weather__today-date">Mon 28 October</span>
-                            <span class="today-weather__today-time">17:23</span>
+                            <span class="today-weather__today-date"></span>
+                            <span class="today-weather__today-time"></span>
                         </h2>
                     </div>
                     <div class="today-weather__data-weather">
                         <p class="today-weather__temperature-today">
-                            <span class="today-weather__num-temperature-today">10</span>
+                            <span class="today-weather__num-temperature-today"></span>
                             <span class="today-weather__degree-temperature-today">°</span>
                         </p>
                         <img src="./src/icon/weather_icon.svg" alt="" class="today-weather__weather-icon" width="200">
@@ -107,8 +123,8 @@
                 <div class="container map__container">
                     <div id="map" class="map__mapEl"></div>
                     <div class="map__geolocation">
-                        <p class="map__latitude">Latitude: <span class="map__latitude-num">53°54'</span></p>
-                        <p class="map__longitude">Longitude: <span class="map__longitude-num">27°34'</span></p>
+                        <p class="map__latitude"><span class="map__latitude-name">Latitude</span>: <span class="map__latitude-num">53°54'</span></p>
+                        <p class="map__longitude"><span class="map__longitude-name">Longitude</span>: <span class="map__longitude-num">27°34'</span></p>
                     </div>
                 </div>
             </section>

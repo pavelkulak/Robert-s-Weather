@@ -1,24 +1,22 @@
 'use strict';
-import { today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude, map__longitude } from "./dom.js"
+import { control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__faringate, control__celsius, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
 
 const API_KEY = "4e88cbe360a5181d59fb73d2bee0c230";
 let city = "Minsk";
 if (!window.localStorage.getItem("city")) {
-city = "Minsk";
+    city = "Minsk";
 window.localStorage.setItem("city", "Minsk")
 } else {
-city = window.localStorage.getItem("city");
+    city = window.localStorage.getItem("city");
 }
 
 
 
 
-
-
-function getTodayWeather(newCity, curLangue) {
+function getTodayWeather(curLangue, newCity = city) {
 city = newCity
 window.localStorage.setItem("city", newCity)
-const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=curLangue`;
+const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric&lang=${curLangue}`;
 
 fetch(url)
 .then(response => response.json())
@@ -53,13 +51,23 @@ fetch(url)
     const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
 
 
-    today_weather__city.innerText = city
+    today_weather__city.innerText = data.name
     today_weather__country.innerText = countryName
+
+    // Меняю язык у названия города
+    fetch(`http://localhost:3000/geonames?city=${today_weather__city.innerText}&lang=${control__name_language.innerText.toLowerCase()}`)
+    .then(response => response.json())
+    .then(dataCity => {
+        today_weather__city.innerText = dataCity.geonames[0].name
+    }) 
+    .catch(error => console.error("Ошибка:", error));
+
+
+  
 
     today_weather__today_date.innerText = `${formattedDate[0]} ${formattedDate[2]} ${formattedDate[1]}`
     today_weather__today_time.innerText = formattedDate[3] 
 
-    console.log(data.main.temp);
     today_weather__num_temperature_today.innerText = Math.floor(data.main.temp)
 
     today_weather__weather_condition.innerText = data.weather[0].description
@@ -80,20 +88,22 @@ fetch(url)
 
 
 
-    console.log(data);
+    // console.log(data);
     // console.log(`Температура в ${data.sys.country} ${data.name}: ${data.main.temp}°C`);
 
 })
 .catch(error => console.error("Ошибка:", error));
 }
 
-getTodayWeather(city, "en")
-// getTodayWeather("minsk", "en")
-// getTodayWeather("moscow", "ru")
-// getTodayWeather("mekka", "ru")
+getTodayWeather("en")
 
 
-function getThreeDaysWeather(newCity, curLangue) {
+// getTodayWeather("en", "minsk")
+getTodayWeather("ru", "moscow")
+// getTodayWeather("ru", "mekka")
+
+
+function getThreeDaysWeather(curLangue, newCity = city) {
 city = newCity
 window.localStorage.setItem("city", newCity)
 
@@ -102,8 +112,6 @@ const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${
     fetch(url)
     .then(response => response.json())
     .then(data => {
-        console.log(data);
-
         // Текущая дата
         const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
@@ -163,7 +171,7 @@ const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${
 
 
 
-getThreeDaysWeather(city, "en")
+getThreeDaysWeather("en")
 
 
 
@@ -171,8 +179,6 @@ getThreeDaysWeather(city, "en")
 
 
 function initMap(lat, lon) {
-    console.log(lat)
-    console.log(lon);
     // Создаём карту и устанавливаем координаты
     const map = L.map("map").setView([lat, lon], 10);
 
@@ -187,7 +193,7 @@ function initMap(lat, lon) {
         .openPopup();
 
 
-        
+
     // Преобразуем координаты в формат градусов, минут, секунд. Затем вписываем их в HTML
     map__latitude.innerText = convertToDMS(lat)
     map__longitude.innerText = convertToDMS(lon)
@@ -206,3 +212,6 @@ function convertToDMS(coord) {
 
 
 initMap(window.localStorage.getItem("latitude"), window.localStorage.getItem("longitude"));
+
+
+export {getTodayWeather, getThreeDaysWeather, initMap}
