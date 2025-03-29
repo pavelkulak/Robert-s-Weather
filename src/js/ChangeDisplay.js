@@ -1,6 +1,36 @@
 'use strict';
-import { content, control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__change_temperature, control__type_temperature, control__faringate, control__celsius, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
+import { content, control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__hidden_element_language_name, control__change_temperature, control__type_temperature, control__faringate, control__celsius, control__search_city_input, control__search_city_button, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
 import {getTodayWeather, getThreeDaysWeather, initMap} from "./script.js"
+
+
+
+// Сразу при запуске страницы обновляю стиль выбранного элемента на языке
+control__hidden_element_language.forEach(function(el) {
+    const elNameLanguage = el.querySelector(".control__hidden-element-language-name")
+    if (elNameLanguage.innerText == window.localStorage.getItem("language")) {
+        el.classList.add("control__hidden-element-language_selected")
+        control__name_language.innerText = window.localStorage.getItem("language")
+    }
+    else {
+        el.classList.remove("control__hidden-element-language_selected")
+    }
+})
+
+// Сразу при запуске страницы обновляю стиль выбранного элемента на шкале температуры
+control__type_temperature.forEach(function(el) {
+    const curTypeTemp = window.localStorage.getItem("curTypeTemp")
+    if (curTypeTemp == "imperial" && el.classList.contains("control__faringate")) {
+        el.classList.add("control__type-temperature_selected-type")
+    } 
+    else if (curTypeTemp == "metric" && el.classList.contains("control__celsius")) {
+        el.classList.add("control__type-temperature_selected-type")
+    }
+    else {
+        el.classList.remove("control__type-temperature_selected-type")
+    }
+})
+
+
 
 
 const translations = {
@@ -14,6 +44,7 @@ function translate(text, lang) {
 }
 
 
+// При изменении языка
 control__change_language.addEventListener("click", function(e) {
     control__hidden_list_languages.classList.toggle("hidden-by-display")
 
@@ -40,6 +71,8 @@ control__change_language.addEventListener("click", function(e) {
     // Меняю язык у "ширина" и "долгота"
     map__latitude_name.innerText = translate("Latitude", control__name_language.innerText.toLowerCase()) 
     map__longitude_name.innerText = translate("Longitude", control__name_language.innerText.toLowerCase())
+
+    window.localStorage.setItem("language", control__name_language.innerText)
 })
 
 
@@ -110,5 +143,19 @@ control__refresh_BG.addEventListener("click", function(e) {
 })
 
 
+
+control__search_city_button.addEventListener("click", function(e) {
+    e.preventDefault()
+    const city = control__search_city_input.value.trim();     // Получаем город из input
+
+    if (city) {
+        getTodayWeather(control__name_language.innerText, window.localStorage.getItem("curTypeTemp"), city);
+        getThreeDaysWeather(control__name_language.innerText, window.localStorage.getItem("curTypeTemp"), city);
+        control__search_city_input.value = ""
+
+    } else {
+        alert("Пожалуйста, введите название города.");
+    }
+})
 
 

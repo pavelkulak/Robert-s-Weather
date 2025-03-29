@@ -20,7 +20,15 @@ const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${A
 
 
 fetch(url)
-.then(response => response.json())
+.then(response => {
+    if (!response.ok) {
+        // Если статус ответа не OK, выбрасываем ошибку
+        alert("Город не найден или ошибка в запросе.")
+        throw new Error("Город не найден или ошибка в запросе.");
+        
+    }
+    return response.json();
+})
 .then(data => {
     const countryCode = data.sys.country;
     const countryName = new Intl.DisplayNames([curLangue], { type: "region" }).of(countryCode);
@@ -56,7 +64,7 @@ fetch(url)
     today_weather__country.innerText = countryName
 
     // Меняю язык у названия города
-    fetch(`http://localhost:3000/geonames?city=${today_weather__city.innerText}&lang=${control__name_language.innerText.toLowerCase()}`)
+    fetch(`http://localhost:3000/geonames?city=${today_weather__city.innerText}&lang=${window.localStorage.getItem("language")}`)
     .then(response => response.json())
     .then(dataCity => {
         today_weather__city.innerText = dataCity.geonames[0].name
@@ -87,6 +95,8 @@ fetch(url)
     window.localStorage.setItem("latitude", data.coord.lat)
     window.localStorage.setItem("longitude", data.coord.lon)
 
+    initMap(window.localStorage.getItem("latitude"), window.localStorage.getItem("longitude"));
+
 
 
     // console.log(data);
@@ -100,9 +110,9 @@ fetch(url)
 
 
 // getTodayWeather("en", "metric", "minsk")
-getTodayWeather("ru", "metric", "moscow")
+// getTodayWeather("ru", "metric", "moscow")
 // getTodayWeather("ru", "metric", "mekka")
-
+getTodayWeather(window.localStorage.getItem("language"), window.localStorage.getItem("curTypeTemp"), window.localStorage.getItem("city"))
 
 function getThreeDaysWeather(curLangue, typeTemp = "metric", newCity = city) {
 city = newCity
@@ -111,7 +121,13 @@ window.localStorage.setItem("city", newCity)
 const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
 
     fetch(url)
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            // Если статус ответа не OK, выбрасываем ошибку
+            throw new Error("Город не найден или ошибка в запросе.");
+        }
+        return response.json();
+    })
     .then(data => {
         // Текущая дата
         const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
@@ -178,10 +194,16 @@ getThreeDaysWeather("en")
 
 
 
-
+let map
 function initMap(lat, lon) {
+    // Удаляем старую карту, если она уже существует
+    if (map) {
+        map.remove(); // Удаляем старую карту, чтобы избежать наложений
+    }
+
     // Создаём карту и устанавливаем координаты
-    const map = L.map("map").setView([lat, lon], 10);
+    map = L.map("map").setView([lat, lon], 10);
+
 
     // Добавляем слой карты CartoDB с локализацией
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -212,7 +234,7 @@ function convertToDMS(coord) {
 }
 
 
-initMap(window.localStorage.getItem("latitude"), window.localStorage.getItem("longitude"));
+
 
 
 export {getTodayWeather, getThreeDaysWeather, initMap}
