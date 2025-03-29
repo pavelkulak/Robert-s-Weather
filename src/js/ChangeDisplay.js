@@ -33,8 +33,8 @@ control__change_language.addEventListener("click", function(e) {
 
     // Заменяю название языка в окне с текущим языком (тем, на который нажали)
     control__name_language.innerText = elementLanguage.querySelector(".control__hidden-element-language-name").innerText
-    getTodayWeather(control__name_language.innerText)
-    getThreeDaysWeather(control__name_language.innerText)
+    getTodayWeather(control__name_language.innerText, window.localStorage.getItem("curTypeTemp"))
+    getThreeDaysWeather(control__name_language.innerText, window.localStorage.getItem("curTypeTemp"))
 
 
     // Меняю язык у "ширина" и "долгота"
@@ -66,6 +66,8 @@ control__change_temperature.addEventListener("click", function(e) {
     else if (elementTypeTemperature.classList.contains("control__celsius")) {
         curTypeTemp = "metric"
     }
+
+    window.localStorage.setItem("curTypeTemp", curTypeTemp)
 
     // Обновляю данные на странице, но прописав температуру в выбранной шкале
     getTodayWeather(control__name_language.innerText, curTypeTemp )
