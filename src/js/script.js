@@ -126,9 +126,9 @@ const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${
 
 
         // Извлекаем прогноз на 3 дня вперёд
-        const tomorrowData = dailyForecasts[0];     // Завтра (первый после сегодняшнего)
-        const afterTomorrowData = dailyForecasts[1];    // Послезавтра
-        const thirdDayData = dailyForecasts[2];
+        const tomorrowData = dailyForecasts[1];     // Завтра (первый после сегодняшнего)
+        const afterTomorrowData = dailyForecasts[2];    // Послезавтра
+        const thirdDayData = dailyForecasts[3];
 
         // Данные на завтра
         const tomorrowDay = formatDay(tomorrowData.dt_txt, curLangue);
