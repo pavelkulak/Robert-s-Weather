@@ -1,5 +1,5 @@
 'use strict';
-import { content, control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__hidden_element_language_name, control__change_temperature, control__type_temperature, control__faringate, control__celsius, control__search_city_input, control__search_city_button, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
+import { content, control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__hidden_element_language_name, control__change_temperature, control__type_temperature, control__faringate, control__celsius, control__search_city_input, control__search_city_icon, control__search_city_button, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
 import {getTodayWeather, getThreeDaysWeather, initMap} from "./script.js"
 
 
@@ -159,3 +159,46 @@ control__search_city_button.addEventListener("click", function(e) {
 })
 
 
+
+
+// Проверяем поддержку браузером Web Speech API
+const speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (speechRecognition) {
+    const recognition = new speechRecognition();
+     
+    recognition.interimResults = false; // Не показывать промежуточные результаты
+    recognition.maxAlternatives = 1; // Одна лучшая альтернатива результата
+
+
+    // При нажатии на кнопку микрофона запускаем распознавание речи
+    control__search_city_icon.addEventListener("click", () => {
+        // Устанавливаем язык для распознавания речи
+        recognition.lang = `${window.localStorage.getItem("language").toLowerCase()}-${window.localStorage.getItem("language")}`;
+        console.log(`${window.localStorage.getItem("language").toLowerCase()}-${window.localStorage.getItem("language")}`); 
+        recognition.start();
+        control__search_city_input.value = "🎙️ Говорите...";
+    });
+
+    // Обработчик события успешного распознавания
+    recognition.addEventListener("result", (event) => {
+        const transcript = event.results[0][0].transcript.trim(); // Распознанный текст
+        control__search_city_input.value = transcript; // Вставляем текст в инпут
+        console.log("Распознанный текст:", transcript);
+        recognition.stop(); // Останавливаем распознавание
+
+        // Автоматически запускаем поиск после распознавания
+        control__search_city_button.click();
+    });
+
+    // Обработчик ошибки
+    recognition.addEventListener("error", (event) => {
+        console.error("Ошибка распознавания:", event.error);
+        alert("Ошибка распознавания речи. Попробуйте снова.");
+        control__search_city_input.value = "🎤";
+    });
+
+} else {
+    console.warn("Web Speech API не поддерживается в этом браузере");
+    alert("Ваш браузер не поддерживает голосовой ввод 😢");
+}
