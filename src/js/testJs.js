@@ -1,20 +1,25 @@
 'use strict';
-import { content, control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__hidden_element_language_name, control__change_temperature, control__type_temperature, control__faringate, control__celsius, control__serch_bar, control__search_city_input, control__search_city_icon, control__search_city_button, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
 
-const API_KEY = "4e88cbe360a5181d59fb73d2bee0c230";
+import {content, controlDomElements, todayWeatherDomElements, weatherThreeDaysDomElements, mapDomElements} from "./dom.js"
 
-control__serch_bar.addEventListener("submit", async function(e) {
+const API_KEY = import.meta.env.VITE_API_KEY;
+
+controlDomElements.serchBar.addEventListener("submit", async function(e) {
     e.preventDefault()
 
-    const city = control__search_city_input.value
-
-    if (city) {
+    const city = controlDomElements.searchCityInput.value
+    console.log(city);
+    console.log(city.trim().length);
+    if (city.trim().length != 0) {
         try {
             const weatherData = await getWeatherData("en", "metric", city)
+            if (controlDomElements.serchBar.children.length === 3) {
+                controlDomElements.searchCityInput.classList.remove("control__search-city-input_error")
+                controlDomElements.serchBar.querySelector(".control__ErrorMessage").remove()
+            }
             displayWeatherInfo(weatherData, "en", "metric", city)
         }
         catch (error) {
-            console.log(error);
             displayError(error)
         }
     }
@@ -34,15 +39,52 @@ async function getWeatherData(curLangue, typeTemp = "metric", city2) {
 
 function displayWeatherInfo(data, curLangue, typeTemp = "metric", city2) {
     console.log(data);
-    // const { name: city, 
-    //         main: {temp, humidity},
-    //         weather: [{description, id}] } = data
 
     const countryCode = data.sys.country;
     const countryName = new Intl.DisplayNames([curLangue], { type: "region" }).of(countryCode);
 
+
+    // Форматируем дату и время
+    const curDate = getDate(data.timezone, curLangue)
+
+    // Получаем код иконки
+    const iconCode = data.weather[0].icon; 
+    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
+
+
+    todayWeatherDomElements.city.innerText = data.name
+    todayWeatherDomElements.country.innerText = countryName
+
+    // Меняю язык у названия города
+    changeLanguageCityName()
+
+
+    todayWeatherDomElements.todayDate.innerText = `${curDate[0]} ${curDate[2]} ${curDate[1]}`
+        todayWeatherDomElements.todayTime.innerText = curDate[3] 
+
+        todayWeatherDomElements.numTemperatureToday.innerText = Math.floor(data.main.temp)
+
+        todayWeatherDomElements.weatherCondition.innerText = data.weather[0].description
+
+        todayWeatherDomElements.perceivedTemperatureNum.innerText = Math.floor(data.main.feels_like)
+
+        todayWeatherDomElements.windSpeedNum.innerText = data.wind.speed
+
+        todayWeatherDomElements.humidityNum.innerText = data.main.humidity
+
+
+        todayWeatherDomElements.weatherIcon.src = iconUrl;
+        todayWeatherDomElements.weatherIcon.alt = data.weather[0].description;
+
+
+        window.localStorage.setItem("latitude", data.coord.lat)
+        window.localStorage.setItem("longitude", data.coord.lon)
+    
+}
+
+
+function getDate(timezoneOffset, curLangue) {
     // Получаем смещение часового пояса
-    const timezoneOffset = data.timezone; // В секундах
     const localTime = new Date(Date.now() + timezoneOffset * 1000);
 
     // Форматируем дату и время
@@ -60,57 +102,50 @@ function displayWeatherInfo(data, curLangue, typeTemp = "metric", city2) {
     formattedDate[0] = formattedDate[0].replace(",", "")  // Удаляем запятую после названия недели
 
 
+    // Данные 2 строчки возможно не нужны   ?????
     const date = new Date().toLocaleDateString("en-US", options);
     date.replace(" ", ", ")
 
-    // Получаем код иконки
-    const iconCode = data.weather[0].icon; 
-    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
-
-
-    today_weather__city.innerText = data.name
-    today_weather__country.innerText = countryName
-
-    // Меняю язык у названия города
-    // changeLanguageCityName()
-
-
-    today_weather__today_date.innerText = `${formattedDate[0]} ${formattedDate[2]} ${formattedDate[1]}`
-        today_weather__today_time.innerText = formattedDate[3] 
-
-        today_weather__num_temperature_today.innerText = Math.floor(data.main.temp)
-
-        today_weather__weather_condition.innerText = data.weather[0].description
-
-        today_weather__perceived_temperature_num.innerText = Math.floor(data.main.feels_like)
-
-        today_weather__wind_speed_num.innerText = data.wind.speed
-
-        today_weather__humidity_num.innerText = data.main.humidity
-
-
-        today_weather__weather_icon.src = iconUrl;
-        today_weather__weather_icon.alt = data.weather[0].description;
-
-
-        window.localStorage.setItem("latitude", data.coord.lat)
-        window.localStorage.setItem("longitude", data.coord.lon)
-    
+    return formattedDate
 }
 
+
+// Функция для отображения ошибки ввода города
 function displayError(error) {
-
+    // Если ранее уже была выдана ошибка, то только меняю текст в html поле. Иначе создаю новый
+    if (controlDomElements.serchBar.children.length === 3) {
+        controlDomElements.serchBar.querySelector(".control__ErrorMessage").innerText = error
+    }
+    else {
+        controlDomElements.searchCityInput.classList.add("control__search-city-input_error")
+        const htmlErrorMessage = document.createElement("p")
+        htmlErrorMessage.textContent = error
+        htmlErrorMessage.classList.add("control__ErrorMessage")
+        controlDomElements.serchBar.appendChild(htmlErrorMessage)
+    }
 }
 
 
+ 
 function changeLanguageCityName() {
     // Меняю язык у названия города
-    console.log(today_weather__city.innerText);
-    fetch(`http://localhost:3000/geonames?city=${today_weather__city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
+    console.log(todayWeatherDomElements.city.innerText);
+
+    fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}&maxRows=1&username=robertimor`)
     .then(response => response.json())
     .then(dataCity => {
-        today_weather__city.innerText = dataCity.geonames[0].name
-    }) 
+        console.log(todayWeatherDomElements.city.innerText);
+        console.log(window.localStorage.getItem("language").toLowerCase());
+        console.log(dataCity);
+
+        // Проверка на наличие данных в geonames
+        if (dataCity && dataCity.geonames && Array.isArray(dataCity.geonames) && dataCity.geonames.length > 0) {
+            console.log(dataCity.geonames[0].name);
+            todayWeatherDomElements.city.innerText = dataCity.geonames[0].name;
+        } else {
+            console.error("Ошибка: geonames не содержит данных", dataCity);
+        }
+    })
     .catch(error => console.error("Ошибка:", error));
 }
 
