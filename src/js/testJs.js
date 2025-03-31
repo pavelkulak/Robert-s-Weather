@@ -126,19 +126,6 @@ function displayError(error) {
 }
 
 
-// function changeLanguageCityName() {
-//     // Меняю язык у названия города
-//     console.log(todayWeatherDomElements.city.innerText);
-//     // fetch(`http://localhost:3000/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
-//     fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
-//     .then(response => response.json())
-//     .then(dataCity => {
-//         console.log(dataCity);
-//         console.log(dataCity.geonames[0].name);
-//         todayWeatherDomElements.city.innerText = dataCity.geonames[0].name
-//     }) 
-//     .catch(error => console.error("Ошибка:", error));
-// }
  
 function changeLanguageCityName() {
     // Меняю язык у названия города
