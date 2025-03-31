@@ -8,14 +8,18 @@ controlDomElements.serchBar.addEventListener("submit", async function(e) {
     e.preventDefault()
 
     const city = controlDomElements.searchCityInput.value
-
-    if (city) {
+    console.log(city);
+    console.log(city.trim().length);
+    if (city.trim().length != 0) {
         try {
             const weatherData = await getWeatherData("en", "metric", city)
+            if (controlDomElements.serchBar.children.length === 3) {
+                controlDomElements.searchCityInput.classList.remove("control__search-city-input_error")
+                controlDomElements.serchBar.querySelector(".control__ErrorMessage").remove()
+            }
             displayWeatherInfo(weatherData, "en", "metric", city)
         }
         catch (error) {
-            console.log(error);
             displayError(error)
         }
     }
@@ -99,8 +103,19 @@ function displayWeatherInfo(data, curLangue, typeTemp = "metric", city2) {
     
 }
 
+// Функция для отображения ошибки ввода города
 function displayError(error) {
-
+    // Если ранее уже была выдана ошибка, то только меняю текст в html поле. Иначе создаю новый
+    if (controlDomElements.serchBar.children.length === 3) {
+        controlDomElements.serchBar.querySelector(".control__ErrorMessage").innerText = error
+    }
+    else {
+        controlDomElements.searchCityInput.classList.add("control__search-city-input_error")
+        const htmlErrorMessage = document.createElement("p")
+        htmlErrorMessage.textContent = error
+        htmlErrorMessage.classList.add("control__ErrorMessage")
+        controlDomElements.serchBar.appendChild(htmlErrorMessage)
+    }
 }
 
 
