@@ -126,15 +126,39 @@ function displayError(error) {
 }
 
 
+// function changeLanguageCityName() {
+//     // Меняю язык у названия города
+//     console.log(todayWeatherDomElements.city.innerText);
+//     // fetch(`http://localhost:3000/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
+//     fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
+//     .then(response => response.json())
+//     .then(dataCity => {
+//         console.log(dataCity);
+//         console.log(dataCity.geonames[0].name);
+//         todayWeatherDomElements.city.innerText = dataCity.geonames[0].name
+//     }) 
+//     .catch(error => console.error("Ошибка:", error));
+// }
+
 function changeLanguageCityName() {
     // Меняю язык у названия города
     console.log(todayWeatherDomElements.city.innerText);
-    fetch(`http://localhost:3000/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
+
+    fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}&maxRows=1&username=robertimor`)
     .then(response => response.json())
     .then(dataCity => {
-        console.log(dataCity.geonames[0].name);
-        todayWeatherDomElements.city.innerText = dataCity.geonames[0].name
-    }) 
+        console.log(todayWeatherDomElements.city.innerText);
+        console.log(window.localStorage.getItem("language").toLowerCase());
+        console.log(dataCity);
+
+        // Проверка на наличие данных в geonames
+        if (dataCity && dataCity.geonames && Array.isArray(dataCity.geonames) && dataCity.geonames.length > 0) {
+            console.log(dataCity.geonames[0].name);
+            todayWeatherDomElements.city.innerText = dataCity.geonames[0].name;
+        } else {
+            console.error("Ошибка: geonames не содержит данных", dataCity);
+        }
+    })
     .catch(error => console.error("Ошибка:", error));
 }
 
