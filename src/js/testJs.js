@@ -39,34 +39,13 @@ async function getWeatherData(curLangue, typeTemp = "metric", city2) {
 
 function displayWeatherInfo(data, curLangue, typeTemp = "metric", city2) {
     console.log(data);
-    // const { name: city, 
-    //         main: {temp, humidity},
-    //         weather: [{description, id}] } = data
 
     const countryCode = data.sys.country;
     const countryName = new Intl.DisplayNames([curLangue], { type: "region" }).of(countryCode);
 
-    // Получаем смещение часового пояса
-    const timezoneOffset = data.timezone; // В секундах
-    const localTime = new Date(Date.now() + timezoneOffset * 1000);
 
     // Форматируем дату и время
-    const options = { 
-        weekday: "short", // "Thu" → "Чт" (если ru)
-        day: "numeric", 
-        month: "long", // "March" → "Март"
-        hour: "2-digit", 
-        minute: "2-digit", 
-        hour12: false, // Для 24-часового формата
-        timeZone: "UTC"
-    };
-    const formattedDate = localTime.toLocaleDateString(curLangue, options).split(" ");
-    formattedDate.splice(3, 1)  // удаляем из массива "at"
-    formattedDate[0] = formattedDate[0].replace(",", "")  // Удаляем запятую после названия недели
-
-
-    const date = new Date().toLocaleDateString("en-US", options);
-    date.replace(" ", ", ")
+    const curDate = getDate(data.timezone, curLangue)
 
     // Получаем код иконки
     const iconCode = data.weather[0].icon; 
@@ -77,11 +56,11 @@ function displayWeatherInfo(data, curLangue, typeTemp = "metric", city2) {
     todayWeatherDomElements.country.innerText = countryName
 
     // Меняю язык у названия города
-    // changeLanguageCityName()
+    changeLanguageCityName()
 
 
-    todayWeatherDomElements.todayDate.innerText = `${formattedDate[0]} ${formattedDate[2]} ${formattedDate[1]}`
-        todayWeatherDomElements.todayTime.innerText = formattedDate[3] 
+    todayWeatherDomElements.todayDate.innerText = `${curDate[0]} ${curDate[2]} ${curDate[1]}`
+        todayWeatherDomElements.todayTime.innerText = curDate[3] 
 
         todayWeatherDomElements.numTemperatureToday.innerText = Math.floor(data.main.temp)
 
@@ -102,6 +81,34 @@ function displayWeatherInfo(data, curLangue, typeTemp = "metric", city2) {
         window.localStorage.setItem("longitude", data.coord.lon)
     
 }
+
+
+function getDate(timezoneOffset, curLangue) {
+    // Получаем смещение часового пояса
+    const localTime = new Date(Date.now() + timezoneOffset * 1000);
+
+    // Форматируем дату и время
+    const options = { 
+        weekday: "short", // "Thu" → "Чт" (если ru)
+        day: "numeric", 
+        month: "long", // "March" → "Март"
+        hour: "2-digit", 
+        minute: "2-digit", 
+        hour12: false, // Для 24-часового формата
+        timeZone: "UTC"
+    };
+    const formattedDate = localTime.toLocaleDateString(curLangue, options).split(" ");
+    formattedDate.splice(3, 1)  // удаляем из массива "at"
+    formattedDate[0] = formattedDate[0].replace(",", "")  // Удаляем запятую после названия недели
+
+
+    // Данные 2 строчки возможно не нужны   ?????
+    const date = new Date().toLocaleDateString("en-US", options);
+    date.replace(" ", ", ")
+
+    return formattedDate
+}
+
 
 // Функция для отображения ошибки ввода города
 function displayError(error) {
@@ -125,6 +132,7 @@ function changeLanguageCityName() {
     fetch(`http://localhost:3000/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
     .then(response => response.json())
     .then(dataCity => {
+        console.log(dataCity.geonames[0].name);
         todayWeatherDomElements.city.innerText = dataCity.geonames[0].name
     }) 
     .catch(error => console.error("Ошибка:", error));
