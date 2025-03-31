@@ -114,7 +114,7 @@ controlDomElements.changeTemperature.addEventListener("click", function(e) {
 
 
 
-const UNSPLASH_API_KEY = "Ie-v99zRFc6xkpCVhSXQKKRdwzheohCdmwvcxcDScYw";
+const UNSPLASH_API_KEY = import.meta.env.VITE_UNSPLASH_KEY;
 let numBgImg = 0
 // При клике на кнопку изменения фонового изображения
 controlDomElements.refreshBG.addEventListener("click", function(e) {

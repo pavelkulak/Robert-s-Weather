@@ -2,7 +2,7 @@
 
 import {content, controlDomElements, todayWeatherDomElements, weatherThreeDaysDomElements, mapDomElements} from "./dom.js"
 
-const API_KEY = "4e88cbe360a5181d59fb73d2bee0c230";
+const API_KEY = import.meta.env.VITE_API_KEY;
 let city = "Minsk";
 if (!window.localStorage.getItem("city")) {
     city = "Minsk";
