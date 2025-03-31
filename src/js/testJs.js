@@ -1,12 +1,13 @@
 'use strict';
-import { content, control__refresh_BG, control__change_language, control__name_language, control__hidden_list_languages, control__hidden_element_language, control__hidden_element_language_name, control__change_temperature, control__type_temperature, control__faringate, control__celsius, control__serch_bar, control__search_city_input, control__search_city_icon, control__search_city_button, today_weather__city, today_weather__country, today_weather__today_date, today_weather__today_time, today_weather__num_temperature_today, today_weather__weather_icon, today_weather__weather_condition, today_weather__perceived_temperature_num, today_weather__wind_speed_num, today_weather__humidity_num, tomorrowDayEl, afterTomorrowDayEl, thirdDayEl, map__latitude_name, map__longitude_name, map__latitude, map__longitude } from "./dom.js"
+
+import {content, controlDomElements, todayWeatherDomElements, weatherThreeDaysDomElements, mapDomElements} from "./dom.js"
 
 const API_KEY = "4e88cbe360a5181d59fb73d2bee0c230";
 
-control__serch_bar.addEventListener("submit", async function(e) {
+controlDomElements.serchBar.addEventListener("submit", async function(e) {
     e.preventDefault()
 
-    const city = control__search_city_input.value
+    const city = controlDomElements.searchCityInput.value
 
     if (city) {
         try {
@@ -68,29 +69,29 @@ function displayWeatherInfo(data, curLangue, typeTemp = "metric", city2) {
     const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
 
 
-    today_weather__city.innerText = data.name
-    today_weather__country.innerText = countryName
+    todayWeatherDomElements.city.innerText = data.name
+    todayWeatherDomElements.country.innerText = countryName
 
     // Меняю язык у названия города
     // changeLanguageCityName()
 
 
-    today_weather__today_date.innerText = `${formattedDate[0]} ${formattedDate[2]} ${formattedDate[1]}`
-        today_weather__today_time.innerText = formattedDate[3] 
+    todayWeatherDomElements.todayDate.innerText = `${formattedDate[0]} ${formattedDate[2]} ${formattedDate[1]}`
+        todayWeatherDomElements.todayTime.innerText = formattedDate[3] 
 
-        today_weather__num_temperature_today.innerText = Math.floor(data.main.temp)
+        todayWeatherDomElements.numTemperatureToday.innerText = Math.floor(data.main.temp)
 
-        today_weather__weather_condition.innerText = data.weather[0].description
+        todayWeatherDomElements.weatherCondition.innerText = data.weather[0].description
 
-        today_weather__perceived_temperature_num.innerText = Math.floor(data.main.feels_like)
+        todayWeatherDomElements.perceivedTemperatureNum.innerText = Math.floor(data.main.feels_like)
 
-        today_weather__wind_speed_num.innerText = data.wind.speed
+        todayWeatherDomElements.windSpeedNum.innerText = data.wind.speed
 
-        today_weather__humidity_num.innerText = data.main.humidity
+        todayWeatherDomElements.humidityNum.innerText = data.main.humidity
 
 
-        today_weather__weather_icon.src = iconUrl;
-        today_weather__weather_icon.alt = data.weather[0].description;
+        todayWeatherDomElements.weatherIcon.src = iconUrl;
+        todayWeatherDomElements.weatherIcon.alt = data.weather[0].description;
 
 
         window.localStorage.setItem("latitude", data.coord.lat)
@@ -105,11 +106,11 @@ function displayError(error) {
 
 function changeLanguageCityName() {
     // Меняю язык у названия города
-    console.log(today_weather__city.innerText);
-    fetch(`http://localhost:3000/geonames?city=${today_weather__city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
+    console.log(todayWeatherDomElements.city.innerText);
+    fetch(`http://localhost:3000/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
     .then(response => response.json())
     .then(dataCity => {
-        today_weather__city.innerText = dataCity.geonames[0].name
+        todayWeatherDomElements.city.innerText = dataCity.geonames[0].name
     }) 
     .catch(error => console.error("Ошибка:", error));
 }
