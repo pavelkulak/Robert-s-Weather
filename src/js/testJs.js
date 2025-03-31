@@ -139,7 +139,7 @@ function displayError(error) {
 //     }) 
 //     .catch(error => console.error("Ошибка:", error));
 // }
-
+ 
 function changeLanguageCityName() {
     // Меняю язык у названия города
     console.log(todayWeatherDomElements.city.innerText);
