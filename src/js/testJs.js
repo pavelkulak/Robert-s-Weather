@@ -150,3 +150,23 @@ function changeLanguageCityName() {
 }
 
 
+async function getApiKey() {
+    try {
+        const response = await fetch("https://cors-proxy-server-0jmy.onrender.com/getApiKey");
+        const data = await response.json();
+        return data.apiKey;
+    } catch (error) {
+        console.error("Ошибка при получении API-ключа:", error);
+    }
+}
+
+async function fetchWeather() {
+    const API_KEY = await getApiKey(); // Получаем ключ перед запросом
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${API_KEY}`)
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error("Ошибка запроса погоды:", error));
+}
+
+fetchWeather();
