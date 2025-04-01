@@ -3,8 +3,24 @@
 import {content, controlDomElements, todayWeatherDomElements, weatherThreeDaysDomElements, mapDomElements} from "./dom.js"
 
 
-const API_KEY = await getApiKey(); // Получаем ключ перед запросом
-console.log(API_KEY);
+async function getApiKey() {
+    try {
+        const response = await fetch("https://cors-proxy-server-0jmy.onrender.com/getApiKey");
+        const data = await response.json();
+        console.log(data);
+        return data.apiKey;
+    } catch (error) {
+        console.error("Ошибка при получении API-ключа:", error);
+    }
+}
+
+let API_KEY
+async function fetchApiKey() {
+    API_KEY = await getApiKey();
+    console.log(API_KEY);
+}
+fetchApiKey();
+
 
 
 controlDomElements.serchBar.addEventListener("submit", async function(e) {
@@ -40,7 +56,7 @@ async function getWeatherData(curLangue, typeTemp = "metric", city2) {
     return await response.json()
 }
 
-function displayWeatherInfo(data, curLangue, typeTemp = "metric", city2) {
+function displayWeatherInfo(data, curLangue) {
     console.log(data);
 
     const countryCode = data.sys.country;
@@ -134,13 +150,9 @@ function changeLanguageCityName() {
     // Меняю язык у названия города
     console.log(todayWeatherDomElements.city.innerText);
 
-    fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}&maxRows=1&username=robertimor`)
+    fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem("language").toLowerCase()}`)
     .then(response => response.json())
     .then(dataCity => {
-        console.log(todayWeatherDomElements.city.innerText);
-        console.log(window.localStorage.getItem("language").toLowerCase());
-        console.log(dataCity);
-
         // Проверка на наличие данных в geonames
         if (dataCity && dataCity.geonames && Array.isArray(dataCity.geonames) && dataCity.geonames.length > 0) {
             console.log(dataCity.geonames[0].name);
@@ -153,45 +165,36 @@ function changeLanguageCityName() {
 }
 
 
-async function getApiKey() {
-    try {
-        const response = await fetch("https://cors-proxy-server-0jmy.onrender.com/getApiKey");
-        const data = await response.json();
-        console.log(data);
-        return data.apiKey;
-    } catch (error) {
-        console.error("Ошибка при получении API-ключа:", error);
-    }
-}
 
-async function getGeonamesApiKey() {
-    try {
-        const response = await fetch("https://cors-proxy-server-0jmy.onrender.com/geonames?city=London&lang=ru");
-        const data = await response.json();
-        console.log(data);
-        return data.apiKey;
-    } catch (error) {
-        console.error("Ошибка при получении API-ключа:", error);
-    }
-}
 
-async function fetchWeather() {
-    const API_KEY = await getApiKey(); // Получаем ключ перед запросом
-    const UNSPLASH_KEY = await getGeonamesApiKey()
-    console.log(API_KEY);
-    console.log(UNSPLASH_KEY);
+// async function getGeonamesApiKey() {
+//     try {
+//         const response = await fetch("https://cors-proxy-server-0jmy.onrender.com/geonames?city=London&lang=ru");
+//         const data = await response.json();
+//         console.log(data);
+//         return data.apiKey;
+//     } catch (error) {
+//         console.error("Ошибка при получении API-ключа:", error);
+//     }
+// }
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${API_KEY}`)
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error("Ошибка запроса погоды:", error));
+// async function fetchWeather() {
+//     const API_KEY = await getApiKey(); // Получаем ключ перед запросом
+//     const UNSPLASH_KEY = await getGeonamesApiKey()
+//     console.log(API_KEY);
+//     console.log(UNSPLASH_KEY);
+
+//     fetch(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${API_KEY}`)
+//         .then(response => response.json())
+//         .then(data => console.log(data))
+//         .catch(error => console.error("Ошибка запроса погоды:", error));
   
 
-    fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=London&lang=ru`)
-        .then(response => response.json())
-        .then(data => console.log("Geonames API ответ:", data))
-        .catch(error => console.error("Ошибка запроса перевода:", error));
-}
+//     fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=London&lang=ru`)
+//         .then(response => response.json())
+//         .then(data => console.log("Geonames API ответ:", data))
+//         .catch(error => console.error("Ошибка запроса перевода:", error));
+// }
 
 
-fetchWeather();
+// fetchWeather();
