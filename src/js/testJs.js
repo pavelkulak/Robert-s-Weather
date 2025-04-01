@@ -154,6 +154,7 @@ async function getApiKey() {
     try {
         const response = await fetch("https://cors-proxy-server-0jmy.onrender.com/getApiKey");
         const data = await response.json();
+        console.log(data);
         return data.apiKey;
     } catch (error) {
         console.error("Ошибка при получении API-ключа:", error);
@@ -162,6 +163,7 @@ async function getApiKey() {
 
 async function fetchWeather() {
     const API_KEY = await getApiKey(); // Получаем ключ перед запросом
+    console.log(API_KEY);
 
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${API_KEY}`)
         .then(response => response.json())
