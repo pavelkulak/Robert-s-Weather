@@ -2,7 +2,7 @@
 
 import {content, controlDomElements, todayWeatherDomElements, weatherThreeDaysDomElements, mapDomElements} from "./dom.js"
 
-// const API_KEY = import.meta.env.VITE_API_KEY;
+
 const API_KEY = await getApiKey(); // Получаем ключ перед запросом
 console.log(API_KEY);
 
@@ -185,11 +185,7 @@ async function fetchWeather() {
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.error("Ошибка запроса погоды:", error));
-
-    // fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=London&lang=ru&maxRows=1&username=robertimor`)
-    //     .then(response => response.json())
-    //     .then(data => console.log(data))
-    //     .catch(error => console.error("Ошибка запроса перевода:", error));    
+  
 
     fetch(`https://cors-proxy-server-0jmy.onrender.com/geonames?city=London&lang=ru`)
         .then(response => response.json())
