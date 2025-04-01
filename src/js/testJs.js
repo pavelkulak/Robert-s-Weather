@@ -21,7 +21,9 @@ async function fetchApiKey() {
 }
 fetchApiKey();
 
-
+window.localStorage.clear
+// Временно по умолчанию
+window.localStorage.setItem("language", "RU")
 
 controlDomElements.serchBar.addEventListener("submit", async function(e) {
     e.preventDefault()
