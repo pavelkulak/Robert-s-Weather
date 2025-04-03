@@ -11,7 +11,7 @@ window.localStorage.clear
 window.localStorage.setItem("language", "RU")
 
 
-controlDomElements.serchBar.addEventListener("submit", checkValidInput)
+controlDomElements.serchBar.addEventListener("submit", (e) => checkValidInput(e))
 async function checkValidInput(e) {
     e.preventDefault()
     const city = controlDomElements.searchCityInput.value
@@ -19,7 +19,7 @@ async function checkValidInput(e) {
         try {
             const weatherData = await getWeatherData("en", "metric", city)
 
-            hiddenErrorMessage()
+            hideErrorMessage()
 
             displayWeatherInfo(weatherData, "en", "metric", city)
 
@@ -46,6 +46,13 @@ async function getWeatherData(curLangue, typeTemp = "metric", city2) {
     return await response.json()
 }
 
+function hideErrorMessage() {
+    if (controlDomElements.serchBar.querySelector(".control__ErrorMessage")) {
+        controlDomElements.searchCityInput.classList.remove("control__search-city-input_error")
+        controlDomElements.serchBar.querySelector(".control__ErrorMessage").remove()
+    }
+}
+
 function displayWeatherInfo(data, curLangue) {
     console.log(data);
 
@@ -53,10 +60,10 @@ function displayWeatherInfo(data, curLangue) {
     const countryName = new Intl.DisplayNames([curLangue], { type: "region" }).of(countryCode);
 
 
-
+    // Форматируем дату и время
     const curDate = getDate(data.timezone, curLangue)
 
-
+    // Получаем код иконки
     const iconCode = data.weather[0].icon; 
     const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
 
@@ -113,31 +120,8 @@ function getDate(timezoneOffset, curLangue) {
     return formattedDate
 }
 
-
-
-function hiddenErrorMessage() {
-    if (controlDomElements.serchBar.querySelector(".control__ErrorMessage")) {
-        controlDomElements.searchCityInput.classList.remove("control__search-city-input_error")
-        controlDomElements.serchBar.querySelector(".control__ErrorMessage").remove()
-    }
-}
-
-
-function displayError(error) {
-    if (controlDomElements.serchBar.querySelector(".control__ErrorMessage")) {
-        controlDomElements.serchBar.querySelector(".control__ErrorMessage").innerText = error
-    }
-    else {
-        controlDomElements.searchCityInput.classList.add("control__search-city-input_error")
-        const htmlErrorMessage = document.createElement("p")
-        htmlErrorMessage.textContent = error
-        htmlErrorMessage.classList.add("control__ErrorMessage")
-        controlDomElements.serchBar.appendChild(htmlErrorMessage)
-    }
-}
-
-
  
+
 function changeLanguageCityName() {
     // Меняю язык у названия города
     console.log(todayWeatherDomElements.city.innerText);
@@ -153,4 +137,20 @@ function changeLanguageCityName() {
         }
     })
     .catch(error => console.error("Ошибка:", error));
+}
+
+
+
+function displayError(error) {
+    // Если ранее уже была выдана ошибка, то только меняю текст в html поле. Иначе создаю новый
+    if (controlDomElements.serchBar.querySelector(".control__ErrorMessage")) {
+        controlDomElements.serchBar.querySelector(".control__ErrorMessage").innerText = error
+    }
+    else {
+        controlDomElements.searchCityInput.classList.add("control__search-city-input_error")
+        const htmlErrorMessage = document.createElement("p")
+        htmlErrorMessage.textContent = error
+        htmlErrorMessage.classList.add("control__ErrorMessage")
+        controlDomElements.serchBar.appendChild(htmlErrorMessage)
+    }
 }

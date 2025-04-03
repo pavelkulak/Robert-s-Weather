@@ -11,9 +11,9 @@ async function getApiKey() {
     }
 }
 
-let API_KEY
+
 async function fetchApiKey() {
-    API_KEY = await getApiKey();
+    const API_KEY = await getApiKey();
     console.log(API_KEY);
     return API_KEY
 }
