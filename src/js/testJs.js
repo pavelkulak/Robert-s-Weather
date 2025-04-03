@@ -1,6 +1,6 @@
 'use strict';
 
-import {content, controlDomElements, todayWeatherDomElements, weatherThreeDaysDomElements, mapDomElements} from "./dom.js"
+import {content, controlDomElements, todayWeatherDomElements, threeDaysArr, weatherThreeDaysDomElements, mapDomElements} from "./dom.js"
 import { fetchApiKey } from "./jobAPI.js"
 
 
@@ -9,6 +9,9 @@ import { fetchApiKey } from "./jobAPI.js"
 window.localStorage.clear
 // Временно по умолчанию
 window.localStorage.setItem("language", "RU")
+
+
+
 
 
 controlDomElements.serchBar.addEventListener("submit", (e) => checkValidInput(e))
@@ -21,9 +24,16 @@ async function checkValidInput(e) {
 
             hideErrorMessage()
 
-            displayWeatherInfo(weatherData, "en", "metric", city)
+            displayWeatherInfo(weatherData[0], "en", "metric", city)
 
             controlDomElements.searchCityInput.value = ""
+
+            // Фильтруем прогноз на 12:00 по местному времени и выводим данные по 3 дням
+            const dailyForecasts = weatherData[1].list.filter(entry => entry.dt_txt.includes("12:00:00"));
+
+            threeDaysArr.forEach(function (day, index) {
+                displayThreeDaysWeather(dailyForecasts[index+1], index, "en")
+            })
         }
         catch (error) {
             displayError("Не удалось найти данные по введённому городу. Возможно допущена ошибка при вводе.")
@@ -39,11 +49,15 @@ async function checkValidInput(e) {
 async function getWeatherData(curLangue, typeTemp = "metric", city2) {
     const API_KEY = await fetchApiKey();
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city2}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
+    const urlFromFreeDays = `https://api.openweathermap.org/data/2.5/forecast?q=${city2}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
     const response = await fetch(url)
+    const responseFromFreeDays = await fetch(urlFromFreeDays)
     if (!response.ok) {
         throw new Error("Could not fetch weather data")
     }
-    return await response.json()
+    const dataResponseToday = await response.json()
+    const dataResponseThreeDay = await responseFromFreeDays.json()
+    return [dataResponseToday, dataResponseThreeDay]
 }
 
 function hideErrorMessage() {
@@ -154,3 +168,30 @@ function displayError(error) {
         controlDomElements.serchBar.appendChild(htmlErrorMessage)
     }
 }
+
+
+
+function displayThreeDaysWeather(curDayData, num, curLangue) {
+    // Функция для форматирования даты
+    function formatDay(dt_txt, lang) {
+        const date = new Date(dt_txt);
+        return date.toLocaleDateString(lang, { weekday: "short" }); // Выводит "Tue", "Wed" и т. д.
+    }
+
+    // Данные на выбранный день
+    const nameDay = formatDay(curDayData.dt_txt, curLangue);
+    const temp = Math.round(curDayData.main.temp);
+    const weatherIcon = `https://openweathermap.org/img/wn/${curDayData.weather[0].icon}@2x.png`;
+
+
+    // Выводим данные в HTML
+    threeDaysArr[num].querySelector(".day__day-week").innerText = nameDay
+    threeDaysArr[num].querySelector(".day__num-temperature").innerText = temp
+    threeDaysArr[num].querySelector(".day__weather-icon").src = weatherIcon
+}   
+
+
+
+// Вводим город по умолчанию (пока что временно так)
+controlDomElements.searchCityInput.value = "Moscow"
+controlDomElements.searchCityButton.click()
