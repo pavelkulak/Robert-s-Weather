@@ -40,7 +40,7 @@
     width: 200px; /* Можно уменьшить размер (например, 50px) */
     height: 200px;
     top: -30px;
-    left: 390px;
+    right: 45px;
 }
 
 .today-weather__weather-details {

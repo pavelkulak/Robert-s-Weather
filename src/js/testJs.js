@@ -10,29 +10,31 @@ window.localStorage.clear
 // Временно по умолчанию
 window.localStorage.setItem("language", "RU")
 
-controlDomElements.serchBar.addEventListener("submit", async function(e) {
-    e.preventDefault()
 
+controlDomElements.serchBar.addEventListener("submit", checkValidInput)
+async function checkValidInput(e) {
+    e.preventDefault()
     const city = controlDomElements.searchCityInput.value
-    console.log(city);
-    console.log(city.trim().length);
-    if (city.trim().length != 0) {
+    if (city.trim().length > 0) {
         try {
             const weatherData = await getWeatherData("en", "metric", city)
-            if (controlDomElements.serchBar.children.length === 3) {
-                controlDomElements.searchCityInput.classList.remove("control__search-city-input_error")
-                controlDomElements.serchBar.querySelector(".control__ErrorMessage").remove()
-            }
+
+            hiddenErrorMessage()
+
             displayWeatherInfo(weatherData, "en", "metric", city)
+
+            controlDomElements.searchCityInput.value = ""
         }
         catch (error) {
-            displayError(error)
+            displayError("Не удалось найти данные по введённому городу. Возможно допущена ошибка при вводе.")
         }
     }
     else {
-        displayError("Please enter a city")
+        displayError("Пожалуйста, введите город")
     }
-})
+}
+
+
 
 async function getWeatherData(curLangue, typeTemp = "metric", city2) {
     const API_KEY = await fetchApiKey();
@@ -51,10 +53,10 @@ function displayWeatherInfo(data, curLangue) {
     const countryName = new Intl.DisplayNames([curLangue], { type: "region" }).of(countryCode);
 
 
-    // Форматируем дату и время
+
     const curDate = getDate(data.timezone, curLangue)
 
-    // Получаем код иконки
+
     const iconCode = data.weather[0].icon; 
     const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
 
@@ -62,7 +64,7 @@ function displayWeatherInfo(data, curLangue) {
     todayWeatherDomElements.city.innerText = data.name
     todayWeatherDomElements.country.innerText = countryName
 
-    // Меняю язык у названия города
+
     changeLanguageCityName()
 
 
@@ -108,19 +110,21 @@ function getDate(timezoneOffset, curLangue) {
     formattedDate.splice(3, 1)  // удаляем из массива "at"
     formattedDate[0] = formattedDate[0].replace(",", "")  // Удаляем запятую после названия недели
 
-
-    // Данные 2 строчки возможно не нужны   ?????
-    const date = new Date().toLocaleDateString("en-US", options);
-    date.replace(" ", ", ")
-
     return formattedDate
 }
 
 
-// Функция для отображения ошибки ввода города
+
+function hiddenErrorMessage() {
+    if (controlDomElements.serchBar.querySelector(".control__ErrorMessage")) {
+        controlDomElements.searchCityInput.classList.remove("control__search-city-input_error")
+        controlDomElements.serchBar.querySelector(".control__ErrorMessage").remove()
+    }
+}
+
+
 function displayError(error) {
-    // Если ранее уже была выдана ошибка, то только меняю текст в html поле. Иначе создаю новый
-    if (controlDomElements.serchBar.children.length === 3) {
+    if (controlDomElements.serchBar.querySelector(".control__ErrorMessage")) {
         controlDomElements.serchBar.querySelector(".control__ErrorMessage").innerText = error
     }
     else {
