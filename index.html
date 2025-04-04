@@ -54,7 +54,7 @@
                     </div>
                     <form action="" class="control__serch-bar" method="POST" name="search-city-form" id="search-city-form">
                         <div class="control__search-city-input-container">
-                            <input type="text" id="search-city-input" placeholder="Search city or ZIP" class="control__search-city-input">
+                            <input type="text" id="search-city-input" placeholder="Search city" class="control__search-city-input">
                             <img src="./src/icon/micro.svg" alt="" class="control__search-city-icon">
                         </div>
                         <button type="submit" class="control__search-city-button">Search</button>
@@ -72,13 +72,16 @@
                     </div>
                     <div class="today-weather__data-weather">
                         <p class="today-weather__temperature-today">
-                            <span class="today-weather__num-temperature-today"></span>
+                            <span class="today-weather__num-temperature-today today-weather__num-temperature-today-celsius"></span>
+                            <span class="today-weather__num-temperature-today today-weather__num-temperature-today-fahrenheit"></span>
                             <span class="today-weather__degree-temperature-today">°</span>
                         </p>
                         <img src="./src/icon/weather_icon.svg" alt="" class="today-weather__weather-icon" width="200">
                         <div class="today-weather__weather-details">
                             <div class="today-weather__weather-condition"></div>
-                            <div class="today-weather__perceived-temperature">Feels like: <span class="today-weather__perceived-temperature-num"></span>°</div>
+                            <div class="today-weather__perceived-temperature">Feels like:
+                                <span class="today-weather__perceived-temperature-num today-weather__perceived-temperature-num-celsius"></span>
+                                <span class="today-weather__perceived-temperature-num today-weather__perceived-temperature-num-fahrenheit"></span>°</div>
                             <div class="today-weather__wind-speed">Wind: <span class="today-weather__wind-speed-num"></span> m/s </div>
                             <div class="today-weather__humidity">Humidity: <span class="today-weather__humidity-num"></span>%</div>
                         </div>
@@ -90,7 +93,8 @@
                     <div class="day weather-three-days__day">
                         <h3 class="day__day-week"></h3>
                         <p class="day__temperature">
-                            <span class="day__num-temperature"></span>
+                            <span class="day__num-temperature day__num-temperature-celsius"></span>
+                            <span class="day__num-temperature day__num-temperature-fahrenheit"></span>
                             <span class="day__degree-temperature">°</span>
                         </p>
                         <div class="day__weather-icon-container">
@@ -100,7 +104,8 @@
                     <div class="day weather-three-days__day">
                         <h3 class="day__day-week"></h3>
                         <p class="day__temperature">
-                            <span class="day__num-temperature"></span>
+                            <span class="day__num-temperature day__num-temperature-celsius"></span>
+                            <span class="day__num-temperature day__num-temperature-fahrenheit"></span>
                             <span class="day__degree-temperature">°</span>
                         </p>
                         <div class="day__weather-icon-container">
@@ -110,7 +115,8 @@
                     <div class="day weather-three-days__day">
                         <h3 class="day__day-week"></h3>
                         <p class="day__temperature">
-                            <span class="day__num-temperature"></span>
+                            <span class="day__num-temperature day__num-temperature-celsius"></span>
+                            <span class="day__num-temperature day__num-temperature-fahrenheit"></span>
                             <span class="day__degree-temperature">°</span>
                         </p>
                         <div class="day__weather-icon-container">
@@ -132,6 +138,8 @@
 
         <script type="module" src="src/js/testJs.js"></script>
         <script type="module" src="src/js/dom.js"></script>
+        <script type="module" src="src/js/jobAPI.js"></script>
+        <script type="module" src="src/js/testChangeDisplay.js"></script>
 
 
         <!-- <script type="module" src="/src/js/testJs.js"></script>

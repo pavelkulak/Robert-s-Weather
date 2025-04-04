@@ -22,11 +22,11 @@ async function handleForm(e) {
     const city = controlDomElements.searchCityInput.value;
     if (city.trim().length > 0) {
         try {
-            const weatherData = await getWeatherData('en', 'metric', city);
+            const weatherData = await getWeatherData('en', window.localStorage.getItem("curTypeTemp"), city);
 
             hideErrorMessage();
 
-            displayWeatherInfo(weatherData[0], 'en', 'metric', city);
+            displayWeatherInfo(weatherData[0], 'en', window.localStorage.getItem("curTypeTemp"), city);
 
             controlDomElements.searchCityInput.value = '';
 
@@ -101,19 +101,14 @@ function displayWeatherInfo(data, curLangue) {
     // Временно закомментировал вызов функции. Потом надо будет вернуть!!!!!!!
     // changeLanguageCityName()
 
+
+
     todayWeatherDomElements.todayDate.innerText = `${curDate[0]} ${curDate[2]} ${curDate[1]}`;
     todayWeatherDomElements.todayTime.innerText = curDate[3];
-
-    todayWeatherDomElements.numTemperatureToday.innerText = Math.floor(
-        data.main.temp
-    );
 
     todayWeatherDomElements.weatherCondition.innerText =
         data.weather[0].description;
 
-    todayWeatherDomElements.perceivedTemperatureNum.innerText = Math.floor(
-        data.main.feels_like
-    );
 
     todayWeatherDomElements.windSpeedNum.innerText = data.wind.speed;
 
@@ -122,8 +117,35 @@ function displayWeatherInfo(data, curLangue) {
     todayWeatherDomElements.weatherIcon.src = iconUrl;
     todayWeatherDomElements.weatherIcon.alt = data.weather[0].description;
 
+
+    
+    // Создаю переменные под оба типа температуры в секциях температуры данного блока. Затем вписываю их в соответствующие секции и скрываю span с ненужным типом темературы
+    const tempTodayC = convertUnitTemp(data.main.temp, "metric")
+    const tempTodayF = convertUnitTemp(data.main.temp, "imperial")
+    const tempfeelsLikeC = convertUnitTemp(data.main.feels_like, "metric")
+    const tempfeelsLikeF = convertUnitTemp(data.main.feels_like, "imperial")
+
+    todayWeatherDomElements.numTemperatureTodayC.innerText = tempTodayC
+    todayWeatherDomElements.numTemperatureTodayF.innerText = tempTodayF
+
+    todayWeatherDomElements.perceivedTemperatureNumC.innerText = tempfeelsLikeC
+    todayWeatherDomElements.perceivedTemperatureNumF.innerText = tempfeelsLikeF
+
+    if (window.localStorage.getItem("curTypeTemp") === "metric") {
+        todayWeatherDomElements.numTemperatureTodayF.classList.add("hidden-by-display")
+        todayWeatherDomElements.perceivedTemperatureNumF.classList.add("hidden-by-display")
+    } 
+    else {
+        todayWeatherDomElements.numTemperatureTodayC.classList.add("hidden-by-display")
+        todayWeatherDomElements.perceivedTemperatureNumC.classList.add("hidden-by-display")
+    }
+
+
+    // Устанавливаю координаты и запускаю показ карты
     window.localStorage.setItem('latitude', data.coord.lat);
     window.localStorage.setItem('longitude', data.coord.lon);
+
+    initMap(window.localStorage.getItem("latitude"), window.localStorage.getItem("longitude"));
 }
 
 function getDate(timezoneOffset, curLangue) {
@@ -201,15 +223,80 @@ function displayThreeDaysWeather(curDayData, num, curLangue) {
 
     // Данные на выбранный день
     const nameDay = formatDay(curDayData.dt_txt, curLangue);
-    const temp = Math.round(curDayData.main.temp);
+    const tempC = convertUnitTemp(curDayData.main.temp, "metric")
+    const tempF = convertUnitTemp(curDayData.main.temp, "imperial")
     const weatherIcon = `https://openweathermap.org/img/wn/${curDayData.weather[0].icon}@2x.png`;
 
     // Выводим данные в HTML
     threeDaysArr[num].querySelector('.day__day-week').innerText = nameDay;
-    threeDaysArr[num].querySelector('.day__num-temperature').innerText = temp;
+    threeDaysArr[num].querySelector('.day__num-temperature-celsius').innerText = tempC;
+    threeDaysArr[num].querySelector('.day__num-temperature-fahrenheit').innerText = tempF;
     threeDaysArr[num].querySelector('.day__weather-icon').src = weatherIcon;
+
+    if (window.localStorage.getItem("curTypeTemp") === "metric") {
+        threeDaysArr[num].querySelector('.day__num-temperature-fahrenheit').classList.add("hidden-by-display")
+    } 
+    else {
+        threeDaysArr[num].querySelector('.day__num-temperature-celsius').classList.add("hidden-by-display")
+    }
 }
 
 // Вводим город по умолчанию (пока что временно так)
 controlDomElements.searchCityInput.value = 'Moscow';
 controlDomElements.searchCityButton.click();
+
+
+
+// Функция для конвертации температуры в другой тип. (Либо возвращения этого же числа)
+function convertUnitTemp(temp, curTemp) {
+    if (curTemp === window.localStorage.getItem("curTypeTemp")) {
+        return Math.round(temp)
+    }
+    else if (curTemp === "metric") {
+        return Math.round((temp - 32) * 5/9)
+    }
+    else if (curTemp === "imperial") {
+        return Math.round((temp * 9/5) + 32)
+    }
+}
+
+
+
+let map
+function initMap(lat, lon) {
+    // Удаляем старую карту, если она уже существует
+    if (map) {
+        map.remove(); // Удаляем старую карту, чтобы избежать наложений
+    }
+
+    // Создаём карту и устанавливаем координаты
+    map = L.map("map").setView([lat, lon], 10);
+
+
+    // Добавляем слой карты CartoDB с локализацией
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions">CartoDB</a>',
+    }).addTo(map);
+
+    // Добавляем метку города
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup("Выбранный город")
+        .openPopup();
+
+
+
+    // Преобразуем координаты в формат градусов, минут, секунд. Затем вписываем их в HTML
+    mapDomElements.latitude.innerText = convertToDMS(lat)
+    mapDomElements.longitude.innerText = convertToDMS(lon)
+}
+
+
+// Функция для преобразования координат в формат градусов, минут, секунд
+function convertToDMS(coord) {
+    const degrees = Math.floor(coord);  // Целые градусы
+    const minutesFloat = (coord - degrees) * 60;  // Остаток, умноженный на 60
+    const minutes = Math.floor(minutesFloat);  // Целые минуты
+    const seconds = Math.round((minutesFloat - minutes) * 60);  // Оставшиеся секунды
+
+    return `${degrees}°${minutes}'${seconds}"`;  // Форматируем строку
+}
