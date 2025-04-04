@@ -14,8 +14,8 @@ window.localStorage.setItem("language", "RU")
 
 
 
-controlDomElements.serchBar.addEventListener("submit", (e) => checkValidInput(e))
-async function checkValidInput(e) {
+controlDomElements.serchBar.addEventListener("submit", (e) => handleForm(e))
+async function handleForm(e) {
     e.preventDefault()
     const city = controlDomElements.searchCityInput.value
     if (city.trim().length > 0) {
@@ -46,18 +46,25 @@ async function checkValidInput(e) {
 
 
 
-async function getWeatherData(curLangue, typeTemp = "metric", city2) {
+async function getWeatherData(curLangue, typeTemp = "metric", city) {
     const API_KEY = await fetchApiKey();
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city2}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
-    const urlFromFreeDays = `https://api.openweathermap.org/data/2.5/forecast?q=${city2}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
-    const response = await fetch(url)
-    const responseFromFreeDays = await fetch(urlFromFreeDays)
-    if (!response.ok) {
-        throw new Error("Could not fetch weather data")
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
+    const urlFromFreeDays = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`;
+    const [response, responseFromThreeDays] = await Promise.all([
+        fetch(url),
+        fetch(urlFromFreeDays)
+    ]);
+
+    if (!response.ok || !responseFromThreeDays.ok) {
+        throw new Error("Could not fetch weather data");
     }
-    const dataResponseToday = await response.json()
-    const dataResponseThreeDay = await responseFromFreeDays.json()
-    return [dataResponseToday, dataResponseThreeDay]
+
+    const [dataResponseToday, dataResponseThreeDay] = await Promise.all([
+        response.json(),
+        responseFromThreeDays.json()
+    ]);
+
+    return [dataResponseToday, dataResponseThreeDay];
 }
 
 function hideErrorMessage() {
@@ -85,8 +92,8 @@ function displayWeatherInfo(data, curLangue) {
     todayWeatherDomElements.city.innerText = data.name
     todayWeatherDomElements.country.innerText = countryName
 
-
-    changeLanguageCityName()
+    // Временно закомментировал вызов функции. Потом надо будет вернуть!!!!!!!
+    // changeLanguageCityName()
 
 
     todayWeatherDomElements.todayDate.innerText = `${curDate[0]} ${curDate[2]} ${curDate[1]}`
@@ -135,7 +142,7 @@ function getDate(timezoneOffset, curLangue) {
 }
 
  
-
+// Вызов функции временно закомментирован. Потом верну!!!!
 function changeLanguageCityName() {
     // Меняю язык у названия города
     console.log(todayWeatherDomElements.city.innerText);
