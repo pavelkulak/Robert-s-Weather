@@ -54,4 +54,4 @@ const mapDomElements = {
     longitude: mapSection.querySelector(".map__longitude-num")
 }
 
-export {content, controlDomElements, todayWeatherDomElements, weatherThreeDaysDomElements, mapDomElements}
+export {content, controlDomElements, todayWeatherDomElements, threeDaysArr, weatherThreeDaysDomElements, mapDomElements}
