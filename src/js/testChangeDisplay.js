@@ -8,6 +8,7 @@ import {
     weatherThreeDaysDomElements,
     mapDomElements,
 } from './dom.js';
+import { fetchUnsplashApiKey } from "./jobAPI.js"
 
 // Сразу при запуске страницы обновляю стиль выбранного элемента на шкале температуры
 controlDomElements.typesTemperature.forEach(function(el) {
@@ -86,35 +87,57 @@ function convertDisplayTemp() {
 
 
 
-const UNSPLASH_API_KEY = import.meta.env.VITE_UNSPLASH_KEY;
+let cachedBGImages = [];
 let numBgImg = 0
-// При клике на кнопку изменения фонового изображения
-controlDomElements.refreshBG.addEventListener("click", function(e) {
-    const url = `https://api.unsplash.com/search/photos?query=${window.localStorage.getItem("city")}&client_id=${UNSPLASH_API_KEY}&per_page=6`;
-    fetch(url)
-    .then(response => response.json())
-    .then(data => {
-        if (numBgImg === 4) {
-            numBgImg = 5
-        } else if (numBgImg > 5) {
-            numBgImg = 0
-        }
-        // Получаем ссылку на первое изображение из результата поиска
-        const imageUrl = data.results[numBgImg]?.urls?.regular;
-    
-        if (imageUrl) {
-            // Устанавливаем изображение в качестве фона
-            content.style.backgroundImage = `url(${imageUrl})`;
-            content.style.backgroundSize = "cover"; // Фоновое изображение будет растянуто на весь экран
-            content.style.backgroundPosition = "center"; // Центрируем изображение
 
-            numBgImg += 1
-        } else {
-            console.log("Изображение не найдено");
-        }
-        })
-        .catch(error => console.error("Ошибка:", error));
-})
+async function getApiBG() {
+    const unsplashApiKey = await fetchUnsplashApiKey();
+    const url = `https://api.unsplash.com/search/photos?query=${window.localStorage.getItem("city")}&client_id=${unsplashApiKey}&per_page=6`
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error("Could not fetch weather data")
+    }
+    const data = await response.json();
+    cachedBGImages = data.results;
+    console.log("Изображения загружены:", cachedBGImages);
+}
+await getApiBG()
+
+// При клике на кнопку изменения фонового изображения
+controlDomElements.refreshBG.addEventListener("click", refreshBG)
+
+function refreshBG() {
+    if (cachedBGImages.length === 0) {
+        console.log("Фоновые изображения ещё не загружены.");
+        return;
+    }
+
+    if (numBgImg === 4) {
+        numBgImg = 5;
+    } else if (numBgImg > 5) {
+        numBgImg = 0;
+    }
+
+    const index = numBgImg % cachedBGImages.length;
+    const selectedImage = cachedBGImages[index];
+
+    if (
+        selectedImage &&
+        selectedImage.urls &&
+        selectedImage.urls.regular
+    ) {
+        const imageUrl = selectedImage.urls.regular;
+
+        content.style.backgroundImage = `url(${imageUrl})`;
+        content.style.backgroundSize = "cover";
+        content.style.backgroundPosition = "center";
+
+        numBgImg += 1;
+    } else {
+        console.log("Изображение не найдено.");
+    }
+}
+
 
 
 

@@ -34,4 +34,10 @@ async function getUnsplashApiKey() {
     }
 }
 
-export { fetchApiKey };
+async function fetchUnsplashApiKey() {
+    const unsplashApiKey = await getUnsplashApiKey()
+    console.log(unsplashApiKey);
+    return unsplashApiKey
+}
+
+export { fetchApiKey, fetchUnsplashApiKey };
