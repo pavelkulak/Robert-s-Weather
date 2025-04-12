@@ -22,11 +22,12 @@ async function handleForm(e) {
     const city = controlDomElements.searchCityInput.value;
     if (city.trim().length > 0) {
         try {
-            const weatherData = await getWeatherData('en', window.localStorage.getItem("curTypeTemp"), city);
+            const weatherData = await getWeatherData('en', "metric", city);
+            console.log("weatherData: ", weatherData);
 
             hideErrorMessage();
 
-            displayWeatherInfo(weatherData[0], 'en', window.localStorage.getItem("curTypeTemp"), city);
+            displayWeatherInfo(weatherData[0], 'en', "metric", city);
 
             controlDomElements.searchCityInput.value = '';
 
@@ -35,9 +36,13 @@ async function handleForm(e) {
                 entry.dt_txt.includes('12:00:00')
             );
 
+            console.log();
+            window.localStorage.setItem("tempOtherDays", JSON.stringify([]))
+            console.log(JSON.parse(window.localStorage.getItem("tempOtherDays")));
             threeDaysArr.forEach(function (day, index) {
                 displayThreeDaysWeather(dailyForecasts[index + 1], index, 'en');
             });
+            console.log(JSON.parse(window.localStorage.getItem("tempOtherDays")));
         } catch (error) {
             displayError(
                 'Не удалось найти данные по введённому городу. Возможно допущена ошибка при вводе.'
@@ -119,26 +124,16 @@ function displayWeatherInfo(data, curLangue) {
 
 
     
-    // Создаю переменные под оба типа температуры в секциях температуры данного блока. Затем вписываю их в соответствующие секции и скрываю span с ненужным типом темературы
-    const tempTodayC = convertUnitTemp(data.main.temp, "metric")
-    const tempTodayF = convertUnitTemp(data.main.temp, "imperial")
-    const tempfeelsLikeC = convertUnitTemp(data.main.feels_like, "metric")
-    const tempfeelsLikeF = convertUnitTemp(data.main.feels_like, "imperial")
+    // Создаю переменные под температуру в Цельсиях, записываю её в локалСторэдж и вписываю в html в нужном типе температуры (зависит от того, какой тип температуры сейчас выьран на странице)
+    const tempToday = convertUnitTemp(data.main.temp)
+    const tempfeelsLike = convertUnitTemp(data.main.feels_like)
 
-    todayWeatherDomElements.numTemperatureTodayC.innerText = tempTodayC
-    todayWeatherDomElements.numTemperatureTodayF.innerText = tempTodayF
+    window.localStorage.setItem("tempTodayC", data.main.temp)
+    window.localStorage.setItem("tempfeelsLikeC", data.main.feels_like)
 
-    todayWeatherDomElements.perceivedTemperatureNumC.innerText = tempfeelsLikeC
-    todayWeatherDomElements.perceivedTemperatureNumF.innerText = tempfeelsLikeF
+    todayWeatherDomElements.numTemperatureToday.innerText = tempToday
+    todayWeatherDomElements.perceivedTemperatureNum.innerText = tempfeelsLike
 
-    if (window.localStorage.getItem("curTypeTemp") === "metric") {
-        todayWeatherDomElements.numTemperatureTodayF.classList.add("hidden-by-display")
-        todayWeatherDomElements.perceivedTemperatureNumF.classList.add("hidden-by-display")
-    } 
-    else {
-        todayWeatherDomElements.numTemperatureTodayC.classList.add("hidden-by-display")
-        todayWeatherDomElements.perceivedTemperatureNumC.classList.add("hidden-by-display")
-    }
 
 
     // Устанавливаю координаты и запускаю показ карты
@@ -223,39 +218,37 @@ function displayThreeDaysWeather(curDayData, num, curLangue) {
 
     // Данные на выбранный день
     const nameDay = formatDay(curDayData.dt_txt, curLangue);
-    const tempC = convertUnitTemp(curDayData.main.temp, "metric")
-    const tempF = convertUnitTemp(curDayData.main.temp, "imperial")
+    console.log("curDayData.main.temp: ", curDayData.main.temp);
+    const temp = convertUnitTemp(curDayData.main.temp)
     const weatherIcon = `https://openweathermap.org/img/wn/${curDayData.weather[0].icon}@2x.png`;
+
+    console.log(curDayData.main.temp);
+    console.log(temp);
+    addItemToLocalStorageArray("tempOtherDays", curDayData.main.temp)
 
     // Выводим данные в HTML
     threeDaysArr[num].querySelector('.day__day-week').innerText = nameDay;
-    threeDaysArr[num].querySelector('.day__num-temperature-celsius').innerText = tempC;
-    threeDaysArr[num].querySelector('.day__num-temperature-fahrenheit').innerText = tempF;
+    threeDaysArr[num].querySelector('.day__num-temperature').innerText = temp;
     threeDaysArr[num].querySelector('.day__weather-icon').src = weatherIcon;
-
-    if (window.localStorage.getItem("curTypeTemp") === "metric") {
-        threeDaysArr[num].querySelector('.day__num-temperature-fahrenheit').classList.add("hidden-by-display")
-    } 
-    else {
-        threeDaysArr[num].querySelector('.day__num-temperature-celsius').classList.add("hidden-by-display")
-    }
 }
 
 // Вводим город по умолчанию (пока что временно так)
 controlDomElements.searchCityInput.value = 'Moscow';
 controlDomElements.searchCityButton.click();
 
+function addItemToLocalStorageArray(key, item) {
+    let arr = JSON.parse(localStorage.getItem(key))
+    arr.push(item);
+    localStorage.setItem(key, JSON.stringify(arr));
+}
 
 
 // Функция для конвертации температуры в другой тип. (Либо возвращения этого же числа)
-function convertUnitTemp(temp, curTemp) {
-    if (curTemp === window.localStorage.getItem("curTypeTemp")) {
+function convertUnitTemp(temp) {
+    if (window.localStorage.getItem("curTypeTemp") === "metric") {
         return Math.round(temp)
     }
-    else if (curTemp === "metric") {
-        return Math.round((temp - 32) * 5/9)
-    }
-    else if (curTemp === "imperial") {
+    else if (window.localStorage.getItem("curTypeTemp") === "imperial") {
         return Math.round((temp * 9/5) + 32)
     }
 }
@@ -300,3 +293,6 @@ function convertToDMS(coord) {
 
     return `${degrees}°${minutes}'${seconds}"`;  // Форматируем строку
 }
+
+
+export { convertUnitTemp, addItemToLocalStorageArray }

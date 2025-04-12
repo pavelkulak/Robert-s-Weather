@@ -9,6 +9,7 @@ import {
     mapDomElements,
 } from './dom.js';
 import { fetchUnsplashApiKey } from "./jobAPI.js"
+import { convertUnitTemp, addItemToLocalStorageArray } from "./testJs.js"
 
 // Сразу при запуске страницы обновляю стиль выбранного элемента на шкале температуры
 controlDomElements.typesTemperature.forEach(function(el) {
@@ -59,30 +60,19 @@ controlDomElements.changeTemperature.addEventListener("click", function(e) {
 
 // Функция для смены показа температуры на странице
 function convertDisplayTemp() {
-    if (window.localStorage.getItem("curTypeTemp") === "metric") {
-        todayWeatherDomElements.numTemperatureTodayC.classList.remove("hidden-by-display")
-        todayWeatherDomElements.perceivedTemperatureNumC.classList.remove("hidden-by-display")
+    todayWeatherDomElements.numTemperatureToday.innerText = convertUnitTemp(window.localStorage.getItem("tempTodayC"))
+    todayWeatherDomElements.perceivedTemperatureNum.innerText = convertUnitTemp(window.localStorage.getItem("tempfeelsLikeC"))
 
-        todayWeatherDomElements.numTemperatureTodayF.classList.add("hidden-by-display")
-        todayWeatherDomElements.perceivedTemperatureNumF.classList.add("hidden-by-display")
+    const arrDays = JSON.parse(window.localStorage.getItem("tempOtherDays"))
+    threeDaysArr.forEach(function(day) {
+        day.querySelector('.day__num-temperature').innerHTML = convertUnitTemp(arrDays[0])
+        console.log("arrDays1 : ", arrDays);
+        arrDays.shift()
+        console.log("arrDays2 : ", arrDays);
+        // window.localStorage.setItem("tempOtherDays", JSON.stringify(arrDays))
+    })
+    
 
-        threeDaysArr.forEach(function(day) {
-            day.querySelector('.day__num-temperature-celsius').classList.remove("hidden-by-display")
-            day.querySelector('.day__num-temperature-fahrenheit').classList.add("hidden-by-display")
-        })
-    } 
-    else {
-        todayWeatherDomElements.numTemperatureTodayF.classList.remove("hidden-by-display")
-        todayWeatherDomElements.perceivedTemperatureNumF.classList.remove("hidden-by-display")
-
-        todayWeatherDomElements.numTemperatureTodayC.classList.add("hidden-by-display")
-        todayWeatherDomElements.perceivedTemperatureNumC.classList.add("hidden-by-display")
-
-        threeDaysArr.forEach(function(day) {
-            day.querySelector('.day__num-temperature-fahrenheit').classList.remove("hidden-by-display")
-            day.querySelector('.day__num-temperature-celsius').classList.add("hidden-by-display")
-        })
-    }
 }
 
 
@@ -101,7 +91,9 @@ async function getApiBG() {
     cachedBGImages = data.results;
     console.log("Изображения загружены:", cachedBGImages);
 }
-await getApiBG()
+window.addEventListener("load", async () => {
+    await getApiBG();
+});
 
 // При клике на кнопку изменения фонового изображения
 controlDomElements.refreshBG.addEventListener("click", refreshBG)

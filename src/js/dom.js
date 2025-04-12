@@ -28,16 +28,12 @@ const todayWeatherDomElements = {
     country: todayWeatherSection.querySelector(".today-weather__country"),
     todayDate: todayWeatherSection.querySelector(".today-weather__today-date"),
     todayTime: todayWeatherSection.querySelector(".today-weather__today-time"),
-    numTemperatureToday: todayWeatherSection.querySelectorAll(".today-weather__num-temperature-today"),
-    numTemperatureTodayC: todayWeatherSection.querySelector(".today-weather__num-temperature-today-celsius"),
-    numTemperatureTodayF: todayWeatherSection.querySelector(".today-weather__num-temperature-today-fahrenheit"),
+    numTemperatureToday: todayWeatherSection.querySelector(".today-weather__num-temperature-today"),
 
     weatherIcon: todayWeatherSection.querySelector(".today-weather__weather-icon"),
 
     weatherCondition: todayWeatherSection.querySelector(".today-weather__weather-condition"),
     perceivedTemperatureNum: todayWeatherSection.querySelectorAll(".today-weather__perceived-temperature-num"),
-    perceivedTemperatureNumC: todayWeatherSection.querySelector(".today-weather__perceived-temperature-num-celsius"),
-    perceivedTemperatureNumF: todayWeatherSection.querySelector(".today-weather__perceived-temperature-num-fahrenheit"),
     windSpeedNum: todayWeatherSection.querySelector(".today-weather__wind-speed-num"),
     humidityNum: todayWeatherSection.querySelector(".today-weather__humidity-num")
 }
