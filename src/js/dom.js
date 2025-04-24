@@ -4,7 +4,8 @@ const content = document.querySelector(".content")
 
 const controlSection = document.querySelector(".control")
 const controlDomElements = {
-    refreshBG: controlSection.querySelector(".control__refresh-BG"),
+    refreshBGButton: controlSection.querySelector(".control__refresh-BG-button"),
+    refreshBG: controlSection.querySelector(".control__refresh-BG-img"),
     changeLanguage: controlSection.querySelector(".control__change-language"),
     nameLanguage: controlSection.querySelector(".control__name-language"),
     hiddenListLanguages: controlSection.querySelector(".control__hidden-list-languages"),
@@ -41,8 +42,8 @@ const todayWeatherDomElements = {
 const weatherThreeDaysSection = document.querySelector(".weather-three-days")
 const threeDaysArr = [...weatherThreeDaysSection.querySelectorAll(".day")]
 const weatherThreeDaysDomElements = {
-    tomorrowDayEl: threeDaysArr[0],
-    afterTomorrowDayEl: threeDaysArr[1],
+    firstDayEl: threeDaysArr[0],
+    secondDayEl: threeDaysArr[1],
     thirdDayEl: threeDaysArr[2]
 }
 
