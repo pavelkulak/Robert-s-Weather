@@ -26,7 +26,9 @@
             <section class="control">
                 <div class="container control__container">
                     <div class="control__control-bar">
-                        <img src="./src/icon/refresh_BG.svg" alt="refresh-BG" class="control__refresh-BG">
+                        <button class="control__refresh-BG-button" disabled>
+                            <img src="./src/icon/refresh_BG_modified.svg" alt="refresh-BG" class="control__refresh-BG-img">
+                        </button>
                         <div class="control__change-language">
                             <div class="control__current-language">
                                 <span class="control__name-language">EN</span>
@@ -54,7 +56,7 @@
                     </div>
                     <form action="" class="control__serch-bar" method="POST" name="search-city-form" id="search-city-form">
                         <div class="control__search-city-input-container">
-                            <input type="text" id="search-city-input" placeholder="Search city or ZIP" class="control__search-city-input">
+                            <input type="text" id="search-city-input" placeholder="Search city" class="control__search-city-input">
                             <img src="./src/icon/micro.svg" alt="" class="control__search-city-icon">
                         </div>
                         <button type="submit" class="control__search-city-button">Search</button>
@@ -78,7 +80,8 @@
                         <img src="./src/icon/weather_icon.svg" alt="" class="today-weather__weather-icon" width="200">
                         <div class="today-weather__weather-details">
                             <div class="today-weather__weather-condition"></div>
-                            <div class="today-weather__perceived-temperature">Feels like: <span class="today-weather__perceived-temperature-num"></span>°</div>
+                            <div class="today-weather__perceived-temperature">Feels like:
+                                <span class="today-weather__perceived-temperature-num"></span>°</div>
                             <div class="today-weather__wind-speed">Wind: <span class="today-weather__wind-speed-num"></span> m/s </div>
                             <div class="today-weather__humidity">Humidity: <span class="today-weather__humidity-num"></span>%</div>
                         </div>
@@ -132,12 +135,16 @@
 
         <script type="module" src="src/js/testJs.js"></script>
         <script type="module" src="src/js/dom.js"></script>
+        <script type="module" src="src/js/jobAPI.js"></script>
+        <script type="module" src="src/js/testChangeDisplay.js"></script>
+        <script type="module" src="src/js/changeTemp.js"></script>
+        <script type="module" src="src/js/changeBG.js"></script>
 
 
         <!-- <script type="module" src="/src/js/testJs.js"></script>
         <script type="module" src="/src/js/dom.js"></script> -->
 
-        <!-- <script type="module" src="/src/js/ChangeDisplay.js"></script> -->
+        <!-- <script type="module" src="/src/js/changeDisplay.js"></script> -->
         <!-- <script type="module" src="/src/js/reload.js"></script> -->
         <!-- <script type="module" src="/src/js/search.js"></script> -->
         <!-- <script type="module" src="/src/js/script.js"></script> -->

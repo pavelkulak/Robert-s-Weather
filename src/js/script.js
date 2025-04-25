@@ -114,9 +114,7 @@ function getTodayWeather(curLangue, typeTemp = "metric", newCity = city) {
 // getTodayWeather("en")
 
 
-// getTodayWeather("en", "metric", "minsk")
-// getTodayWeather("ru", "metric", "moscow")
-// getTodayWeather("ru", "metric", "mekka")
+
 getTodayWeather(window.localStorage.getItem("language"), window.localStorage.getItem("curTypeTemp"), window.localStorage.getItem("city"))
 
 function getThreeDaysWeather(curLangue, typeTemp = "metric", newCity = city) {
