@@ -1,10 +1,9 @@
-@import "./base/base.css";
-@import "./base/reset.css";
-@import "./control.css";
-@import "./today_weather.css";
-@import "./weather_three_days.css";
-@import "./map.css";
-
+@import './base/base.css';
+@import './base/reset.css';
+@import './control.css';
+@import './today_weather.css';
+@import './weather_three_days.css';
+@import './map.css';
 
 .container {
     width: 100%;
@@ -13,14 +12,14 @@
     padding: 0 90px;
 }
 
-
 .content {
     display: grid;
     grid-template-columns: min-content 1fr;
     grid-template-rows: min-content auto auto;
     /* grid-auto-rows: min-content; */
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), 
-                url("../img/bg.jpg");
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)),
+        url('../img/bg.jpg');
     /* background-image: url("../img/bg.jpg"); */
     background-size: cover; /* Растягивает изображение так, чтобы оно заполняло весь блок */
     background-position: center; /* Центрирует изображение */
@@ -30,7 +29,6 @@
     width: 100%;
     min-height: 100vh;
     /* height: 800px; */
-    
 }
 
 /* .content::before {
@@ -42,5 +40,3 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5); 
 } */
-
-

@@ -19,7 +19,6 @@ async function fetchApiKey() {
 }
 fetchApiKey();
 
-
 async function getUnsplashApiKey() {
     try {
         const response = await fetch(
@@ -34,10 +33,10 @@ async function getUnsplashApiKey() {
 }
 
 async function fetchUnsplashApiKey() {
-    const unsplashApiKey = await getUnsplashApiKey()
+    const unsplashApiKey = await getUnsplashApiKey();
     console.log(unsplashApiKey);
-    return unsplashApiKey
+    return unsplashApiKey;
 }
-fetchUnsplashApiKey()
+fetchUnsplashApiKey();
 
 export { fetchApiKey, fetchUnsplashApiKey };

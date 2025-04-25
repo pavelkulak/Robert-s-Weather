@@ -24,7 +24,7 @@ async function getApiBG(initialLoad = false) {
         cachedBGImages = data.results;
         console.log('Изображения загружены:', cachedBGImages);
 
-        const index = initialLoad ? (numBgImg % cachedBGImages.length) : numBgImg;
+        const index = initialLoad ? numBgImg % cachedBGImages.length : numBgImg;
         setBackgroundImage(index);
 
         // ✅ Убираем индикатор загрузки и разблокируем кнопку
@@ -36,7 +36,6 @@ async function getApiBG(initialLoad = false) {
         console.error('Ошибка при загрузке изображений:', err.message);
     }
 }
-
 
 function setBackgroundImage(index) {
     const imageUrl = cachedBGImages[index]?.urls?.regular;
@@ -58,7 +57,6 @@ function refreshBG() {
 window.addEventListener('load', async () => {
     await getApiBG();
 });
-
 
 // При клике на кнопку изменения фонового изображения
 refreshBtn.addEventListener('click', refreshBG);

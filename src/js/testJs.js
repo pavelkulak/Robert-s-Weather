@@ -89,7 +89,6 @@ function displayWeatherInfo(data, curLangue) {
     // Форматируем дату и время
     const [weekday, day, month, time] = formatDate(data.timezone, curLangue);
 
-
     todayWeatherDomElements.city.innerText = data.name;
     todayWeatherDomElements.country.innerText = countryName;
 
@@ -106,10 +105,9 @@ function displayWeatherInfo(data, curLangue) {
 
     todayWeatherDomElements.humidityNum.innerText = data.main.humidity;
 
-
     // Получаем код иконки и заменяю у сегодняшней погоды
     const iconCode = data.weather[0].icon;
-    todayWeatherDomElements.weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;   // Ссылка на иконку
+    todayWeatherDomElements.weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
     todayWeatherDomElements.weatherIcon.alt = data.weather[0].description;
 
     // Создаю переменные под температуру в Цельсиях, записываю её в локалСторэдж и вписываю в html в нужном типе температуры (зависит от того, какой тип температуры сейчас выьран на странице)
@@ -179,11 +177,11 @@ function changeLanguageCityName() {
         .catch((error) => console.error('Ошибка:', error));
 }
 
-
-
 function displayThreeDaysWeather(curDayData, index, curLangue) {
     // Данные на выбранный день
-    const dayName = new Date(data.dt_txt).toLocaleDateString(curLangue, { weekday: 'short' });
+    const dayName = new Date(data.dt_txt).toLocaleDateString(curLangue, {
+        weekday: 'short',
+    });
     console.log('curDayData.main.temp: ', curDayData.main.temp);
     const temp = convertUnitTemp(curDayData.main.temp);
     const weatherIcon = `https://openweathermap.org/img/wn/${curDayData.weather[0].icon}@2x.png`;
@@ -197,7 +195,6 @@ function displayThreeDaysWeather(curDayData, index, curLangue) {
     el.querySelector('.day__weather-icon').src = weatherIcon;
 }
 
-
 // Функция для конвертации температуры в другой тип. (Либо возвращения этого же числа)
 function convertUnitTemp(temp) {
     const curTypeTemp = window.localStorage.getItem('curTypeTemp');
@@ -208,18 +205,16 @@ function convertUnitTemp(temp) {
     }
 }
 
-
 function addItemToLocalStorageArray(key, item) {
     const arr = JSON.parse(localStorage.getItem(key)) || [];
     arr.push(item);
     localStorage.setItem(key, JSON.stringify(arr));
 }
 
-
-
-
 function displayError(error) {
-    const existing = controlDomElements.serchBar.querySelector('.control__ErrorMessage');
+    const existing = controlDomElements.serchBar.querySelector(
+        '.control__ErrorMessage'
+    );
     // Если ранее уже была выдана ошибка, то только меняю текст в html поле. Иначе создаю новый
     if (existing) {
         existing.innerText = error;
@@ -233,9 +228,6 @@ function displayError(error) {
         controlDomElements.serchBar.appendChild(htmlErrorMessage);
     }
 }
-
-
-
 
 let map;
 function initMap(lat, lon) {
@@ -271,13 +263,8 @@ function convertToDMS(coord) {
     return `${degrees}°${minutes}'${seconds}"`; // Форматируем строку
 }
 
-
-
-
-
 // Вводим город по умолчанию (пока что временно так)
 controlDomElements.searchCityInput.value = 'Moscow';
 // controlDomElements.searchCityButton.click();
-
 
 export { convertUnitTemp, addItemToLocalStorageArray };

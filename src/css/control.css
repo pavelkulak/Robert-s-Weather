@@ -15,7 +15,7 @@
     align-items: start;
     font-weight: 700;
     font-size: 14px;
-    color: #FFFFFF;
+    color: #ffffff;
 }
 .control__refresh-BG-img {
     cursor: pointer;
@@ -28,7 +28,7 @@
 }
 
 .control__refresh-BG_loading::after {
-    content: "";
+    content: '';
     position: absolute;
     right: 13px;
     top: 50%;
@@ -51,8 +51,6 @@
     display: none;
 }
 
-
-
 .control__change-language {
     position: relative;
     /* display: flex;
@@ -64,14 +62,14 @@
     /* height: 100%; */
     cursor: pointer;
     /* height: 100%; */
-     /* height: 44px; */
+    /* height: 44px; */
 }
 
 .control__current-language {
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: #AEB5B980;
+    background-color: #aeb5b980;
     padding: 0 15px;
     border-radius: 5px;
     height: 44px;
@@ -82,14 +80,13 @@
     bottom: 0;
     /* bottom: calc(-100% - 15px);  */
     /* left: 15px; */
-    transform: translateY(110%); 
+    transform: translateY(110%);
     list-style: none;
-    background-color: #4C525566;
+    background-color: #4c525566;
     /* padding: 5px 15px; */
     border-radius: 5px;
     width: 100%;
 }
-
 
 .control__hidden-element-language {
     display: flex;
@@ -102,15 +99,12 @@
 }
 
 .control__hidden-element-language_selected {
-    background-color: #AEB5B980;
+    background-color: #aeb5b980;
 }
 .control__hidden-element-language_selected:hover {
     cursor: not-allowed;
-    background-color: #AEB5B980;
+    background-color: #aeb5b980;
 }
-
-
-
 
 .control__change-temperature {
     display: flex;
@@ -122,14 +116,14 @@
     align-items: center;
     height: 100%;
     padding: 0 15px;
-    background-color: #4C525566;
+    background-color: #4c525566;
     cursor: pointer;
 }
 .control__type-temperature:not(.control__type-temperature_selected-type):hover {
     background-color: #86929866;
 }
 .control__type-temperature_selected-type {
-    background-color: #AEB5B980;
+    background-color: #aeb5b980;
 }
 .control__type-temperature_selected-type:hover {
     cursor: not-allowed;
@@ -147,7 +141,7 @@
     grid-template-columns: auto auto;
     grid-template-rows: auto auto;
     align-items: center;
-    color: #FFFFFF;
+    color: #ffffff;
     height: 100%;
     flex-wrap: wrap;
 }
@@ -159,13 +153,13 @@
     height: 44px;
     width: 274px;
     font-size: 14px;
-    border: 1px solid #E4E3E333;
+    border: 1px solid #e4e3e333;
     border-radius: 5px 0 0 5px;
     padding: 13px 0 13px 15px;
-    background-color: #4C525566;
+    background-color: #4c525566;
 }
 .control__search-city-input::placeholder {
-    color: #FFFFFF;
+    color: #ffffff;
 }
 
 .control__search-city-icon {
@@ -180,7 +174,7 @@
 }
 
 .control__search-city-button {
-    background-color: #AEB5B980;
+    background-color: #aeb5b980;
     display: flex;
     align-items: center;
     height: 44px;
