@@ -11,8 +11,15 @@ const refreshBtn = controlDomElements.refreshBGButton;
 refreshBtn.classList.add('control__refresh-BG_loading');
 refreshBtn.disabled = true;
 
-async function getApiBG(initialLoad = false) {
+async function getApiBG(initialLoad = false, cityChanged = false) {
     try {
+        // Если город изменился, очищаем кэш изображений
+        if (cityChanged) {
+            cachedBGImages = [];
+            numBgImg = 0;
+            localStorage.setItem('numBgImg', numBgImg); // Сбрасываем индекс
+        }
+
         const unsplashApiKey = await fetchUnsplashApiKey();
         console.log(unsplashApiKey);
         const url = `https://api.unsplash.com/search/photos?query=${window.localStorage.getItem('city')}&client_id=${unsplashApiKey}&per_page=6`;
@@ -23,6 +30,7 @@ async function getApiBG(initialLoad = false) {
         const data = await response.json();
         cachedBGImages = data.results;
         console.log('Изображения загружены:', cachedBGImages);
+        console.log("Данные BG", data);
 
         const index = initialLoad ? numBgImg % cachedBGImages.length : numBgImg;
         setBackgroundImage(index);
@@ -60,3 +68,5 @@ window.addEventListener('load', async () => {
 
 // При клике на кнопку изменения фонового изображения
 refreshBtn.addEventListener('click', refreshBG);
+
+export { refreshBG, getApiBG }

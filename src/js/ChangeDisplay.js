@@ -24,23 +24,7 @@ controlDomElements.hiddenElementsLanguage.forEach(function (el) {
     }
 });
 
-// Сразу при запуске страницы обновляю стиль выбранного элемента на шкале температуры
-controlDomElements.typesTemperature.forEach(function (el) {
-    const curTypeTemp = window.localStorage.getItem('curTypeTemp');
-    if (
-        curTypeTemp == 'imperial' &&
-        el.classList.contains('control__faringate')
-    ) {
-        el.classList.add('control__type-temperature_selected-type');
-    } else if (
-        curTypeTemp == 'metric' &&
-        el.classList.contains('control__celsius')
-    ) {
-        el.classList.add('control__type-temperature_selected-type');
-    } else {
-        el.classList.remove('control__type-temperature_selected-type');
-    }
-});
+
 
 const translations = {
     en: { Latitude: 'Latitude', Longitude: 'Longituded' },
@@ -107,95 +91,8 @@ controlDomElements.changeLanguage.addEventListener('click', function (e) {
     );
 });
 
-// При смене шкалы температуры
-controlDomElements.changeTemperature.addEventListener('click', function (e) {
-    // Если клик вне элемента с типом температуры, то игнор
-    if (!e.target.closest('.control__type-temperature')) return;
 
-    const elementTypeTemperature = e.target.closest(
-        '.control__type-temperature'
-    );
 
-    // Если нажатый элемент уже был выбран, то игнор
-    if (
-        elementTypeTemperature.classList.contains(
-            'control__type-temperature_selected-type'
-        )
-    )
-        return;
-
-    controlDomElements.typesTemperature.forEach(function (typeTemp) {
-        typeTemp.classList.remove('control__type-temperature_selected-type');
-    });
-    elementTypeTemperature.classList.add(
-        'control__type-temperature_selected-type'
-    );
-
-    // Создаю переменную для определения названия выбранной шкалы (которое нужно будет передать в функцию для api)
-    let curTypeTemp = '';
-    if (elementTypeTemperature.classList.contains('control__faringate')) {
-        curTypeTemp = 'imperial';
-    } else if (elementTypeTemperature.classList.contains('control__celsius')) {
-        curTypeTemp = 'metric';
-    }
-
-    window.localStorage.setItem('curTypeTemp', curTypeTemp);
-
-    // Обновляю данные на странице, но прописав температуру в выбранной шкале
-    getTodayWeather(controlDomElements.nameLanguage.innerText, curTypeTemp);
-    getThreeDaysWeather(controlDomElements.nameLanguage.innerText, curTypeTemp);
-});
-
-const UNSPLASH_API_KEY = import.meta.env.VITE_UNSPLASH_KEY;
-let numBgImg = 0;
-// При клике на кнопку изменения фонового изображения
-controlDomElements.refreshBG.addEventListener('click', function (e) {
-    const url = `https://api.unsplash.com/search/photos?query=${window.localStorage.getItem('city')}&client_id=${UNSPLASH_API_KEY}&per_page=6`;
-    fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-            if (numBgImg === 4) {
-                numBgImg = 5;
-            } else if (numBgImg > 5) {
-                numBgImg = 0;
-            }
-            // Получаем ссылку на первое изображение из результата поиска
-            const imageUrl = data.results[numBgImg]?.urls?.regular;
-
-            if (imageUrl) {
-                // Устанавливаем изображение в качестве фона
-                content.style.backgroundImage = `url(${imageUrl})`;
-                content.style.backgroundSize = 'cover'; // Фоновое изображение будет растянуто на весь экран
-                content.style.backgroundPosition = 'center'; // Центрируем изображение
-
-                numBgImg += 1;
-            } else {
-                console.log('Изображение не найдено');
-            }
-        })
-        .catch((error) => console.error('Ошибка:', error));
-});
-
-controlDomElements.searchCityButton.addEventListener('click', function (e) {
-    e.preventDefault();
-    const city = controlDomElements.searchCityInput.value.trim(); // Получаем город из input
-
-    if (city) {
-        getTodayWeather(
-            controlDomElements.nameLanguage.innerText,
-            window.localStorage.getItem('curTypeTemp'),
-            city
-        );
-        getThreeDaysWeather(
-            controlDomElements.nameLanguage.innerText,
-            window.localStorage.getItem('curTypeTemp'),
-            city
-        );
-        controlDomElements.searchCityInput.value = '';
-    } else {
-        alert('Пожалуйста, введите название города.');
-    }
-});
 
 // Проверяем поддержку браузером Web Speech API
 const speechRecognition =

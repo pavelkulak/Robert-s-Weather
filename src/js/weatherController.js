@@ -9,8 +9,25 @@ import {
     mapDomElements,
 } from './dom.js';
 import { fetchApiKey } from './jobAPI.js';
+import { refreshBG, getApiBG } from "./changeBG.js"
 
-window.localStorage.setItem('language', 'EN');
+
+function initDefaultLocalStorage() {
+    // Устанавливаем шкалу температуры по умолчанию, если её нет в localStorage
+    if (!window.localStorage.getItem('curTypeTemp')) {
+        window.localStorage.setItem('curTypeTemp', 'metric'); // шкала Цельсия
+    }
+    if (!window.localStorage.getItem('curTypeTempName')) {
+        window.localStorage.setItem('curTypeTempName', '°C');
+    }
+
+    // Устанавливаем язык по умолчанию, если её нет в localStorage
+    if (!window.localStorage.getItem('language')) {
+        window.localStorage.setItem('language', 'EN');
+    }
+}
+
+initDefaultLocalStorage()
 
 const weatherAPIUrl = 'https://api.openweathermap.org/data/2.5';
 
@@ -18,7 +35,13 @@ controlDomElements.serchBar.addEventListener('submit', (e) => handleForm(e));
 async function handleForm(e) {
     e.preventDefault();
     const city = controlDomElements.searchCityInput.value.trim();
-    if (!city) return displayError('Пожалуйста, введите город');
+    await loadCityWeather(city);   
+}
+
+async function loadCityWeather(city) {
+    if (!city) {
+        return displayError('Пожалуйста, введите город');
+    }
 
     try {
         const [todayWeather, forecast] = await getWeatherData(
@@ -31,7 +54,6 @@ async function handleForm(e) {
         displayWeatherInfo(todayWeather, 'en', 'metric');
         controlDomElements.searchCityInput.value = '';
 
-        // Фильтруем прогноз на 12:00 по местному времени и выводим данные по 3 дням
         const dailyForecasts = forecast.list.filter((entry) =>
             entry.dt_txt.includes('12:00:00')
         );
@@ -40,12 +62,15 @@ async function handleForm(e) {
         threeDaysArr.forEach((day, i) =>
             displayThreeDaysWeather(dailyForecasts[i + 1], i, 'en')
         );
+        window.localStorage.setItem('city', todayWeather.name); // Сохраняем новый город в localStorage
+
+        refreshBG();        // Переключение на следующее изображение (если что-то есть)
+        await getApiBG(true); // Загружаем картинки под новый город
     } catch (error) {
-        displayError(
-            'Не удалось найти данные по введённому городу. Возможно допущена ошибка при вводе.'
-        );
+        displayError('Не удалось найти данные по введённому городу.');
     }
 }
+
 
 async function getWeatherData(curLangue, typeTemp = 'metric', city) {
     const API_KEY = await fetchApiKey();
@@ -81,16 +106,21 @@ function hideErrorMessage() {
 }
 
 function displayWeatherInfo(data, curLangue) {
+    console.log('DISPLAY WEATHER INFO DATA:', data);
     const countryCode = data.sys.country;
     const countryName = new Intl.DisplayNames([curLangue], {
         type: 'region',
     }).of(countryCode);
+
+    console.log("lll");
 
     // Форматируем дату и время
     const [weekday, day, month, time] = formatDate(data.timezone, curLangue);
 
     todayWeatherDomElements.city.innerText = data.name;
     todayWeatherDomElements.country.innerText = countryName;
+
+    window.localStorage.setItem("city", data.name)
 
     // Временно закомментировал вызов функции. Потом надо будет вернуть!!!!!!!
     // changeLanguageCityName()
@@ -179,7 +209,7 @@ function changeLanguageCityName() {
 
 function displayThreeDaysWeather(curDayData, index, curLangue) {
     // Данные на выбранный день
-    const dayName = new Date(data.dt_txt).toLocaleDateString(curLangue, {
+    const dayName = new Date(curDayData.dt_txt).toLocaleDateString(curLangue, {
         weekday: 'short',
     });
     console.log('curDayData.main.temp: ', curDayData.main.temp);
@@ -197,6 +227,7 @@ function displayThreeDaysWeather(curDayData, index, curLangue) {
 
 // Функция для конвертации температуры в другой тип. (Либо возвращения этого же числа)
 function convertUnitTemp(temp) {
+    console.log("curTypeTemp: ", window.localStorage.getItem('curTypeTemp'));
     const curTypeTemp = window.localStorage.getItem('curTypeTemp');
     if (curTypeTemp === 'metric') {
         return Math.round(temp);
@@ -263,8 +294,8 @@ function convertToDMS(coord) {
     return `${degrees}°${minutes}'${seconds}"`; // Форматируем строку
 }
 
-// Вводим город по умолчанию (пока что временно так)
-controlDomElements.searchCityInput.value = 'Moscow';
-// controlDomElements.searchCityButton.click();
+// Применяем функции к выбранному ранее городу при запуске страницы 
+const defaultCity = window.localStorage.getItem('city') || 'Moscow';
+loadCityWeather(defaultCity);
 
 export { convertUnitTemp, addItemToLocalStorageArray };

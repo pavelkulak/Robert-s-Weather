@@ -5,7 +5,7 @@ import {
     todayWeatherDomElements,
     threeDaysArr,
 } from './dom.js';
-import { convertUnitTemp } from './testJs.js';
+import { convertUnitTemp } from './weatherController.js';
 
 // Проставляет активный класс выбранной шкале температуры
 function setActiveTemperatureType(curTypeTempName) {
@@ -45,6 +45,9 @@ controlDomElements.changeTemperature.addEventListener('click', function (e) {
 
     convertDisplayTemp();
 });
+
+window.localStorage.setItem('curTypeTemp', 'metric');
+window.localStorage.setItem('curTypeTempName', 'celsius');
 
 // Функция для смены показа температуры на странице
 function convertDisplayTemp() {
