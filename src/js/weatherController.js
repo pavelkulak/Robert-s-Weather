@@ -69,6 +69,7 @@ async function loadCityWeather(city) {
     } catch (error) {
         displayError('Не удалось найти данные по введённому городу.');
     }
+    console.log("todayWeatherDomElements.perceivedTemperatureNum: ", todayWeatherDomElements.perceivedTemperatureNum);
 }
 
 
@@ -112,7 +113,6 @@ function displayWeatherInfo(data, curLangue) {
         type: 'region',
     }).of(countryCode);
 
-    console.log("lll");
 
     // Форматируем дату и время
     const [weekday, day, month, time] = formatDate(data.timezone, curLangue);
@@ -147,6 +147,10 @@ function displayWeatherInfo(data, curLangue) {
     window.localStorage.setItem('tempTodayC', data.main.temp);
     window.localStorage.setItem('tempfeelsLikeC', data.main.feels_like);
 
+    console.log("tempToday: ", tempToday);
+    console.log("tempfeelsLike: ", tempfeelsLike);
+    console.log("todayWeatherDomElements.perceivedTemperatureNum: ", todayWeatherDomElements.perceivedTemperatureNum);
+
     todayWeatherDomElements.numTemperatureToday.innerText = tempToday;
     todayWeatherDomElements.perceivedTemperatureNum.innerText = tempfeelsLike;
 
@@ -158,6 +162,7 @@ function displayWeatherInfo(data, curLangue) {
         window.localStorage.getItem('latitude'),
         window.localStorage.getItem('longitude')
     );
+    console.log("todayWeatherDomElements.perceivedTemperatureNum: ", todayWeatherDomElements.perceivedTemperatureNum);
 }
 
 function formatDate(timezoneOffset, curLangue) {

@@ -56,7 +56,7 @@ const todayWeatherDomElements = {
     weatherCondition: todayWeatherSection.querySelector(
         '.today-weather__weather-condition'
     ),
-    perceivedTemperatureNum: todayWeatherSection.querySelectorAll(
+    perceivedTemperatureNum: todayWeatherSection.querySelector(
         '.today-weather__perceived-temperature-num'
     ),
     windSpeedNum: todayWeatherSection.querySelector(

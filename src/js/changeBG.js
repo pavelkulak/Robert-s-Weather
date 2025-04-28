@@ -21,7 +21,6 @@ async function getApiBG(initialLoad = false, cityChanged = false) {
         }
 
         const unsplashApiKey = await fetchUnsplashApiKey();
-        console.log(unsplashApiKey);
         const url = `https://api.unsplash.com/search/photos?query=${window.localStorage.getItem('city')}&client_id=${unsplashApiKey}&per_page=6`;
         const response = await fetch(url);
         if (!response.ok) {

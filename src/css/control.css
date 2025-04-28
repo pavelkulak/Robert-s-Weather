@@ -191,3 +191,39 @@
     grid-column: 1 / 3;
     grid-row: 2;
 }
+
+
+
+
+
+
+@media (max-width: 768px) {
+    .control__container {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+    .control__serch-bar {
+        width: 100%;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+    .control__search-city-input {
+        width: 100%;
+        border-radius: 5px;
+    }
+    .control__search-city-button {
+        width: 100%;
+        border-radius: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .control__current-language,
+    .control__type-temperature,
+    .control__search-city-button,
+    .control__search-city-input {
+        font-size: 12px;
+        height: 40px;
+    }
+}
