@@ -69,7 +69,6 @@ async function loadCityWeather(city) {
     } catch (error) {
         displayError('Не удалось найти данные по введённому городу.');
     }
-    console.log("todayWeatherDomElements.perceivedTemperatureNum: ", todayWeatherDomElements.perceivedTemperatureNum);
 }
 
 
