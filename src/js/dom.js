@@ -83,6 +83,9 @@ const mapDomElements = {
     longitude: mapSection.querySelector('.map__longitude-num'),
 };
 
+const errorContainer = document.querySelector('.error-container');
+const errorMessage = document.querySelector(".error-message__button")
+
 export {
     content,
     controlDomElements,
@@ -90,4 +93,6 @@ export {
     threeDaysArr,
     weatherThreeDaysDomElements,
     mapDomElements,
+    errorContainer,
+    errorMessage
 };

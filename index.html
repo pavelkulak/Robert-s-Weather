@@ -66,24 +66,24 @@
             <section class="today-weather">
                 <div class="container today-weather__container">
                     <div class="today-weather__header">
-                        <h1 class="today-weather__city-country"><span class="today-weather__city"></span>, <span class="today-weather__country"></span></h1>
+                        <h1 class="today-weather__city-country"><span class="today-weather__city">Moscow</span>, <span class="today-weather__country">Russia</span></h1>
                         <h2 class="today-weather__today-date-time">
-                            <span class="today-weather__today-date"></span>
-                            <span class="today-weather__today-time"></span>
+                            <span class="today-weather__today-date">Day 00 mouth</span>
+                            <span class="today-weather__today-time">00:00</span>
                         </h2>
                     </div>
                     <div class="today-weather__data-weather">
                         <p class="today-weather__temperature-today">
-                            <span class="today-weather__num-temperature-today"></span>
+                            <span class="today-weather__num-temperature-today">10</span>
                             <span class="today-weather__degree-temperature-today">°</span>
                         </p>
                         <img src="./src/icon/weather_icon.svg" alt="" class="today-weather__weather-icon" width="200">
                         <div class="today-weather__weather-details">
-                            <div class="today-weather__weather-condition"></div>
+                            <div class="today-weather__weather-condition">condition</div>
                             <div class="today-weather__perceived-temperature">Feels like:
-                                <span class="today-weather__perceived-temperature-num"></span>°</div>
-                            <div class="today-weather__wind-speed">Wind: <span class="today-weather__wind-speed-num"></span> m/s </div>
-                            <div class="today-weather__humidity">Humidity: <span class="today-weather__humidity-num"></span>%</div>
+                                <span class="today-weather__perceived-temperature-num">10</span>°</div>
+                            <div class="today-weather__wind-speed">Wind: <span class="today-weather__wind-speed-num">0</span> m/s </div>
+                            <div class="today-weather__humidity">Humidity: <span class="today-weather__humidity-num">100</span>%</div>
                         </div>
                     </div>
                 </div>
@@ -91,9 +91,9 @@
             <section class="weather-three-days">
                 <div class="container weather-three-days__container">
                     <div class="day weather-three-days__day">
-                        <h3 class="day__day-week"></h3>
+                        <h3 class="day__day-week">DAY</h3>
                         <p class="day__temperature">
-                            <span class="day__num-temperature"></span>
+                            <span class="day__num-temperature">10</span>
                             <span class="day__degree-temperature">°</span>
                         </p>
                         <div class="day__weather-icon-container">
@@ -101,9 +101,9 @@
                         </div>
                     </div>
                     <div class="day weather-three-days__day">
-                        <h3 class="day__day-week"></h3>
+                        <h3 class="day__day-week">DAY</h3>
                         <p class="day__temperature">
-                            <span class="day__num-temperature"></span>
+                            <span class="day__num-temperature">10</span>
                             <span class="day__degree-temperature">°</span>
                         </p>
                         <div class="day__weather-icon-container">
@@ -111,9 +111,9 @@
                         </div>
                     </div>
                     <div class="day weather-three-days__day">
-                        <h3 class="day__day-week"></h3>
+                        <h3 class="day__day-week">DAY</h3>
                         <p class="day__temperature">
-                            <span class="day__num-temperature"></span>
+                            <span class="day__num-temperature">10</span>
                             <span class="day__degree-temperature">°</span>
                         </p>
                         <div class="day__weather-icon-container">
@@ -126,11 +126,19 @@
                 <div class="container map__container">
                     <div id="map" class="map__mapEl"></div>
                     <div class="map__geolocation">
-                        <p class="map__latitude"><span class="map__latitude-name">Latitude</span>: <span class="map__latitude-num"></span></p>
-                        <p class="map__longitude"><span class="map__longitude-name">Longitude</span>: <span class="map__longitude-num"></span></p>
+                        <p class="map__latitude"><span class="map__latitude-name">Latitude</span>: <span class="map__latitude-num">00°00'0"</span></p>
+                        <p class="map__longitude"><span class="map__longitude-name">Longitude</span>: <span class="map__longitude-num">00°00'00"</span></p>
                     </div>
                 </div>
             </section>
+        </div>
+
+        <div class="error-container hidden-by-display">
+            <div class="error-message">
+                <h2 class="error-message__header">⚠️ Что-то пошло не так</h2>
+                <p class="error-message__text">Не удалось получить данные. Пожалуйста, попробуйте позже.</p>
+                <button class="error-message__button">🔄 Попробовать снова</button>
+            </div>
         </div>
 
         <script type="module" src="src/js/main.js"></script>

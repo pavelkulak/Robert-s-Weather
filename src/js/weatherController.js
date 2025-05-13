@@ -10,6 +10,7 @@ import {
 } from './dom.js';
 import { fetchApiKey } from './jobAPI.js';
 import { refreshBG, getApiBG } from "./changeBG.js"
+import { hideErrorMessage, displayError, showErrorOverlay } from "./errors.js"
 
 
 function initDefaultLocalStorage() {
@@ -49,6 +50,11 @@ async function loadCityWeather(city) {
             'metric',
             city
         );
+
+        if (!todayWeather || !forecast || !forecast.list || !Array.isArray(forecast.list) || !todayWeather.main) {
+            showErrorOverlay();
+            return;
+        }
         hideErrorMessage();
 
         displayWeatherInfo(todayWeather, 'en', 'metric');
@@ -57,17 +63,28 @@ async function loadCityWeather(city) {
         const dailyForecasts = forecast.list.filter((entry) =>
             entry.dt_txt.includes('12:00:00')
         );
+
+        if (dailyForecasts.length < 4) {
+            showErrorOverlay();
+            return;
+        }
         window.localStorage.setItem('tempOtherDays', JSON.stringify([]));
 
-        threeDaysArr.forEach((day, i) =>
-            displayThreeDaysWeather(dailyForecasts[i + 1], i, 'en')
-        );
+        threeDaysArr.forEach((day, i) => {
+            if (dailyForecasts[i + 1]) {
+                displayThreeDaysWeather(dailyForecasts[i + 1], i, 'en');
+            }
+            else {
+                showErrorOverlay()
+            }
+        });
         window.localStorage.setItem('city', todayWeather.name); // Сохраняем новый город в localStorage
 
         refreshBG();        // Переключение на следующее изображение (если что-то есть)
         await getApiBG(true); // Загружаем картинки под новый город
     } catch (error) {
         displayError('Не удалось найти данные по введённому городу.');
+        showErrorOverlay();
     }
 }
 
@@ -82,6 +99,7 @@ async function getWeatherData(curLangue, typeTemp = 'metric', city) {
     ]);
 
     if (!response.ok || !responseFromThreeDays.ok) {
+        showErrorOverlay()
         throw new Error('Could not fetch weather data');
     }
 
@@ -90,20 +108,14 @@ async function getWeatherData(curLangue, typeTemp = 'metric', city) {
         responseFromThreeDays.json(),
     ]);
 
+    if (!dataResponseToday || !dataResponseThreeDay) {
+        showErrorOverlay();
+        throw new Error('Некорректные данные от API');
+    }
+
     return [dataResponseToday, dataResponseThreeDay];
 }
 
-function hideErrorMessage() {
-    const el = controlDomElements.serchBar.querySelector(
-        '.control__ErrorMessage'
-    );
-    if (el) {
-        controlDomElements.searchCityInput.classList.remove(
-            'control__search-city-input_error'
-        );
-        el.remove();
-    }
-}
 
 function displayWeatherInfo(data, curLangue) {
     console.log('DISPLAY WEATHER INFO DATA:', data);
@@ -246,23 +258,7 @@ function addItemToLocalStorageArray(key, item) {
     localStorage.setItem(key, JSON.stringify(arr));
 }
 
-function displayError(error) {
-    const existing = controlDomElements.serchBar.querySelector(
-        '.control__ErrorMessage'
-    );
-    // Если ранее уже была выдана ошибка, то только меняю текст в html поле. Иначе создаю новый
-    if (existing) {
-        existing.innerText = error;
-    } else {
-        controlDomElements.searchCityInput.classList.add(
-            'control__search-city-input_error'
-        );
-        const htmlErrorMessage = document.createElement('p');
-        htmlErrorMessage.textContent = error;
-        htmlErrorMessage.classList.add('control__ErrorMessage');
-        controlDomElements.serchBar.appendChild(htmlErrorMessage);
-    }
-}
+
 
 let map;
 function initMap(lat, lon) {

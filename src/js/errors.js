@@ -1,0 +1,53 @@
+'use strict';
+
+import {
+    controlDomElements,
+    errorContainer,
+    errorMessage
+} from './dom.js';
+
+
+function hideErrorMessage() {
+    const el = controlDomElements.serchBar.querySelector(
+        '.control__ErrorMessage'
+    );
+    if (el) {
+        controlDomElements.searchCityInput.classList.remove(
+            'control__search-city-input_error'
+        );
+        el.remove();
+    }
+}
+
+
+function displayError(error) {
+    const existing = controlDomElements.serchBar.querySelector(
+        '.control__ErrorMessage'
+    );
+    // Если ранее уже была выдана ошибка, то только меняю текст в html поле. Иначе создаю новый
+    if (existing) {
+        existing.innerText = error;
+    } else {
+        controlDomElements.searchCityInput.classList.add(
+            'control__search-city-input_error'
+        );
+        const htmlErrorMessage = document.createElement('p');
+        htmlErrorMessage.textContent = error;
+        htmlErrorMessage.classList.add('control__ErrorMessage');
+        controlDomElements.serchBar.appendChild(htmlErrorMessage);
+    }
+}
+
+
+
+function showErrorOverlay() {
+    if (errorContainer) {
+        errorContainer.classList.remove('hidden-by-display');
+    }
+}
+
+errorMessage.addEventListener("click", function() {
+    location.reload()
+})
+
+export { hideErrorMessage, displayError, showErrorOverlay }
