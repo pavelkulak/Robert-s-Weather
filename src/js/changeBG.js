@@ -2,6 +2,7 @@
 
 import { content, controlDomElements } from './dom.js';
 import { fetchUnsplashApiKey } from './jobAPI.js';
+import { setToLocalStorage, getFromLocalStorage } from "./weatherController.js"
 
 let cachedBGImages = [];
 let numBgImg = Number(localStorage.getItem('numBgImg')) || 0;
@@ -21,7 +22,7 @@ async function getApiBG(initialLoad = false, cityChanged = false) {
         }
 
         const unsplashApiKey = await fetchUnsplashApiKey();
-        const url = `https://api.unsplash.com/search/photos?query=${window.localStorage.getItem('city')}&client_id=${unsplashApiKey}&per_page=6`;
+        const url = `https://api.unsplash.com/search/photos?query=${getFromLocalStorage('city')}&client_id=${unsplashApiKey}&per_page=6`;
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Could not fetch weather data');

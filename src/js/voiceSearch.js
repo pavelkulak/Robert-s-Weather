@@ -3,6 +3,7 @@
 import {
     controlDomElements,
 } from './dom.js';
+import { setToLocalStorage, getFromLocalStorage } from './weatherController.js';
 
 
 
@@ -19,9 +20,9 @@ if (speechRecognition) {
     // При нажатии на кнопку микрофона запускаем распознавание речи
     controlDomElements.searchCityIcon.addEventListener('click', () => {
         // Устанавливаем язык для распознавания речи
-        recognition.lang = `${window.localStorage.getItem('language').toLowerCase()}-${window.localStorage.getItem('language')}`;
+        recognition.lang = `${getFromLocalStorage('language').toLowerCase()}-${getFromLocalStorage('language')}`;
         console.log(
-            `${window.localStorage.getItem('language').toLowerCase()}-${window.localStorage.getItem('language')}`
+            `${getFromLocalStorage('language').toLowerCase()}-${getFromLocalStorage('language')}`
         );
         recognition.start();
         controlDomElements.searchCityInput.value = '🎙️ Говорите...';

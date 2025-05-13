@@ -15,16 +15,16 @@ import { hideErrorMessage, displayError, showErrorOverlay } from "./errors.js"
 
 function initDefaultLocalStorage() {
     // Устанавливаем шкалу температуры по умолчанию, если её нет в localStorage
-    if (!window.localStorage.getItem('curTypeTemp')) {
-        window.localStorage.setItem('curTypeTemp', 'metric'); // шкала Цельсия
+    if (!getFromLocalStorage('curTypeTemp')) {
+        setToLocalStorage('curTypeTemp', 'metric'); // шкала Цельсия
     }
-    if (!window.localStorage.getItem('curTypeTempName')) {
-        window.localStorage.setItem('curTypeTempName', '°C');
+    if (!getFromLocalStorage('curTypeTempName')) {
+        setToLocalStorage('curTypeTempName', '°C');
     }
 
     // Устанавливаем язык по умолчанию, если её нет в localStorage
-    if (!window.localStorage.getItem('language')) {
-        window.localStorage.setItem('language', 'EN');
+    if (!getFromLocalStorage('language')) {
+        setToLocalStorage('language', 'EN');
     }
 }
 
@@ -68,7 +68,7 @@ async function loadCityWeather(city) {
             showErrorOverlay();
             return;
         }
-        window.localStorage.setItem('tempOtherDays', JSON.stringify([]));
+        setToLocalStorage('tempOtherDays', JSON.stringify([]));
 
         threeDaysArr.forEach((day, i) => {
             if (dailyForecasts[i + 1]) {
@@ -78,7 +78,7 @@ async function loadCityWeather(city) {
                 showErrorOverlay()
             }
         });
-        window.localStorage.setItem('city', todayWeather.name); // Сохраняем новый город в localStorage
+        setToLocalStorage('city', todayWeather.name); // Сохраняем новый город в localStorage
 
         refreshBG();        // Переключение на следующее изображение (если что-то есть)
         await getApiBG(true); // Загружаем картинки под новый город
@@ -118,7 +118,6 @@ async function getWeatherData(curLangue, typeTemp = 'metric', city) {
 
 
 function displayWeatherInfo(data, curLangue) {
-    console.log('DISPLAY WEATHER INFO DATA:', data);
     const countryCode = data.sys.country;
     const countryName = new Intl.DisplayNames([curLangue], {
         type: 'region',
@@ -131,7 +130,7 @@ function displayWeatherInfo(data, curLangue) {
     todayWeatherDomElements.city.innerText = data.name;
     todayWeatherDomElements.country.innerText = countryName;
 
-    window.localStorage.setItem("city", data.name)
+    setToLocalStorage("city", data.name)
 
     // Временно закомментировал вызов функции. Потом надо будет вернуть!!!!!!!
     // changeLanguageCityName()
@@ -155,25 +154,20 @@ function displayWeatherInfo(data, curLangue) {
     const tempToday = convertUnitTemp(data.main.temp);
     const tempfeelsLike = convertUnitTemp(data.main.feels_like);
 
-    window.localStorage.setItem('tempTodayC', data.main.temp);
-    window.localStorage.setItem('tempfeelsLikeC', data.main.feels_like);
-
-    console.log("tempToday: ", tempToday);
-    console.log("tempfeelsLike: ", tempfeelsLike);
-    console.log("todayWeatherDomElements.perceivedTemperatureNum: ", todayWeatherDomElements.perceivedTemperatureNum);
+    setToLocalStorage('tempTodayC', data.main.temp);
+    setToLocalStorage('tempfeelsLikeC', data.main.feels_like);
 
     todayWeatherDomElements.numTemperatureToday.innerText = tempToday;
     todayWeatherDomElements.perceivedTemperatureNum.innerText = tempfeelsLike;
 
     // Устанавливаю координаты и запускаю показ карты
-    window.localStorage.setItem('latitude', data.coord.lat);
-    window.localStorage.setItem('longitude', data.coord.lon);
+    setToLocalStorage('latitude', data.coord.lat);
+    setToLocalStorage('longitude', data.coord.lon);
 
     initMap(
-        window.localStorage.getItem('latitude'),
-        window.localStorage.getItem('longitude')
+        getFromLocalStorage('latitude'),
+        getFromLocalStorage('longitude')
     );
-    console.log("todayWeatherDomElements.perceivedTemperatureNum: ", todayWeatherDomElements.perceivedTemperatureNum);
 }
 
 function formatDate(timezoneOffset, curLangue) {
@@ -203,7 +197,7 @@ function changeLanguageCityName() {
     console.log(todayWeatherDomElements.city.innerText);
 
     fetch(
-        `https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${window.localStorage.getItem('language').toLowerCase()}`
+        `https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${getFromLocalStorage('language').toLowerCase()}`
     )
         .then((response) => response.json())
         .then((dataCity) => {
@@ -218,6 +212,7 @@ function changeLanguageCityName() {
                     dataCity.geonames[0].name;
             } else {
                 console.error('Ошибка: geonames не содержит данных', dataCity);
+                showErrorOverlay();
             }
         })
         .catch((error) => console.error('Ошибка:', error));
@@ -228,7 +223,6 @@ function displayThreeDaysWeather(curDayData, index, curLangue) {
     const dayName = new Date(curDayData.dt_txt).toLocaleDateString(curLangue, {
         weekday: 'short',
     });
-    console.log('curDayData.main.temp: ', curDayData.main.temp);
     const temp = convertUnitTemp(curDayData.main.temp);
     const weatherIcon = `https://openweathermap.org/img/wn/${curDayData.weather[0].icon}@2x.png`;
 
@@ -243,8 +237,7 @@ function displayThreeDaysWeather(curDayData, index, curLangue) {
 
 // Функция для конвертации температуры в другой тип. (Либо возвращения этого же числа)
 function convertUnitTemp(temp) {
-    console.log("curTypeTemp: ", window.localStorage.getItem('curTypeTemp'));
-    const curTypeTemp = window.localStorage.getItem('curTypeTemp');
+    const curTypeTemp = getFromLocalStorage('curTypeTemp');
     if (curTypeTemp === 'metric') {
         return Math.round(temp);
     } else if (curTypeTemp === 'imperial') {
@@ -256,6 +249,29 @@ function addItemToLocalStorageArray(key, item) {
     const arr = JSON.parse(localStorage.getItem(key)) || [];
     arr.push(item);
     localStorage.setItem(key, JSON.stringify(arr));
+}
+
+function setToLocalStorage(key, value) {
+    // Если значение — строка, сохраняем как есть
+    if (typeof value === "string") {
+        localStorage.setItem(key, value);
+    } else {
+        // Всё остальное (объекты, числа, булевы и т.д.) — сериализуем
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+}
+function getFromLocalStorage(key, defaultValue = null) {
+    const value = localStorage.getItem(key);
+
+    if (value === null) return defaultValue;
+
+    try {
+        // Пробуем распарсить, если это валидный JSON (объект, массив, число, булевое и т.д.)
+        return JSON.parse(value);
+    } catch {
+        // Если это просто строка (например, "metric") — вернуть как есть
+        return value;
+    }
 }
 
 
@@ -295,7 +311,7 @@ function convertToDMS(coord) {
 }
 
 // Применяем функции к выбранному ранее городу при запуске страницы 
-const defaultCity = window.localStorage.getItem('city') || 'Moscow';
+const defaultCity = getFromLocalStorage('city') || 'Moscow';
 loadCityWeather(defaultCity);
 
-export { convertUnitTemp, addItemToLocalStorageArray };
+export { convertUnitTemp, addItemToLocalStorageArray, setToLocalStorage, getFromLocalStorage };

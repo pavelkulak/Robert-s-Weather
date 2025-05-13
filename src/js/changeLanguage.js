@@ -6,7 +6,7 @@ import {
     mapDomElements,
 } from './dom.js';
 
-import { loadCityWeather } from './weatherController.js';
+import { loadCityWeather, setToLocalStorage, getFromLocalStorage } from './weatherController.js';
 
 // Сразу при запуске страницы обновляю стиль выбранного элемента на языке
 controlDomElements.hiddenElementsLanguage.forEach(function (el) {
@@ -14,11 +14,11 @@ controlDomElements.hiddenElementsLanguage.forEach(function (el) {
         '.control__hidden-element-language-name'
     );
     console.log("elNameLanguage.innerText: ", elNameLanguage.innerText);
-    console.log(window.localStorage.getItem('language'));
-    if (elNameLanguage.innerText === window.localStorage.getItem('language')) {
+    console.log(getFromLocalStorage('language'));
+    if (elNameLanguage.innerText === getFromLocalStorage('language')) {
         el.classList.add('control__hidden-element-language_selected');
         controlDomElements.nameLanguage.innerText =
-            window.localStorage.getItem('language');
+            getFromLocalStorage('language');
     } else {
         el.classList.remove('control__hidden-element-language_selected');
     }
@@ -67,7 +67,7 @@ async function changeLang(e) {
     controlDomElements.nameLanguage.innerText = elementLanguage.querySelector(
         '.control__hidden-element-language-name'
     ).innerText;
-    await loadCityWeather(window.localStorage.getItem("city"), window.localStorage.getItem("language"))
+    await loadCityWeather(getFromLocalStorage("city"), getFromLocalStorage("language"))
 
 
     // Меняю язык у "ширина" и "долгота"
@@ -80,7 +80,7 @@ async function changeLang(e) {
         controlDomElements.nameLanguage.innerText.toLowerCase()
     );
 
-    window.localStorage.setItem(
+    setToLocalStorage(
         'language',
         controlDomElements.nameLanguage.innerText
     );

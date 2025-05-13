@@ -5,14 +5,14 @@ import {
     todayWeatherDomElements,
     threeDaysArr,
 } from './dom.js';
-import { convertUnitTemp } from './weatherController.js';
+import { convertUnitTemp, setToLocalStorage, getFromLocalStorage } from './weatherController.js';
 
 // Проставляет активный класс выбранной шкале температуры
 function setActiveTemperatureType(curTypeTempName) {
     controlDomElements.typesTemperature.forEach(function (el) {
         el.classList.remove('control__type-temperature_selected-type');
     });
-
+    console.log(curTypeTempName);
     const selected = controlDomElements.changeTemperature.querySelector(
         `.control__${curTypeTempName}`
     );
@@ -20,7 +20,7 @@ function setActiveTemperatureType(curTypeTempName) {
 }
 
 // Сразу при запуске страницы обновляю стиль выбранного элемента на шкале температуры
-setActiveTemperatureType(window.localStorage.getItem('curTypeTempName'));
+setActiveTemperatureType(getFromLocalStorage('curTypeTempName'));
 
 // При смене шкалы температуры
 controlDomElements.changeTemperature.addEventListener('click', function (e) {
@@ -40,25 +40,29 @@ controlDomElements.changeTemperature.addEventListener('click', function (e) {
     // Обновляю html стиль выбранной температуры, данные в localstorage и саму вписанную температуру (перевожу в нужную шкалу)
     setActiveTemperatureType(curTypeTempName);
 
-    window.localStorage.setItem('curTypeTemp', curTypeTemp);
-    window.localStorage.setItem('curTypeTempName', curTypeTempName);
+    setToLocalStorage('curTypeTemp', curTypeTemp);
+    setToLocalStorage('curTypeTempName', curTypeTempName);
 
     convertDisplayTemp();
 });
 
-window.localStorage.setItem('curTypeTemp', 'metric');
-window.localStorage.setItem('curTypeTempName', 'celsius');
+// Если в локал сторэдже не была сохранена ранее какая-либо температура, то ставлю цельсию
+if (!getFromLocalStorage("curTypeTemp") || !getFromLocalStorage("curTypeTempName")) {
+    setToLocalStorage('curTypeTemp', 'metric');
+    setToLocalStorage('curTypeTempName', 'celsius');
+}
+
 
 // Функция для смены показа температуры на странице
 function convertDisplayTemp() {
     todayWeatherDomElements.numTemperatureToday.innerText = convertUnitTemp(
-        window.localStorage.getItem('tempTodayC')
+        getFromLocalStorage('tempTodayC')
     );
     todayWeatherDomElements.perceivedTemperatureNum.innerText = convertUnitTemp(
-        window.localStorage.getItem('tempfeelsLikeC')
+        getFromLocalStorage('tempfeelsLikeC')
     );
 
-    const arrDays = JSON.parse(window.localStorage.getItem('tempOtherDays'));
+    const arrDays = getFromLocalStorage('tempOtherDays');
     threeDaysArr.forEach(function (day) {
         day.querySelector('.day__num-temperature').innerText = convertUnitTemp(
             arrDays.shift()
