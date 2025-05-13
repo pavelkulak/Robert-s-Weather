@@ -1,11 +1,7 @@
 'use strict';
 
-import {
-    controlDomElements,
-} from './dom.js';
-import { setToLocalStorage, getFromLocalStorage } from './weatherController.js';
-
-
+import { controlDomElements } from './dom.js';
+import { getFromLocalStorage } from './localStorage.js';
 
 // Проверяем поддержку браузером Web Speech API
 const speechRecognition =

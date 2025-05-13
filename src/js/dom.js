@@ -84,7 +84,7 @@ const mapDomElements = {
 };
 
 const errorContainer = document.querySelector('.error-container');
-const errorMessage = document.querySelector(".error-message__button")
+const errorMessage = document.querySelector('.error-message__button');
 
 export {
     content,
@@ -94,5 +94,5 @@ export {
     weatherThreeDaysDomElements,
     mapDomElements,
     errorContainer,
-    errorMessage
+    errorMessage,
 };

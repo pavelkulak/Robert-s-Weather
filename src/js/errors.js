@@ -1,11 +1,6 @@
 'use strict';
 
-import {
-    controlDomElements,
-    errorContainer,
-    errorMessage
-} from './dom.js';
-
+import { controlDomElements, errorContainer, errorMessage } from './dom.js';
 
 function hideErrorMessage() {
     const el = controlDomElements.serchBar.querySelector(
@@ -18,7 +13,6 @@ function hideErrorMessage() {
         el.remove();
     }
 }
-
 
 function displayError(error) {
     const existing = controlDomElements.serchBar.querySelector(
@@ -38,16 +32,14 @@ function displayError(error) {
     }
 }
 
-
-
 function showErrorOverlay() {
     if (errorContainer) {
         errorContainer.classList.remove('hidden-by-display');
     }
 }
 
-errorMessage.addEventListener("click", function() {
-    location.reload()
-})
+errorMessage.addEventListener('click', function () {
+    location.reload();
+});
 
-export { hideErrorMessage, displayError, showErrorOverlay }
+export { hideErrorMessage, displayError, showErrorOverlay };

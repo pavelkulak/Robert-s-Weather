@@ -1,19 +1,19 @@
 'use strict';
 
+import { controlDomElements, mapDomElements } from './dom.js';
 
+import { loadCityWeather } from './weatherController.js';
 import {
-    controlDomElements,
-    mapDomElements,
-} from './dom.js';
-
-import { loadCityWeather, setToLocalStorage, getFromLocalStorage } from './weatherController.js';
+    setToLocalStorage,
+    getFromLocalStorage,
+} from './localStorage.js';
 
 // Сразу при запуске страницы обновляю стиль выбранного элемента на языке
 controlDomElements.hiddenElementsLanguage.forEach(function (el) {
     const elNameLanguage = el.querySelector(
         '.control__hidden-element-language-name'
     );
-    console.log("elNameLanguage.innerText: ", elNameLanguage.innerText);
+    console.log('elNameLanguage.innerText: ', elNameLanguage.innerText);
     console.log(getFromLocalStorage('language'));
     if (elNameLanguage.innerText === getFromLocalStorage('language')) {
         el.classList.add('control__hidden-element-language_selected');
@@ -23,8 +23,6 @@ controlDomElements.hiddenElementsLanguage.forEach(function (el) {
         el.classList.remove('control__hidden-element-language_selected');
     }
 });
-
-
 
 const translations = {
     en: { Latitude: 'Latitude', Longitude: 'Longituded' },
@@ -37,7 +35,9 @@ function translate(text, lang) {
 }
 
 // При изменении языка
-controlDomElements.changeLanguage.addEventListener('click', (e) => changeLang(e));
+controlDomElements.changeLanguage.addEventListener('click', (e) =>
+    changeLang(e)
+);
 async function changeLang(e) {
     controlDomElements.hiddenListLanguages.classList.toggle(
         'hidden-by-display'
@@ -67,8 +67,10 @@ async function changeLang(e) {
     controlDomElements.nameLanguage.innerText = elementLanguage.querySelector(
         '.control__hidden-element-language-name'
     ).innerText;
-    await loadCityWeather(getFromLocalStorage("city"), getFromLocalStorage("language"))
-
+    await loadCityWeather(
+        getFromLocalStorage('city'),
+        getFromLocalStorage('language')
+    );
 
     // Меняю язык у "ширина" и "долгота"
     mapDomElements.latitudeName.innerText = translate(
@@ -80,8 +82,5 @@ async function changeLang(e) {
         controlDomElements.nameLanguage.innerText.toLowerCase()
     );
 
-    setToLocalStorage(
-        'language',
-        controlDomElements.nameLanguage.innerText
-    );
+    setToLocalStorage('language', controlDomElements.nameLanguage.innerText);
 }

@@ -2,7 +2,7 @@
 
 import { content, controlDomElements } from './dom.js';
 import { fetchUnsplashApiKey } from './jobAPI.js';
-import { setToLocalStorage, getFromLocalStorage } from "./weatherController.js"
+import { getFromLocalStorage } from './localStorage.js';
 
 let cachedBGImages = [];
 let numBgImg = Number(localStorage.getItem('numBgImg')) || 0;
@@ -30,7 +30,7 @@ async function getApiBG(initialLoad = false, cityChanged = false) {
         const data = await response.json();
         cachedBGImages = data.results;
         console.log('Изображения загружены:', cachedBGImages);
-        console.log("Данные BG", data);
+        console.log('Данные BG', data);
 
         const index = initialLoad ? numBgImg % cachedBGImages.length : numBgImg;
         setBackgroundImage(index);
@@ -69,4 +69,4 @@ window.addEventListener('load', async () => {
 // При клике на кнопку изменения фонового изображения
 refreshBtn.addEventListener('click', refreshBG);
 
-export { refreshBG, getApiBG }
+export { refreshBG, getApiBG };

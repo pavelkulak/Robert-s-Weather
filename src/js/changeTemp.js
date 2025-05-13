@@ -5,7 +5,8 @@ import {
     todayWeatherDomElements,
     threeDaysArr,
 } from './dom.js';
-import { convertUnitTemp, setToLocalStorage, getFromLocalStorage } from './weatherController.js';
+import { convertUnitTemp } from './weatherController.js';
+import { setToLocalStorage, getFromLocalStorage } from './localStorage.js';
 
 // Проставляет активный класс выбранной шкале температуры
 function setActiveTemperatureType(curTypeTempName) {
@@ -45,13 +46,6 @@ controlDomElements.changeTemperature.addEventListener('click', function (e) {
 
     convertDisplayTemp();
 });
-
-// Если в локал сторэдже не была сохранена ранее какая-либо температура, то ставлю цельсию
-if (!getFromLocalStorage("curTypeTemp") || !getFromLocalStorage("curTypeTempName")) {
-    setToLocalStorage('curTypeTemp', 'metric');
-    setToLocalStorage('curTypeTempName', 'celsius');
-}
-
 
 // Функция для смены показа температуры на странице
 function convertDisplayTemp() {
