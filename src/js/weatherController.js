@@ -83,7 +83,6 @@ async function loadCityWeather(city) {
         });
 
         setToLocalStorage('city', todayWeather.name); // Сохраняем новый город в localStorage
-        refreshBG(); // Переключение на следующее изображение (если что-то есть)
         await getApiBG(true); // Загружаем картинки под новый город
     } catch (error) {
         displayError('Не удалось найти данные по введённому городу.');
@@ -146,6 +145,7 @@ function displayWeatherInfo(data, curLangue) {
     const iconCode = data.weather[0].icon;
     todayWeatherDomElements.weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
     todayWeatherDomElements.weatherIcon.alt = data.weather[0].description;
+    todayWeatherDomElements.weatherIcon.removeAttribute('style');
 
     // Создаю переменные под температуру в Цельсиях, записываю её в локалСторэдж и вписываю в html в нужном типе температуры (зависит от того, какой тип температуры сейчас выьран на странице)
     const tempToday = convertUnitTemp(data.main.temp);
@@ -199,13 +199,16 @@ function displayThreeDaysWeather(curDayData, index, curLangue) {
     const temp = convertUnitTemp(curDayData.main.temp);
     const weatherIcon = `https://openweathermap.org/img/wn/${curDayData.weather[0].icon}@2x.png`;
 
+
     addItemToLocalStorageArray('tempOtherDays', curDayData.main.temp);
 
     // Выводим данные в HTML
     const el = threeDaysArr[index];
     el.querySelector('.day__day-week').innerText = dayName;
     el.querySelector('.day__num-temperature').innerText = temp;
-    el.querySelector('.day__weather-icon').src = weatherIcon;
+    const iconDay = el.querySelector('.day__weather-icon')
+    iconDay.src = weatherIcon;
+    iconDay.removeAttribute('style');
 }
 
 // Функция для конвертации температуры в другой тип. (Либо возвращения этого же числа)

@@ -13,6 +13,7 @@ refreshBtn.classList.add('control__refresh-BG_loading');
 refreshBtn.disabled = true;
 
 
+
 async function getApiBG(initialLoad = false, cityChanged = false) {
     try {
         // Если город изменился, очищаем кэш изображений
@@ -42,12 +43,14 @@ async function getApiBG(initialLoad = false, cityChanged = false) {
         );
         controlDomElements.refreshBGButton.disabled = false;
         controlDomElements.refreshBG.classList.remove("hidden-by-visibility")
+
     } catch (err) {
         console.error('Ошибка при загрузке изображений:', err.message);
     }
 }
 
 function setBackgroundImage(index) {
+    console.log(index);
     const imageUrl = cachedBGImages[index]?.urls?.regular;
     if (imageUrl) {
         content.style.backgroundImage = `url(${imageUrl})`;
@@ -55,6 +58,7 @@ function setBackgroundImage(index) {
 }
 
 function refreshBG() {
+    console.log("REFRESH");
     if (!cachedBGImages.length) {
         console.log('Фоновые изображения ещё не загружены.');
         return;
