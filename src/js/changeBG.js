@@ -12,6 +12,7 @@ const refreshBtn = controlDomElements.refreshBGButton;
 refreshBtn.classList.add('control__refresh-BG_loading');
 refreshBtn.disabled = true;
 
+
 async function getApiBG(initialLoad = false, cityChanged = false) {
     try {
         // Если город изменился, очищаем кэш изображений
@@ -40,6 +41,7 @@ async function getApiBG(initialLoad = false, cityChanged = false) {
             'control__refresh-BG_loading'
         );
         controlDomElements.refreshBGButton.disabled = false;
+        controlDomElements.refreshBG.classList.remove("hidden-by-visibility")
     } catch (err) {
         console.error('Ошибка при загрузке изображений:', err.message);
     }

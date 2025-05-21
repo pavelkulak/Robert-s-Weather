@@ -11,11 +11,14 @@
 .control__control-bar {
     display: flex;
     gap: 10px;
-    /* align-items: center; */
-    align-items: start;
+    align-items: center;
+    /* align-items: start; */
     font-weight: 700;
     font-size: 14px;
     color: #ffffff;
+}
+.control__refresh-BG-button {
+    height: 30px;
 }
 .control__refresh-BG-img {
     cursor: pointer;
@@ -30,11 +33,11 @@
 .control__refresh-BG_loading::after {
     content: '';
     position: absolute;
-    right: 13px;
+    right: 5px;
     top: 50%;
-    width: 16px;
-    height: 16px;
-    margin-top: -8px;
+    width: 22px;
+    height: 22px;
+    margin-top: -10px;
     border: 3px solid #000000;
     border-top-color: transparent;
     border-radius: 50%;
@@ -238,5 +241,11 @@
     .control__search-city-input {
         font-size: 20px;
         height: 55px;
+    }
+    .control__refresh-BG-img {
+        width: 40px;
+    }
+    .control__control-bar {
+        gap: 18px;
     }
 }
