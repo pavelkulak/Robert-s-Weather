@@ -59,7 +59,7 @@ async function loadCityWeather(city) {
             !Array.isArray(forecast.list) ||
             !todayWeather.main
         ) {
-            return showErrorOverlay();
+            return displayError('Не удалось найти данные по введённому городу.');
         }
 
         hideErrorMessage();
@@ -87,7 +87,6 @@ async function loadCityWeather(city) {
         await getApiBG(true); // Загружаем картинки под новый город
     } catch (error) {
         displayError('Не удалось найти данные по введённому городу.');
-        showErrorOverlay();
     }
 }
 
@@ -104,7 +103,6 @@ async function getWeatherData(curLangue, typeTemp = 'metric', city) {
     ]);
 
     if (!weatherRes.ok || !forecastRes.ok) {
-        showErrorOverlay();
         throw new Error('Could not fetch weather data');
     }
 

@@ -227,3 +227,16 @@
         height: 40px;
     }
 }
+
+
+@media (min-width: 1900px) {
+    .control__refresh-BG-button,
+    .control__current-language,
+    .control__type-temperature,
+    .control__change-temperature,
+    .control__search-city-button,
+    .control__search-city-input {
+        font-size: 20px;
+        height: 55px;
+    }
+}

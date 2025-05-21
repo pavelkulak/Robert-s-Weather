@@ -20,6 +20,7 @@
 .map__geolocation {
     text-align: right;
     margin-top: 15px;
+    font-size: 16px;
 }
 
 
@@ -47,10 +48,20 @@
     .map__geolocation {
         margin-bottom: 20px;
     }
+    .map__geolocation {
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 630px) {
     .map {
         grid-row: 4;
+    }
+}
+
+
+@media (min-width: 1900px) {
+    .map__geolocation {
+        font-size: 20px;
     }
 }

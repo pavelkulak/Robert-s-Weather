@@ -17,6 +17,7 @@ body {
 }
 
 .content {
+    position: relative;
     display: grid;
     grid-template-columns: min-content 1fr;
     grid-template-rows: min-content auto auto;
@@ -32,7 +33,16 @@ body {
     padding: 0 90px;
     margin: 0 auto;
 }
-
+.content * {
+    z-index: 1;
+}
+.content::before {
+    content: '';
+    position: absolute;
+    inset: 0; /* то же самое, что top: 0; right: 0; bottom: 0; left: 0; */
+    background-color: rgba(0, 0, 0, 0.2); /* полупрозрачный черный */
+    z-index: 0; /* чтобы быть под контентом */
+}
 
 
 .error-container {
@@ -68,6 +78,12 @@ body {
 @media (max-width: 630px) {
     .content {
         grid-template-rows: min-content auto auto auto;
+    }
+}
+
+@media (min-width: 1900px) {
+    .content {
+        padding: 0 10% 0 10%;
     }
 }
 

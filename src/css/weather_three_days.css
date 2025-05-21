@@ -94,3 +94,19 @@
         grid-row: 3;
     }
 }
+
+
+@media (min-width: 1900px) {
+    .day__day-week {
+        font-size: 30px;
+    }
+    .day__temperature, .day__num-temperature {
+        font-size: 86px;
+    }
+    .day__weather-icon-container {
+        width: 70px;
+    }
+    .day__weather-icon {
+        width: 100px;
+    }
+}

@@ -32,7 +32,8 @@ function displayError(error) {
     }
 }
 
-function showErrorOverlay() {
+function showErrorOverlay(e) {
+    console.log(e);
     if (errorContainer) {
         errorContainer.classList.remove('hidden-by-display');
     }

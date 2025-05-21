@@ -143,3 +143,24 @@
         grid-column: 1;
     }
 }
+
+
+
+
+@media (min-width: 1900px) {
+    .today-weather__city-country {
+        font-size: 50px;
+    }
+    .today-weather__today-date-time {
+        font-size: 30px;
+    }
+    .today-weather__num-temperature-today {
+        font-size: 312px;
+    }
+    .today-weather__degree-temperature-today {
+        font-size: 106px;
+    }
+    .today-weather__weather-details {
+        font-size: 28px;
+    }
+}

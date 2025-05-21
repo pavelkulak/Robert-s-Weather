@@ -15,7 +15,7 @@ async function fetchKey(endpoint) {
         return data.apiKey;
     } catch (err) {
         console.error(`Ошибка получения ключа (${endpoint}):`, err);
-        showErrorOverlay();
+        // showErrorOverlay();
         return null;
     }
 }
