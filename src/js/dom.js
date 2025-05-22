@@ -29,7 +29,7 @@ const controlDomElements = {
     faringate: controlSection.querySelector('.control__faringate'),
     celsius: controlSection.querySelector('.control__celsius'),
 
-    serchBar: controlSection.querySelector('.control__serch-bar'),
+    serchBar: controlSection.querySelector('.control__search-bar'),
     searchCityInput: controlSection.querySelector(
         '.control__search-city-input'
     ),

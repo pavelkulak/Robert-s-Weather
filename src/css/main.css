@@ -7,6 +7,10 @@
 @import './weather_three_days.css';
 @import './map.css';
 
+html {
+    font-size: 16px; /* 1rem = 16px */
+}
+
 body {
     overflow-x: hidden;
 }
