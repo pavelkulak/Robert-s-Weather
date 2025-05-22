@@ -31,6 +31,10 @@
     font-size: 5rem; /* 80px */
 }
 
+.day__num-temperature::after {
+    content: "°";
+}
+
 .day__weather-icon-container {
     position: relative;
     width: 3.75rem; /* 60px */
@@ -70,7 +74,7 @@
     .day__temperature, .day__num-temperature {
         font-size: 2.5rem; /* 40px */
     }
-    .day__degree-temperature {
+    .day__num-temperature::after {
         font-size: 1.875rem; /* 30px */
     }
     .day__weather-icon {

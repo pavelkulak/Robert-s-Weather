@@ -20,11 +20,14 @@
 }
 .today-weather__num-temperature-today {
     font-size: 19.125rem; /* 306px */
+    display: flex;
 }
-.today-weather__degree-temperature-today {
+
+.today-weather__num-temperature-today::after {
+    content: "°";
     font-size: 6.25rem; /* 100px */
-    margin-top: 60px;
     margin-left: 18px;
+    margin-top: 60px;
 }
 
 .today-weather__data-weather {
@@ -70,7 +73,7 @@
     .today-weather__num-temperature-today {
         font-size: 16rem; /* 256px */
     }
-    .today-weather__degree-temperature-today {
+    .today-weather__num-temperature-today::after {
         font-size: 4.375rem; /* 70px */
         margin-top: 50px;
     }
@@ -100,7 +103,7 @@
         right: 0;
         transform: translate(-47px, 10px);
     }
-    .today-weather__degree-temperature-today {
+    .today-weather__num-temperature-today::after {
         font-size: 3.75rem; /* 60px */
         margin-top: 30px;
         margin-left: 10px;
@@ -159,7 +162,7 @@
     .today-weather__num-temperature-today {
         font-size: 19.5rem; /* 312px */
     }
-    .today-weather__degree-temperature-today {
+    .today-weather__num-temperature-today::after {
         font-size: 6.625rem; /* 106px */
     }
     .today-weather__weather-details {
