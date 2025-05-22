@@ -1,5 +1,7 @@
 @import './base/base.css';
-@import './base/reset.css';
+@import 'modern-normalize';
+@import './base/global-fix.css';
+/* @import './base/reset.css'; */
 @import './control.css';
 @import './today_weather.css';
 @import './weather_three_days.css';
@@ -11,9 +13,6 @@ body {
 
 .container {
     width: 100%;
-    /* max-width: 1257px; */
-    /* margin: 0 auto; */
-    /* padding: 0 90px; */
 }
 
 .content {

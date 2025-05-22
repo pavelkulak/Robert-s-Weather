@@ -2,11 +2,11 @@
     grid-column: 1 / 3;
     padding-top: 40px;
     margin-bottom: 57px;
-}
-.control__container {
+
     display: flex;
     justify-content: space-between;
 }
+
 
 .control__control-bar {
     display: flex;
@@ -22,6 +22,10 @@
 }
 .control__refresh-BG-img {
     cursor: pointer;
+    width: 30px;
+    height: 30px;
+    color: #000000;
+    /* display: inline-block; */
 }
 
 .control__refresh-BG_loading {
@@ -56,6 +60,7 @@
 
 .control__change-language {
     position: relative;
+    font-weight: 700;
     /* display: flex;
     align-items: center;
     gap: 10px;
@@ -76,6 +81,10 @@
     padding: 0 15px;
     border-radius: 5px;
     height: 44px;
+}
+.control__icon-arrow-down-language {
+    width: 10px;
+    height: 6px;
 }
 
 .control__hidden-list-languages {
@@ -108,19 +117,25 @@
     cursor: not-allowed;
     background-color: #aeb5b980;
 }
+.control__hidden-element-language-icon {
+    width: 10px;
+    height: 6px;
+}
 
 .control__change-temperature {
     display: flex;
     align-items: center;
     height: 44px;
 }
+
 .control__type-temperature {
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0 15px;
+    padding: 0 18px 0 15px;
     background-color: #4c525566;
     cursor: pointer;
+    font-weight: 700;
 }
 .control__type-temperature:not(.control__type-temperature_selected-type):hover {
     background-color: #86929866;
@@ -170,6 +185,8 @@
     right: 18px;
     top: 30%;
     cursor: pointer;
+    width: 16px;
+    height: 18px;
 }
 
 .control__search-city-input_error {
@@ -201,7 +218,7 @@
 
 
 @media (max-width: 768px) {
-    .control__container {
+    .control {
         flex-direction: column;
         gap: 20px;
         align-items: center;

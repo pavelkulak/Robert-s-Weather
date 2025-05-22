@@ -23,112 +23,119 @@
     </head>
     <body>
         <div class="content">
-            <section class="control">
-                <div class="container control__container">
-                    <div class="control__control-bar">
-                        <button class="control__refresh-BG-button" disabled>
-                            <img src="./src/icon/refresh_BG.svg" alt="refresh-BG" class="control__refresh-BG-img hidden-by-visibility">
-                        </button>
-                        <div class="control__change-language">
-                            <div class="control__current-language">
-                                <span class="control__name-language">EN</span>
-                                <img src="./src/icon/arrow_down.svg" alt="" class="control__icon-arrow-down-language">   
-                            </div>
-                            <ul class="control__hidden-list-languages hidden-by-display">
-                                <li class="control__hidden-element-language control__hidden-element-language_selected">
-                                    <span class="control__hidden-element-language-name">EN</span> 
-                                    <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6">
-                                </li>
-                                <li class="control__hidden-element-language">
-                                    <span class="control__hidden-element-language-name">RU</span> 
-                                    <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6">
-                                </li>
-                                <li class="control__hidden-element-language">
-                                    <span class="control__hidden-element-language-name">ES</span> 
-                                    <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6">
-                                </li>
-                            </ul>
+            <nav class="control container">
+                <div class="control__control-bar">
+                    <button class="control__refresh-BG-button" disabled>
+                        <svg class="control__refresh-BG-img hidden-by-visibility" aria-hidden="true" >
+                            <use xlink:href="./sprite.svg#refresh_BG"></use>
+                        </svg>
+                    </button>
+                    <button class="control__change-language">
+                        <div class="control__current-language">
+                            <span class="control__name-language">EN</span>
+                            <svg class="control__icon-arrow-down-language" aria-hidden="true" >
+                                <use xlink:href="./sprite.svg#arrow_down"></use>
+                            </svg>
                         </div>
-                        <div class="control__change-temperature">
-                            <div class="control__type-temperature control__faringate">°F</div>
-                            <div class="control__type-temperature control__celsius control__type-temperature_selected-type">°С</div>
-                        </div>
-                    </div>
-                    <form action="" class="control__serch-bar" method="POST" name="search-city-form" id="search-city-form">
-                        <div class="control__search-city-input-container">
-                            <input type="text" id="search-city-input" placeholder="Search city" class="control__search-city-input">
-                            <img src="./src/icon/micro.svg" alt="" class="control__search-city-icon">
-                        </div>
-                        <button type="submit" class="control__search-city-button">Search</button>
-                    </form>
-                </div>
-            </section>
-            <section class="today-weather">
-                <div class="container today-weather__container">
-                    <div class="today-weather__header">
-                        <h1 class="today-weather__city-country"><span class="today-weather__city">Moscow</span>, <span class="today-weather__country">Russia</span></h1>
-                        <h2 class="today-weather__today-date-time">
-                            <span class="today-weather__today-date">Day 00 mouth</span>
-                            <span class="today-weather__today-time">00:00</span>
-                        </h2>
-                    </div>
-                    <div class="today-weather__data-weather">
-                        <p class="today-weather__temperature-today">
-                            <span class="today-weather__num-temperature-today">10</span>
-                            <span class="today-weather__degree-temperature-today">°</span>
-                        </p>
-                        <img src="./src/icon/weather_icon.svg" alt="" style="width: 150px; height: 150px;" class="today-weather__weather-icon">
-                        <div class="today-weather__weather-details">
-                            <div class="today-weather__weather-condition">condition</div>
-                            <div class="today-weather__perceived-temperature">Feels like:
-                                <span class="today-weather__perceived-temperature-num">10</span>°</div>
-                            <div class="today-weather__wind-speed">Wind: <span class="today-weather__wind-speed-num">0</span> m/s </div>
-                            <div class="today-weather__humidity">Humidity: <span class="today-weather__humidity-num">100</span>%</div>
-                        </div>
+                        <ul class="control__hidden-list-languages hidden-by-display">
+                            <li class="control__hidden-element-language control__hidden-element-language_selected">
+                                <span class="control__hidden-element-language-name">EN</span> 
+                                <svg class="control__hidden-element-language-icon" aria-hidden="true" >
+                                    <use xlink:href="./sprite.svg#iconHideLine6"></use>
+                                </svg>
+                                <!-- <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6"> -->
+                            </li>
+                            <li class="control__hidden-element-language">
+                                <span class="control__hidden-element-language-name">RU</span> 
+                                <svg class="control__hidden-element-language-icon" aria-hidden="true" >
+                                    <use xlink:href="./sprite.svg#iconHideLine6"></use>
+                                </svg>
+                                <!-- <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6"> -->
+                            </li>
+                            <li class="control__hidden-element-language">
+                                <span class="control__hidden-element-language-name">ES</span> 
+                                <svg class="control__hidden-element-language-icon" aria-hidden="true" >
+                                    <use xlink:href="./sprite.svg#iconHideLine6"></use>
+                                </svg>
+                                <!-- <img src="./src/icon/iconHideLine6.svg" class="control__hidden-element-language-icon" alt="" width="10" height="6"> -->
+                            </li>
+                        </ul>
+                    </button>
+                    <div class="control__change-temperature">
+                        <button class="control__type-temperature control__faringate">°F</button>
+                        <button class="control__type-temperature control__celsius control__type-temperature_selected-type">°С</button>
                     </div>
                 </div>
-            </section>
-            <section class="weather-three-days">
-                <div class="container weather-three-days__container">
-                    <div class="day weather-three-days__day">
-                        <h3 class="day__day-week">DAY</h3>
-                        <p class="day__temperature">
-                            <span class="day__num-temperature">10</span>
-                            <span class="day__degree-temperature">°</span>
-                        </p>
-                        <div class="day__weather-icon-container">
-                            <img src="./src/icon/weather_icon.svg" alt="погода" class="day__weather-icon" style="width: 60px; height: 60px; top: 0; right: -15px;">
-                        </div>
+                <form action="" class="control__serch-bar" method="POST" name="search-city-form" id="search-city-form">
+                    <div class="control__search-city-input-container">
+                        <input type="text" id="search-city-input" placeholder="Search city" class="control__search-city-input">
+                        <svg class="control__search-city-icon" aria-hidden="true" >
+                            <use xlink:href="./sprite.svg#micro"></use>
+                        </svg>
                     </div>
-                    <div class="day weather-three-days__day">
-                        <h3 class="day__day-week">DAY</h3>
-                        <p class="day__temperature">
-                            <span class="day__num-temperature">10</span>
-                            <span class="day__degree-temperature">°</span>
-                        </p>
-                        <div class="day__weather-icon-container">
-                            <img src="./src/icon/weather_icon2.svg" alt="погода" class="day__weather-icon" style="width: 60px; height: 60px; top: 0; right: -15px;">
-                        </div>
-                    </div>
-                    <div class="day weather-three-days__day">
-                        <h3 class="day__day-week">DAY</h3>
-                        <p class="day__temperature">
-                            <span class="day__num-temperature">10</span>
-                            <span class="day__degree-temperature">°</span>
-                        </p>
-                        <div class="day__weather-icon-container">
-                            <img src="./src/icon/weather_icon.svg" alt="погода" class="day__weather-icon" style="width: 60px; height: 60px; top: 0; right: -15px;">
-                        </div>
+                    <button type="submit" class="control__search-city-button">Search</button>
+                </form>
+            </nav>
+            <section class="today-weather container">
+                <div class="today-weather__header">
+                    <h1 class="today-weather__city-country"><span class="today-weather__city">Moscow</span>, <span class="today-weather__country">Russia</span></h1>
+                    <h2 class="today-weather__today-date-time">
+                        <span class="today-weather__today-date">Day 00 mouth</span>
+                        <span class="today-weather__today-time">00:00</span>
+                    </h2>
+                </div>
+                <div class="today-weather__data-weather">
+                    <p class="today-weather__temperature-today">
+                        <span class="today-weather__num-temperature-today">10</span>
+                        <span class="today-weather__degree-temperature-today">°</span>
+                    </p>
+                    <img src="./src/icon/weather_icon.svg" alt="" style="width: 150px; height: 150px;" class="today-weather__weather-icon">
+                    <div class="today-weather__weather-details">
+                        <div class="today-weather__weather-condition">condition</div>
+                        <div class="today-weather__perceived-temperature">Feels like:
+                            <span class="today-weather__perceived-temperature-num">10</span>°</div>
+                        <div class="today-weather__wind-speed">Wind: <span class="today-weather__wind-speed-num">0</span> m/s </div>
+                        <div class="today-weather__humidity">Humidity: <span class="today-weather__humidity-num">100</span>%</div>
                     </div>
                 </div>
             </section>
-            <section class="map">
-                <div class="container map__container">
-                    <div id="map" class="map__mapEl"></div>
-                    <div class="map__geolocation">
-                        <p class="map__latitude"><span class="map__latitude-name">Latitude</span>: <span class="map__latitude-num">00°00'0"</span></p>
-                        <p class="map__longitude"><span class="map__longitude-name">Longitude</span>: <span class="map__longitude-num">00°00'00"</span></p>
+            <section class="weather-three-days container">
+                <div class="day weather-three-days__day">
+                    <h3 class="day__day-week">DAY</h3>
+                    <p class="day__temperature">
+                        <span class="day__num-temperature">10</span>
+                        <span class="day__degree-temperature">°</span>
+                    </p>
+                    <div class="day__weather-icon-container">
+                        <img src="./src/icon/weather_icon.svg" alt="погода" class="day__weather-icon" style="width: 60px; height: 60px; top: 0; right: -15px;">
                     </div>
+                </div>
+                <div class="day weather-three-days__day">
+                    <h3 class="day__day-week">DAY</h3>
+                    <p class="day__temperature">
+                        <span class="day__num-temperature">10</span>
+                        <span class="day__degree-temperature">°</span>
+                    </p>
+                    <div class="day__weather-icon-container">
+                        <img src="./src/icon/weather_icon.svg" alt="погода" class="day__weather-icon" style="width: 60px; height: 60px; top: 0; right: -15px;">
+                    </div>
+                </div>
+                <div class="day weather-three-days__day">
+                    <h3 class="day__day-week">DAY</h3>
+                    <p class="day__temperature">
+                        <span class="day__num-temperature">10</span>
+                        <span class="day__degree-temperature">°</span>
+                    </p>
+                    <div class="day__weather-icon-container">
+                        <img src="./src/icon/weather_icon.svg" alt="погода" class="day__weather-icon" style="width: 60px; height: 60px; top: 0; right: -15px;">
+                    </div>
+                </div>
+            </section>
+            <section class="map container">
+                <div id="map" class="map__mapEl"></div>
+                <div class="map__geolocation">
+                    <p class="map__latitude"><span class="map__latitude-name">Latitude</span>: <span class="map__latitude-num">00°00'0"</span></p>
+                    <p class="map__longitude"><span class="map__longitude-name">Longitude</span>: <span class="map__longitude-num">00°00'00"</span></p>
                 </div>
             </section>
         </div>
