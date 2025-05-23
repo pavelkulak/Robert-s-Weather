@@ -72,7 +72,8 @@ body {
 
 @media (max-width: 1080px) {
     .content {
-        grid-template-rows: min-content auto auto;
+        grid-template-rows: min-content auto auto auto;
+        grid-template-columns: 1fr 1fr;
         padding: 0 50px;
     }
 }
