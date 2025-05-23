@@ -21,6 +21,9 @@
     font-size: 1rem;
 }
 
+.map__latitude-name::after, .map__longitude-name::after {
+    content: ":";
+} 
 
 
 @media (max-width: 1280px) {
