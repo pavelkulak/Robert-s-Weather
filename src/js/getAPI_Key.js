@@ -1,5 +1,4 @@
 'use strict';
-import { showErrorOverlay } from './errors.js';
 
 async function fetchKey(endpoint) {
     try {

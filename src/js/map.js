@@ -22,8 +22,8 @@ function initMap(lat, lon) {
     L.marker([lat, lon]).addTo(map).bindPopup('Выбранный город').openPopup();
 
     // Преобразуем координаты в формат градусов, минут, секунд. Затем вписываем их в HTML
-    mapDomElements.latitude.innerText = convertToDMS(lat);
-    mapDomElements.longitude.innerText = convertToDMS(lon);
+    mapDomElements.latitudeValue.innerText = convertToDMS(lat);
+    mapDomElements.longitudeValue.innerText = convertToDMS(lon);
 }
 
 // Функция для преобразования координат в формат градусов, минут, секунд

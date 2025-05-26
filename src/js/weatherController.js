@@ -3,10 +3,10 @@
 import {
     controlDomElements,
     todayWeatherDomElements,
-    threeDaysArr,
+    upcomingForecastDays,
 } from './dom.js';
-import { fetchApiKey } from './jobAPI.js';
-import { refreshBG, getApiBG } from './changeBG.js';
+import { fetchApiKey } from './getAPI_Key.js';
+import { getApiBG } from './changeBG.js';
 import { hideErrorMessage, displayError, showErrorOverlay } from './errors.js';
 import { initMap } from './map.js';
 import { formatDate } from './utils.js';
@@ -18,11 +18,11 @@ import {
 
 function initDefaultLocalStorage() {
     // Устанавливаем шкалу температуры по умолчанию, если её нет в localStorage
-    if (!getFromLocalStorage('curTypeTemp')) {
-        setToLocalStorage('curTypeTemp', 'metric'); // шкала Цельсия
+    if (!getFromLocalStorage('currentTypeTemperature')) {
+        setToLocalStorage('currentTypeTemperature', 'metric'); // шкала Цельсия
     }
-    if (!getFromLocalStorage('curTypeTempName')) {
-        setToLocalStorage('curTypeTempName', '°C');
+    if (!getFromLocalStorage('currentTypeTemperatureName')) {
+        setToLocalStorage('currentTypeTemperatureName', '°C');
     }
 
     // Устанавливаем язык по умолчанию, если её нет в localStorage
@@ -33,9 +33,9 @@ function initDefaultLocalStorage() {
 
 initDefaultLocalStorage();
 
-const weatherAPIUrl = 'https://api.openweathermap.org/data/2.5';
+const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5';
 
-controlDomElements.serchBar.addEventListener('submit', (e) => handleForm(e));
+controlDomElements.searchBar.addEventListener('submit', (e) => handleForm(e));
 async function handleForm(e) {
     e.preventDefault();
     const city = controlDomElements.searchCityInput.value.trim();
@@ -59,7 +59,9 @@ async function loadCityWeather(city) {
             !Array.isArray(forecast.list) ||
             !todayWeather.main
         ) {
-            return displayError('Не удалось найти данные по введённому городу.');
+            return displayError(
+                'Не удалось найти данные по введённому городу.'
+            );
         }
 
         hideErrorMessage();
@@ -74,9 +76,9 @@ async function loadCityWeather(city) {
 
         setToLocalStorage('tempOtherDays', JSON.stringify([]));
 
-        threeDaysArr.forEach((day, i) => {
+        upcomingForecastDays.forEach((day, i) => {
             if (dailyForecasts[i + 1]) {
-                displayThreeDaysWeather(dailyForecasts[i + 1], i, 'en');
+                displayUpcomingForecastDays(dailyForecasts[i + 1], i, 'en');
             } else {
                 showErrorOverlay();
             }
@@ -94,10 +96,10 @@ async function getWeatherData(curLangue, typeTemp = 'metric', city) {
 
     const [weatherRes, forecastRes] = await Promise.all([
         fetch(
-            `${weatherAPIUrl}/weather?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`
+            `${WEATHER_API_URL}/weather?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`
         ),
         fetch(
-            `${weatherAPIUrl}/forecast?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`
+            `${WEATHER_API_URL}/forecast?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`
         ),
     ]);
 
@@ -135,6 +137,12 @@ function displayWeatherInfo(data, curLangue) {
         data.weather[0].description;
     todayWeatherDomElements.windSpeedNum.innerText = data.wind.speed;
     todayWeatherDomElements.humidityNum.innerText = data.main.humidity;
+
+    const { name, sys, main, wind, weather, coord } = data;
+    console.log(data);
+    console.log(name, sys, main, wind, weather, coord);
+    console.log(data.name, data.datasysm, data.main, data.wind);
+    console.log('waw');
 
     setToLocalStorage('city', data.name);
 
@@ -191,7 +199,7 @@ function changeLanguageCityName() {
         .catch((error) => console.error('Ошибка:', error));
 }
 
-function displayThreeDaysWeather(curDayData, index, curLangue) {
+function displayUpcomingForecastDays(curDayData, index, curLangue) {
     // Данные на выбранный день
     const dayName = new Date(curDayData.dt_txt).toLocaleDateString(curLangue, {
         weekday: 'short',
@@ -199,23 +207,22 @@ function displayThreeDaysWeather(curDayData, index, curLangue) {
     const temp = convertUnitTemp(curDayData.main.temp);
     const weatherIcon = `https://openweathermap.org/img/wn/${curDayData.weather[0].icon}@2x.png`;
 
-
     addItemToLocalStorageArray('tempOtherDays', curDayData.main.temp);
 
     // Выводим данные в HTML
-    const el = threeDaysArr[index];
+    const el = upcomingForecastDays[index];
     el.querySelector('.day__day-week').innerText = dayName;
     el.querySelector('.day__num-temperature').innerText = temp;
-    const iconDay = el.querySelector('.day__weather-icon')
+    const iconDay = el.querySelector('.day__weather-icon');
     iconDay.src = weatherIcon;
     iconDay.removeAttribute('style');
 }
 
 // Функция для конвертации температуры в другой тип. (Либо возвращения этого же числа)
 function convertUnitTemp(temp) {
-    const curTypeTemp = getFromLocalStorage('curTypeTemp');
-    if (curTypeTemp === 'metric') return Math.round(temp);
-    if (curTypeTemp === 'imperial') return Math.round((temp * 9) / 5 + 32);
+    const currentTypeTemperature = getFromLocalStorage('currentTypeTemperature');
+    if (currentTypeTemperature === 'metric') return Math.round(temp);
+    if (currentTypeTemperature === 'imperial') return Math.round((temp * 9) / 5 + 32);
 }
 
 // Применяем функции к выбранному ранее городу при запуске страницы

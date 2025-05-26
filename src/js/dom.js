@@ -29,7 +29,7 @@ const controlDomElements = {
     faringate: controlSection.querySelector('.control__faringate'),
     celsius: controlSection.querySelector('.control__celsius'),
 
-    serchBar: controlSection.querySelector('.control__search-bar'),
+    searchBar: controlSection.querySelector('.control__search-bar'),
     searchCityInput: controlSection.querySelector(
         '.control__search-city-input'
     ),
@@ -67,20 +67,15 @@ const todayWeatherDomElements = {
     ),
 };
 
-const weatherThreeDaysSection = document.querySelector('.weather-three-days');
-const threeDaysArr = [...weatherThreeDaysSection.querySelectorAll('.day')];
-const weatherThreeDaysDomElements = {
-    firstDayEl: threeDaysArr[0],
-    secondDayEl: threeDaysArr[1],
-    thirdDayEl: threeDaysArr[2],
-};
+const upcomingForecastSection = document.querySelector('.upcoming-forecast');
+const upcomingForecastDays = [...upcomingForecastSection.querySelectorAll('.day')];
 
 const mapSection = document.querySelector('.map');
 const mapDomElements = {
-    latitudeName: mapSection.querySelector('.map__latitude-name'),
-    longitudeName: mapSection.querySelector('.map__longitude-name'),
-    latitude: mapSection.querySelector('.map__latitude-num'),
-    longitude: mapSection.querySelector('.map__longitude-num'),
+    latitudeLabel: mapSection.querySelector('.map__latitude-name'),
+    longitudeLabel: mapSection.querySelector('.map__longitude-name'),
+    latitudeValue: mapSection.querySelector('.map__latitude-num'),
+    longitudeValue: mapSection.querySelector('.map__longitude-num'),
 };
 
 const errorContainer = document.querySelector('.error-container');
@@ -90,8 +85,7 @@ export {
     content,
     controlDomElements,
     todayWeatherDomElements,
-    threeDaysArr,
-    weatherThreeDaysDomElements,
+    upcomingForecastDays,
     mapDomElements,
     errorContainer,
     errorMessage,

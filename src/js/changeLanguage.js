@@ -73,11 +73,11 @@ async function changeLang(e) {
     );
 
     // Меняю язык у "ширина" и "долгота"
-    mapDomElements.latitudeName.innerText = translate(
+    mapDomElements.latitudeLabel.innerText = translate(
         'Latitude',
         controlDomElements.nameLanguage.innerText.toLowerCase()
     );
-    mapDomElements.longitudeName.innerText = translate(
+    mapDomElements.longitudeLabel.innerText = translate(
         'Longitude',
         controlDomElements.nameLanguage.innerText.toLowerCase()
     );

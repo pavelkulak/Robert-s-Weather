@@ -1,7 +1,7 @@
 'use strict';
 
 import { content, controlDomElements } from './dom.js';
-import { fetchUnsplashApiKey } from './jobAPI.js';
+import { fetchUnsplashApiKey } from './getAPI_Key.js';
 import { getFromLocalStorage } from './localStorage.js';
 
 let cachedBGImages = [];
@@ -11,8 +11,6 @@ let numBgImg = Number(localStorage.getItem('numBgImg')) || 0;
 const refreshBtn = controlDomElements.refreshBGButton;
 refreshBtn.classList.add('control__refresh-BG_loading');
 refreshBtn.disabled = true;
-
-
 
 async function getApiBG(initialLoad = false, cityChanged = false) {
     try {
@@ -42,8 +40,7 @@ async function getApiBG(initialLoad = false, cityChanged = false) {
             'control__refresh-BG_loading'
         );
         controlDomElements.refreshBGButton.disabled = false;
-        controlDomElements.refreshBG.classList.remove("hidden-by-visibility")
-
+        controlDomElements.refreshBG.classList.remove('hidden-by-visibility');
     } catch (err) {
         console.error('Ошибка при загрузке изображений:', err.message);
     }
@@ -58,7 +55,7 @@ function setBackgroundImage(index) {
 }
 
 function refreshBG() {
-    console.log("REFRESH");
+    console.log('REFRESH');
     if (!cachedBGImages.length) {
         console.log('Фоновые изображения ещё не загружены.');
         return;

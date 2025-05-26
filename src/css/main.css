@@ -4,7 +4,7 @@
 /* @import './base/reset.css'; */
 @import './control.css';
 @import './today_weather.css';
-@import './weather_three_days.css';
+@import './upcoming-forecast.css';
 @import './map.css';
 
 html {

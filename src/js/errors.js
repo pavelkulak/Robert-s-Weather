@@ -3,7 +3,7 @@
 import { controlDomElements, errorContainer, errorMessage } from './dom.js';
 
 function hideErrorMessage() {
-    const el = controlDomElements.serchBar.querySelector(
+    const el = controlDomElements.searchBar.querySelector(
         '.control__ErrorMessage'
     );
     if (el) {
@@ -15,7 +15,7 @@ function hideErrorMessage() {
 }
 
 function displayError(error) {
-    const existing = controlDomElements.serchBar.querySelector(
+    const existing = controlDomElements.searchBar.querySelector(
         '.control__ErrorMessage'
     );
     // Если ранее уже была выдана ошибка, то только меняю текст в html поле. Иначе создаю новый
@@ -28,7 +28,7 @@ function displayError(error) {
         const htmlErrorMessage = document.createElement('p');
         htmlErrorMessage.textContent = error;
         htmlErrorMessage.classList.add('control__ErrorMessage');
-        controlDomElements.serchBar.appendChild(htmlErrorMessage);
+        controlDomElements.searchBar.appendChild(htmlErrorMessage);
     }
 }
 
