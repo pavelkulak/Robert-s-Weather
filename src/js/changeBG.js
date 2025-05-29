@@ -5,20 +5,21 @@ import { fetchUnsplashApiKey } from './getAPI_Key.js';
 import { getFromLocalStorage } from './localStorage.js';
 
 let cachedBGImages = [];
-let numBgImg = Number(localStorage.getItem('numBgImg')) || 0;
+let currentBG_Img_Index =
+    Number(localStorage.getItem('currentBG_Img_Index')) || 0;
 
 // При загрузке страницы сначала блокируем кнопку и добавляем эффект загрузки
 const refreshBtn = controlDomElements.refreshBGButton;
 refreshBtn.classList.add('control__refresh-BG_loading');
 refreshBtn.disabled = true;
 
-async function getApiBG(initialLoad = false, cityChanged = false) {
+async function getApiBG({ isInitialLoad = false, isCityChanged = false } = {}) {
     try {
         // Если город изменился, очищаем кэш изображений
-        if (cityChanged) {
+        if (isCityChanged) {
             cachedBGImages = [];
-            numBgImg = 0;
-            localStorage.setItem('numBgImg', numBgImg); // Сбрасываем индекс
+            currentBG_Img_Index = 0;
+            localStorage.setItem('currentBG_Img_Index', currentBG_Img_Index); // Сбрасываем индекс
         }
 
         const unsplashApiKey = await fetchUnsplashApiKey();
@@ -32,7 +33,10 @@ async function getApiBG(initialLoad = false, cityChanged = false) {
         console.log('Изображения загружены:', cachedBGImages);
         console.log('Данные BG', data);
 
-        const index = initialLoad ? numBgImg % cachedBGImages.length : numBgImg;
+        // Если функция инициализироана при загрузке страницы (isInitialLoad = true), то берём индекс currentBG_Img_Index как есть. Если же смена идёт по клику (isInitialLoad=false), то переходим к следующему изображению (currentBG_Img_Index % cachedBGImages.length)
+        const index = isInitialLoad
+            ? currentBG_Img_Index % cachedBGImages.length
+            : currentBG_Img_Index;
         setBackgroundImage(index);
 
         // ✅ Убираем индикатор загрузки и разблокируем кнопку
@@ -60,14 +64,10 @@ function refreshBG() {
         console.log('Фоновые изображения ещё не загружены.');
         return;
     }
-    numBgImg = (numBgImg + 1) % cachedBGImages.length;
-    localStorage.setItem('numBgImg', numBgImg);
-    setBackgroundImage(numBgImg);
+    currentBG_Img_Index = (currentBG_Img_Index + 1) % cachedBGImages.length;
+    localStorage.setItem('currentBG_Img_Index', currentBG_Img_Index);
+    setBackgroundImage(currentBG_Img_Index);
 }
-
-window.addEventListener('load', async () => {
-    await getApiBG();
-});
 
 // При клике на кнопку изменения фонового изображения
 refreshBtn.addEventListener('click', refreshBG);

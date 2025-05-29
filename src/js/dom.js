@@ -68,7 +68,9 @@ const todayWeatherDomElements = {
 };
 
 const upcomingForecastSection = document.querySelector('.upcoming-forecast');
-const upcomingForecastDays = [...upcomingForecastSection.querySelectorAll('.day')];
+const upcomingForecastDays = [
+    ...upcomingForecastSection.querySelectorAll('.day'),
+];
 
 const mapSection = document.querySelector('.map');
 const mapDomElements = {

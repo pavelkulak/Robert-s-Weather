@@ -5,7 +5,7 @@ import {
     todayWeatherDomElements,
     upcomingForecastDays,
 } from './dom.js';
-import { convertUnitTemp } from './weatherController.js';
+import { convertUnitTemp } from './utils.js';
 import { setToLocalStorage, getFromLocalStorage } from './localStorage.js';
 
 // Проставляет активный класс выбранной шкале температуры
@@ -13,7 +13,6 @@ function setActiveTemperatureType(currentTypeTemperatureName) {
     controlDomElements.typesTemperature.forEach(function (el) {
         el.classList.remove('control__type-temperature_selected-type');
     });
-    console.log(currentTypeTemperatureName);
     const selected = controlDomElements.changeTemperature.querySelector(
         `.control__${currentTypeTemperatureName}`
     );

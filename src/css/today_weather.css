@@ -24,7 +24,7 @@
 }
 
 .today-weather__num-temperature-today::after {
-    content: "°";
+    content: " ° ";
     font-size: 6.25rem; /* 100px */
     margin-left: 18px;
     margin-top: 60px;

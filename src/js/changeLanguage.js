@@ -3,10 +3,7 @@
 import { controlDomElements, mapDomElements } from './dom.js';
 
 import { loadCityWeather } from './weatherController.js';
-import {
-    setToLocalStorage,
-    getFromLocalStorage,
-} from './localStorage.js';
+import { setToLocalStorage, getFromLocalStorage } from './localStorage.js';
 
 // Сразу при запуске страницы обновляю стиль выбранного элемента на языке
 controlDomElements.hiddenElementsLanguage.forEach(function (el) {

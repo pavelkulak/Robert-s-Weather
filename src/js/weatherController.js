@@ -7,13 +7,11 @@ import {
 } from './dom.js';
 import { fetchApiKey } from './getAPI_Key.js';
 import { getApiBG } from './changeBG.js';
-import { hideErrorMessage, displayError, showErrorOverlay } from './errors.js';
+import { hideErrorMessage, displayError, showErrorOverlay, validateWeatherData,
+} from './errors.js';
 import { initMap } from './map.js';
-import { formatDate } from './utils.js';
-import {
-    addItemToLocalStorageArray,
-    setToLocalStorage,
-    getFromLocalStorage,
+import { formatDate, convertUnitTemp } from './utils.js';
+import { addItemToLocalStorageArray, setToLocalStorage, getFromLocalStorage,
 } from './localStorage.js';
 
 function initDefaultLocalStorage() {
@@ -35,22 +33,34 @@ initDefaultLocalStorage();
 
 const WEATHER_API_URL = 'https://api.openweathermap.org/data/2.5';
 
-controlDomElements.searchBar.addEventListener('submit', (e) => handleForm(e));
-async function handleForm(e) {
+controlDomElements.searchBar.addEventListener('submit', (e) =>
+    handleSearchForm(e)
+);
+async function handleSearchForm(e) {
     e.preventDefault();
     const city = controlDomElements.searchCityInput.value.trim();
-    await loadCityWeather(city);
+    await loadCityWeather({ city, isInitialLoad: false, isCityChanged: true });
 }
 
-async function loadCityWeather(city) {
+function clearCityData() {
+    hideErrorMessage();
+    controlDomElements.searchCityInput.value = '';
+    setToLocalStorage('tempOtherDays', JSON.stringify([]));
+}
+
+async function loadCityWeather({
+    city,
+    isInitialLoad = false,
+    isCityChanged = false,
+}) {
     if (!city) return displayError('Пожалуйста, введите город');
 
     try {
-        const [todayWeather, forecast] = await getWeatherData(
-            'en',
-            'metric',
-            city
-        );
+        const [todayWeather, forecast] = await getWeatherData({
+            language: 'en',
+            units: 'metric',
+            city,
+        });
 
         if (
             !todayWeather ||
@@ -64,17 +74,14 @@ async function loadCityWeather(city) {
             );
         }
 
-        hideErrorMessage();
         displayWeatherInfo(todayWeather, 'en');
-        controlDomElements.searchCityInput.value = '';
 
-        const dailyForecasts = forecast.list.filter((entry) =>
+        // Отфильтровываем погодные данные следующих дней по единому времени - 12ч дня
+        const dailyForecasts = forecast?.list.filter((entry) =>
             entry.dt_txt.includes('12:00:00')
         );
 
         if (dailyForecasts.length < 4) return showErrorOverlay();
-
-        setToLocalStorage('tempOtherDays', JSON.stringify([]));
 
         upcomingForecastDays.forEach((day, i) => {
             if (dailyForecasts[i + 1]) {
@@ -84,22 +91,24 @@ async function loadCityWeather(city) {
             }
         });
 
+        clearCityData(); // Очищаем некоторые данные
+
         setToLocalStorage('city', todayWeather.name); // Сохраняем новый город в localStorage
-        await getApiBG(true); // Загружаем картинки под новый город
+        await getApiBG({ isInitialLoad, isCityChanged }); // Загружаем картинки под новый город
     } catch (error) {
         displayError('Не удалось найти данные по введённому городу.');
     }
 }
 
-async function getWeatherData(curLangue, typeTemp = 'metric', city) {
-    const API_KEY = await fetchApiKey();
+async function getWeatherData({ curLangue, typeTemp = 'metric', city }) {
+    const api_key = await fetchApiKey();
 
     const [weatherRes, forecastRes] = await Promise.all([
         fetch(
-            `${WEATHER_API_URL}/weather?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`
+            `${WEATHER_API_URL}/weather?q=${city}&appid=${api_key}&units=${typeTemp}&lang=${curLangue}`
         ),
         fetch(
-            `${WEATHER_API_URL}/forecast?q=${city}&appid=${API_KEY}&units=${typeTemp}&lang=${curLangue}`
+            `${WEATHER_API_URL}/forecast?q=${city}&appid=${api_key}&units=${typeTemp}&lang=${curLangue}`
         ),
     ]);
 
@@ -121,6 +130,7 @@ async function getWeatherData(curLangue, typeTemp = 'metric', city) {
 }
 
 function displayWeatherInfo(data, curLangue) {
+    console.log(data);
     const countryCode = data.sys.country;
     const countryName = new Intl.DisplayNames([curLangue], {
         type: 'region',
@@ -129,45 +139,66 @@ function displayWeatherInfo(data, curLangue) {
     // Форматируем дату и время
     const [weekday, day, month, time] = formatDate(data.timezone, curLangue);
 
-    todayWeatherDomElements.city.innerText = data.name;
+    const {
+        name,
+        wind: { speed },
+        main: { temp, feels_like, humidity },
+        weather: [{ description, icon }],
+        coord: { lat, lon },
+    } = data;
+
+    // Проверка на то, пришли ли верные данные из api (не изменилась ли структура api)
+    if (!validateWeatherData(data)) {
+        showErrorOverlay;
+        return displayError('Данные от API повреждены или устарели');
+    }
+
+    todayWeatherDomElements.city.innerText = name;
     todayWeatherDomElements.country.innerText = countryName;
     todayWeatherDomElements.todayDate.innerText = `${weekday} ${month} ${day}`;
     todayWeatherDomElements.todayTime.innerText = time;
-    todayWeatherDomElements.weatherCondition.innerText =
-        data.weather[0].description;
-    todayWeatherDomElements.windSpeedNum.innerText = data.wind.speed;
-    todayWeatherDomElements.humidityNum.innerText = data.main.humidity;
-
-    const { name, sys, main, wind, weather, coord } = data;
-    console.log(data);
-    console.log(name, sys, main, wind, weather, coord);
-    console.log(data.name, data.datasysm, data.main, data.wind);
-    console.log('waw');
+    todayWeatherDomElements.weatherCondition.innerText = description;
+    todayWeatherDomElements.windSpeedNum.innerText = speed;
+    todayWeatherDomElements.humidityNum.innerText = humidity;
 
     setToLocalStorage('city', data.name);
 
+    // TODO: ... Изменение языка
     // Временно закомментировал вызов функции. Потом надо будет вернуть!!!!!!!
     // changeLanguageCityName()
 
     // Получаем код иконки и заменяю у сегодняшней погоды
-    const iconCode = data.weather[0].icon;
+    setIcon(icon, description);
+
+    // Получаю и устанавливаю температуру
+    setTemperature(temp, feels_like);
+
+    // Устанавливаю координаты и запускаю показ карты
+    createMap(lat, lon);
+}
+
+function setIcon(icon, description) {
+    const iconCode = icon;
     todayWeatherDomElements.weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`; // Ссылка на иконку
-    todayWeatherDomElements.weatherIcon.alt = data.weather[0].description;
+    todayWeatherDomElements.weatherIcon.alt = description;
     todayWeatherDomElements.weatherIcon.removeAttribute('style');
+}
 
+function setTemperature(temp, feels_like) {
     // Создаю переменные под температуру в Цельсиях, записываю её в локалСторэдж и вписываю в html в нужном типе температуры (зависит от того, какой тип температуры сейчас выьран на странице)
-    const tempToday = convertUnitTemp(data.main.temp);
-    const tempfeelsLike = convertUnitTemp(data.main.feels_like);
+    const tempToday = convertUnitTemp(temp);
+    const tempfeelsLike = convertUnitTemp(feels_like);
 
-    setToLocalStorage('tempTodayC', data.main.temp);
-    setToLocalStorage('tempfeelsLikeC', data.main.feels_like);
+    setToLocalStorage('tempTodayC', temp);
+    setToLocalStorage('tempfeelsLikeC', feels_like);
 
     todayWeatherDomElements.numTemperatureToday.innerText = tempToday;
     todayWeatherDomElements.perceivedTemperatureNum.innerText = tempfeelsLike;
+}
 
-    // Устанавливаю координаты и запускаю показ карты
-    setToLocalStorage('latitude', data.coord.lat);
-    setToLocalStorage('longitude', data.coord.lon);
+function createMap(lat, lon) {
+    setToLocalStorage('latitude', lat);
+    setToLocalStorage('longitude', lon);
 
     initMap(getFromLocalStorage('latitude'), getFromLocalStorage('longitude'));
 }
@@ -218,16 +249,11 @@ function displayUpcomingForecastDays(curDayData, index, curLangue) {
     iconDay.removeAttribute('style');
 }
 
-// Функция для конвертации температуры в другой тип. (Либо возвращения этого же числа)
-function convertUnitTemp(temp) {
-    const currentTypeTemperature = getFromLocalStorage('currentTypeTemperature');
-    if (currentTypeTemperature === 'metric') return Math.round(temp);
-    if (currentTypeTemperature === 'imperial') return Math.round((temp * 9) / 5 + 32);
-}
-
 // Применяем функции к выбранному ранее городу при запуске страницы
 const defaultCity = getFromLocalStorage('city') || 'Moscow';
-loadCityWeather(defaultCity);
+window.addEventListener('load', async () => {
+    await loadCityWeather({ city: defaultCity, isInitialLoad: true });
+});
 
 export {
     convertUnitTemp,

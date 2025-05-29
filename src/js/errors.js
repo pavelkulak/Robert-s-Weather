@@ -43,4 +43,26 @@ errorMessage.addEventListener('click', function () {
     location.reload();
 });
 
-export { hideErrorMessage, displayError, showErrorOverlay };
+function validateWeatherData(data) {
+    if (
+        !data ||
+        typeof data.name !== 'string' ||
+        !data.main ||
+        typeof data.main.temp !== 'number' ||
+        !data.wind ||
+        typeof data.wind.speed !== 'number' ||
+        !Array.isArray(data.weather) ||
+        !data.weather[0] ||
+        typeof data.weather[0].description !== 'string'
+    ) {
+        return false;
+    }
+    return true;
+}
+
+export {
+    hideErrorMessage,
+    displayError,
+    showErrorOverlay,
+    validateWeatherData,
+};
