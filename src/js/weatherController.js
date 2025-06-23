@@ -13,6 +13,7 @@ import { initMap } from './map.js';
 import { formatDate, convertUnitTemp } from './utils.js';
 import { addItemToLocalStorageArray, setToLocalStorage, getFromLocalStorage,
 } from './localStorage.js';
+import { changeLanguageCityName } from "./changeLanguage.js"
 
 function initDefaultLocalStorage() {
     // Устанавливаем шкалу температуры по умолчанию, если её нет в localStorage
@@ -52,14 +53,16 @@ async function loadCityWeather({
     city,
     isInitialLoad = false,
     isCityChanged = false,
+    currentLanguage = getFromLocalStorage('language')
 }) {
     if (!city) return displayError('Пожалуйста, введите город');
 
     try {
+        console.log("currentLanguage: ", currentLanguage);
         const [todayWeather, forecast] = await getWeatherData({
-            language: 'en',
+            curLangue: currentLanguage,
             units: 'metric',
-            city,
+            city
         });
 
         if (
@@ -74,7 +77,7 @@ async function loadCityWeather({
             );
         }
 
-        displayWeatherInfo(todayWeather, 'en');
+        displayWeatherInfo(todayWeather, currentLanguage);
 
         // Отфильтровываем погодные данные следующих дней по единому времени - 12ч дня
         const dailyForecasts = forecast?.list.filter((entry) =>
@@ -85,7 +88,7 @@ async function loadCityWeather({
 
         upcomingForecastDays.forEach((day, i) => {
             if (dailyForecasts[i + 1]) {
-                displayUpcomingForecastDays(dailyForecasts[i + 1], i, 'en');
+                displayUpcomingForecastDays(dailyForecasts[i + 1], i, currentLanguage);
             } else {
                 showErrorOverlay();
             }
@@ -101,6 +104,7 @@ async function loadCityWeather({
 }
 
 async function getWeatherData({ curLangue, typeTemp = 'metric', city }) {
+    console.log("currentLanguage: ", curLangue);
     const api_key = await fetchApiKey();
 
     const [weatherRes, forecastRes] = await Promise.all([
@@ -131,6 +135,7 @@ async function getWeatherData({ curLangue, typeTemp = 'metric', city }) {
 
 function displayWeatherInfo(data, curLangue) {
     console.log(data);
+    console.log("currentLanguage: ", curLangue);
     const countryCode = data.sys.country;
     const countryName = new Intl.DisplayNames([curLangue], {
         type: 'region',
@@ -163,9 +168,9 @@ function displayWeatherInfo(data, curLangue) {
 
     setToLocalStorage('city', data.name);
 
-    // TODO: ... Изменение языка
+
     // Временно закомментировал вызов функции. Потом надо будет вернуть!!!!!!!
-    // changeLanguageCityName()
+    changeLanguageCityName()
 
     // Получаем код иконки и заменяю у сегодняшней погоды
     setIcon(icon, description);
@@ -203,32 +208,6 @@ function createMap(lat, lon) {
     initMap(getFromLocalStorage('latitude'), getFromLocalStorage('longitude'));
 }
 
-// Вызов функции временно закомментирован. Потом верну!!!!
-function changeLanguageCityName() {
-    // Меняю язык у названия города
-    console.log(todayWeatherDomElements.city.innerText);
-
-    fetch(
-        `https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${getFromLocalStorage('language').toLowerCase()}`
-    )
-        .then((response) => response.json())
-        .then((dataCity) => {
-            // Проверка на наличие данных в geonames
-            if (
-                dataCity &&
-                dataCity.geonames &&
-                Array.isArray(dataCity.geonames) &&
-                dataCity.geonames.length > 0
-            ) {
-                todayWeatherDomElements.city.innerText =
-                    dataCity.geonames[0].name;
-            } else {
-                console.error('Ошибка: geonames не содержит данных', dataCity);
-                showErrorOverlay();
-            }
-        })
-        .catch((error) => console.error('Ошибка:', error));
-}
 
 function displayUpcomingForecastDays(curDayData, index, curLangue) {
     // Данные на выбранный день
@@ -257,6 +236,7 @@ window.addEventListener('load', async () => {
 
 export {
     convertUnitTemp,
+    loadCityWeather, 
     addItemToLocalStorageArray,
     setToLocalStorage,
     getFromLocalStorage,

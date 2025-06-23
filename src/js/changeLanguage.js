@@ -1,6 +1,7 @@
 'use strict';
 
-import { controlDomElements, mapDomElements } from './dom.js';
+import { controlDomElements, todayWeatherDomElements, mapDomElements } from './dom.js';
+
 
 import { loadCityWeather } from './weatherController.js';
 import { setToLocalStorage, getFromLocalStorage } from './localStorage.js';
@@ -64,11 +65,13 @@ async function changeLang(e) {
     controlDomElements.nameLanguage.innerText = elementLanguage.querySelector(
         '.control__hidden-element-language-name'
     ).innerText;
-    await loadCityWeather(
-        getFromLocalStorage('city'),
-        getFromLocalStorage('language')
-    );
 
+    setToLocalStorage('language', controlDomElements.nameLanguage.innerText);
+
+    console.log("controlDomElements.nameLanguage.innerText: ", controlDomElements.nameLanguage.innerText);
+    console.log(getFromLocalStorage('language'));
+
+    await loadCityWeather({city: getFromLocalStorage('city'), isInitialLoad: false, isCityChanged: true, currentLanguage: getFromLocalStorage('language')});
     // Меняю язык у "ширина" и "долгота"
     mapDomElements.latitudeLabel.innerText = translate(
         'Latitude',
@@ -78,6 +81,33 @@ async function changeLang(e) {
         'Longitude',
         controlDomElements.nameLanguage.innerText.toLowerCase()
     );
-
-    setToLocalStorage('language', controlDomElements.nameLanguage.innerText);
 }
+
+
+function changeLanguageCityName() {
+    // Меняю язык у названия города
+    console.log(todayWeatherDomElements.city.innerText);
+
+    fetch(
+        `https://cors-proxy-server-0jmy.onrender.com/geonames?city=${todayWeatherDomElements.city.innerText}&lang=${getFromLocalStorage('language').toLowerCase()}`
+    )
+        .then((response) => response.json())
+        .then((dataCity) => {
+            // Проверка на наличие данных в geonames
+            if (
+                dataCity &&
+                dataCity.geonames &&
+                Array.isArray(dataCity.geonames) &&
+                dataCity.geonames.length > 0
+            ) {
+                todayWeatherDomElements.city.innerText =
+                    dataCity.geonames[0].name;
+            } else {
+                console.error('Ошибка: geonames не содержит данных', dataCity);
+                showErrorOverlay();
+            }
+        })
+        .catch((error) => console.error('Ошибка:', error));
+}
+
+export { changeLanguageCityName }
