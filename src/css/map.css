@@ -1,7 +1,7 @@
 .map {
     color:  #fff;
     grid-column: 2;
-    grid-row: 2 / 4;
+    grid-row: 2 / 3;
     align-self: center; /* Центрирование по вертикали */
 
     display: flex;

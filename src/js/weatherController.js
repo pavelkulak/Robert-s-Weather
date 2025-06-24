@@ -46,7 +46,6 @@ async function handleSearchForm(e) {
 function clearCityData() {
     hideErrorMessage();
     controlDomElements.searchCityInput.value = '';
-    setToLocalStorage('tempOtherDays', JSON.stringify([]));
 }
 
 async function loadCityWeather({
@@ -58,7 +57,6 @@ async function loadCityWeather({
     if (!city) return displayError('Пожалуйста, введите город');
 
     try {
-        console.log("currentLanguage: ", currentLanguage);
         const [todayWeather, forecast] = await getWeatherData({
             curLangue: currentLanguage,
             units: 'metric',
@@ -104,7 +102,6 @@ async function loadCityWeather({
 }
 
 async function getWeatherData({ curLangue, typeTemp = 'metric', city }) {
-    console.log("currentLanguage: ", curLangue);
     const api_key = await fetchApiKey();
 
     const [weatherRes, forecastRes] = await Promise.all([
@@ -134,8 +131,6 @@ async function getWeatherData({ curLangue, typeTemp = 'metric', city }) {
 }
 
 function displayWeatherInfo(data, curLangue) {
-    console.log(data);
-    console.log("currentLanguage: ", curLangue);
     const countryCode = data.sys.country;
     const countryName = new Intl.DisplayNames([curLangue], {
         type: 'region',
@@ -217,7 +212,8 @@ function displayUpcomingForecastDays(curDayData, index, curLangue) {
     const temp = convertUnitTemp(curDayData.main.temp);
     const weatherIcon = `https://openweathermap.org/img/wn/${curDayData.weather[0].icon}@2x.png`;
 
-    addItemToLocalStorageArray('tempOtherDays', curDayData.main.temp);
+    addItemToLocalStorageArray('tempOtherDays', curDayData.main.temp, index);
+
 
     // Выводим данные в HTML
     const el = upcomingForecastDays[index];
@@ -237,7 +233,6 @@ window.addEventListener('load', async () => {
 export {
     convertUnitTemp,
     loadCityWeather, 
-    addItemToLocalStorageArray,
     setToLocalStorage,
     getFromLocalStorage,
 };

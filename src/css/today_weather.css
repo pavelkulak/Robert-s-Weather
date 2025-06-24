@@ -1,4 +1,4 @@
-.today-weather {
+﻿.today-weather {
     color: #fff;
     grid-column: 1;
 }
@@ -24,7 +24,7 @@
 }
 
 .today-weather__num-temperature-today::after {
-    content: " ° ";
+    content: ' ° ';
     font-size: 6.25rem; /* 100px */
     margin-left: 18px;
     margin-top: 60px;
@@ -44,19 +44,18 @@
     text-transform: uppercase;
     line-height: 2.3125rem; /* 37px */
     white-space: nowrap;
-    transform:translateY(-42px);
+    transform: translateY(-42px);
 }
 .today-weather__weather-icon {
     position: relative;
     max-width: unset;
-    width: 12.5rem;     /* 200px */
-    height: 12.5rem;    /* 200px */
-    transform:translateX(-52px);
+    width: 12.5rem; /* 200px */
+    height: 12.5rem; /* 200px */
+    transform: translateX(-52px);
 }
 .today-weather__details-list {
     list-style: none;
 }
-
 
 @media (max-width: 1280px) {
     .today-weather__city-country {
@@ -79,7 +78,7 @@
     }
     .today-weather__weather-details {
         font-size: 1.125rem; /* 18px */
-        transform:translateY(-89px);
+        transform: translateY(-89px);
     }
     .today-weather__weather-icon {
         transform: translate(-70px, 10px);
@@ -99,8 +98,8 @@
         font-size: 13.175rem; /* 210.8px */
     }
     .today-weather__weather-icon {
-        width: 9.375rem;    /* 150px */
-        height: 9.375rem;   /* 150px */
+        width: 9.375rem; /* 150px */
+        height: 9.375rem; /* 150px */
         transform: translate(-47px, 10px);
     }
     .today-weather__num-temperature-today::after {
@@ -111,7 +110,7 @@
     .today-weather__weather-details {
         font-size: 1.375rem; /* 22px */
         line-height: 2.175rem; /* 34.8px */
-        transform:translateY(-77px);
+        transform: translateY(-77px);
     }
 }
 
@@ -136,16 +135,12 @@
     }
 }
 
-
 @media (max-width: 480px) {
     .today-weather__weather-icon {
-        width: 12.5rem;     /* 200px */
-        height: 12.5rem;    /* 200px */
+        width: 12.5rem; /* 200px */
+        height: 12.5rem; /* 200px */
     }
 }
-
-
-
 
 @media (min-width: 1900px) {
     .today-weather__city-country {

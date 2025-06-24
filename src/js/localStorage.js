@@ -1,8 +1,8 @@
 'use strict';
 
-function addItemToLocalStorageArray(key, item) {
+function addItemToLocalStorageArray(key, item, index) {
     const arr = JSON.parse(localStorage.getItem(key)) || [];
-    arr.push(item);
+    arr[index] = item
     localStorage.setItem(key, JSON.stringify(arr));
 }
 

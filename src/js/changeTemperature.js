@@ -43,6 +43,9 @@ controlDomElements.changeTemperature.addEventListener('click', function (e) {
     setToLocalStorage('currentTypeTemperature', currentTypeTemperature);
     setToLocalStorage('currentTypeTemperatureName', currentTypeTemperatureName);
 
+    console.log(currentTypeTemperature);
+    console.log(currentTypeTemperatureName);
+
     convertDisplayTemp();
 });
 
@@ -55,10 +58,17 @@ function convertDisplayTemp() {
         getFromLocalStorage('tempfeelsLikeC')
     );
 
+    console.log(getFromLocalStorage('tempTodayC'));
+    console.log(getFromLocalStorage('tempfeelsLikeC'));
+
     const arrDays = getFromLocalStorage('tempOtherDays');
+    console.log("arrDays: ", arrDays);
     upcomingForecastDays.forEach(function (day) {
         day.querySelector('.day__num-temperature').innerText = convertUnitTemp(
             arrDays.shift()
         );
+        console.log("day: ", day);
     });
+    console.log("arrDays: ", arrDays);
+    console.log("upcomingForecastDays: ", upcomingForecastDays);
 }
