@@ -25,8 +25,7 @@ body {
     grid-template-columns: min-content 1fr;
     grid-template-rows: min-content min-content min-content;
     background:
-        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)),
-        url('../img/bg.jpg');
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url('/bg.jpg');
 
     background-size: cover; /* Растягивает изображение так, чтобы оно заполняло весь блок */
     background-position: center; /* Центрирует изображение */
@@ -47,7 +46,6 @@ body {
     z-index: 0; /* чтобы быть под контентом */
 }
 
-
 .error-container {
     position: fixed;
     top: 0;
@@ -67,9 +65,6 @@ body {
     max-width: 500px;
 }
 
-
-
-
 @media (max-width: 1080px) {
     .content {
         grid-template-rows: min-content auto auto auto;
@@ -77,7 +72,6 @@ body {
         padding: 0 50px;
     }
 }
-
 
 @media (max-width: 630px) {
     .content {
@@ -90,6 +84,3 @@ body {
         padding: 0 10% 0 10%;
     }
 }
-
-
-
